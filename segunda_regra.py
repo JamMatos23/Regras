@@ -42,9 +42,11 @@ list3 = [] #Lista vazia
 df = pd.read_excel('C://Users\jamil.monteiro\Downloads\De-Para_codificada.xlsx')
 
 # Acesse as informações dentro da planilha
-listano = df.loc[0, 'Ano']
+listaQT = []
+listano = df.loc[0:1000, 'Ano']
 print(listano)
-'''listacao = ['01','02','03','04','05','06','07','08','09',1,2,3,4,5,6,7,8,9,10]
+listacao = ['01','02','03','04','05','06','07','08','09',1,2,3,4,5,6,7,8,9,10]
+print(listacao)
 listproduto = [1,2,3,4]
 listdemanda = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 listatividade = [1,2,3,4,5,6]
@@ -143,4 +145,4 @@ for valor in df['Descrição'].values:
         #df.to_excel('nao.xlsx',index=False)
         email.Send()
         print("Email Enviado")
-        exit()'''
+        exit()
