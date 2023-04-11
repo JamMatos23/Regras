@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Formulário</title>
+</head>
+<body>
+    <header>
+        <div class="topnav">
+            <div>
+                <img class="logo-image" src="inep-logo-1.png" height="100px" alt="Inepnet"> 
+                <h1>Gerador de Descrição</h1>
+            </div>
+        </div>
+    </header>
+    <form>
+        <p>
+            <label for="DDD">Selecione a demanda </label><br>
+            <select id="DDD" name="DDD" required onchange="atualizarDPAT()">
+                <option value="" class="nada">-- demanda --</option>
+                <option value="1">Planejamento Anual</option>
+                <option value="2">Avaliação</option>
+                <option value="3">Consultoria</option>
+                <option value="4">Apuração</option>
+                <option value="5">Monitoramento</option>
+                <option value="6">Demandas Externas</option>
+                <option value="7">PGMQ</option>
+                <option value="8">Demandas Administrativas</option>
+                <option value="9">Demandas de TIC</option>
+                <option value="10">Capacitação</option>
+                <option value="11">Ausência</option>
+                <option value="12">Participação em reuniões/GT</option>
+                <option value="13">Outros</option>
+            </select>
+        </p>
+        <p>
+            <label for="AT">Selecione a atividade</label><br>
+            <select id="AT" name="AT" required onchange="atualizarATPPP()">
+                <option value="" class="nada">-- atividade --</option>
+                <option data-group="1" value="2">Elaboração/Atualização do PAINT</option>
+                <option data-group="1" value="3">Elaboração/Atualização do RAINT</option>
+                <option data-group="1" value="1">Mapeamento do Universo de Auditoria</option>
+                <option data-group="2" value="1">Planejamento</option>
+                <option data-group="2" value="2">Execução</option>
+                <option data-group="2" value="4">Achados de Auditoria</option>
+                <option data-group="2" value="3">Relatoria</option>
+                <option hidden data-group="3" value="1">Planejamento</option>
+                <option hidden data-group="3" value="2">Execução</option>
+                <option hidden data-group="3" value="4">Achados de Auditoria</option>
+                <option hidden data-group="3" value="3">Relatoria</option>
+                <option hidden data-group="4" value="1">Planejamento</option>
+                <option hidden data-group="4" value="2">Execução</option>
+                <option hidden data-group="4" value="4">Achados de Auditoria</option>
+                <option hidden data-group="4" value="3">Relatoria</option>
+                <option data-group="5" value="1">Monitoramento das Recomendações</option>
+                <option data-group="5" value="2">Contabilização de benefícios</option>
+                <option data-group="6" value="1">Acompanhamento de Diligências TCU</option>
+                <option data-group="9" value="1">Outros</option>
+                <option data-group="6" value="2">Acompanhamento de Demandas CGU</option>
+                <option data-group="6" value="3">Análise de admissibilidade de Denúncias</option>
+                <option data-group="6" value="4">Suporte a Ação de Auditoria do TCU</option>
+                <option data-group="6" value="5">Suporte a ação de Auditoria do CGU</option>
+                <option data-group="7" value="1">Auto-Avaliação do IA-CM</option>
+                <option data-group="7" value="2">Elaboração de Plano de Ação</option>
+                <option data-group="7" value="3">Relatório de Avaliação IA-CM</option>
+                <option data-group="8" value="2">Produção/Atualização de documentos</option>
+                <option data-group="8" value="1">Gestão do SEI</option>
+                <option data-group="9" value="2">Desenvolvimento/Manutenção de Aplicativo</option>
+                <option data-group="9" value="1">Manipulação de Base de Dados</option>
+                <option data-group="9" value="3">Desenvolvimento/Manutenção de Painel Gerencial</option>
+                <option data-group="8" value="4">Gestão do SEI</option>
+                <option data-group="9" value="5">Gestão do SharePoint</option>
+                <option data-group="9" value="6">Outros</option>
+                <option data-group="10" value="1">Participação em cursos</option>
+                <option data-group="10" value="2">Estudo individual</option>
+                <option data-group="11" value="1">Ausência</option>
+            </select>
+        </p>
+        <p>
+            <label for="PP">Selecione o ID do produto</label><br>
+            <select id="PP" name="PP" required>
+                <option value="" class="nada">-- id do produto --</option>
+                <option value="1">PAINT Preliminar</option>
+                <option value="1">RAINT Preliminar</option>
+                <option value="1">Universo de auditoria</option>
+                <option value="2">PAINT Definitivo</option>
+                <option value="2">RAINT Definitivo</option>
+                <option value="1">Análise Preliminar</option>
+                <option value="1">Escopo da Auditoria</option>
+                <option value="1">Recomendações cadastradas</option>
+                <option value="1">Relatório Preliminar</option>
+                <option value="2">Matriz de Riscos</option>
+                <option value="2">Papéis de Trabalho</option>
+                <option value="2">Relatório Final</option>
+                <option value="2">Matriz de Achados</option>
+                <option value="3">Matriz de Planejamento</option>
+                <option value="1">Recomendação monitorada</option>
+                <option value="2">Benefício contabilizado</option>
+                <option value="1">Construção da matriz de avaliação</option>
+                <option value="1">Plano de ação aprovado</option>
+                <option value="1">Relatório aprovado</option>
+                <option value="2">Avaliação inserida no e-aud</option>
+                <option value="1">Normativo</option>
+                <option value="2">Parecer</option>
+                <option value="3">Manual Operacional</option>
+                <option value="4">POP</option>
+                <option value="1">Aplicativo</option>
+                <option value="1">Consulta SQL</option>
+                <option value="1">Painel Gerencial</option>
+                <option value="1">Atestado Médico</option>
+                <option value="2">Férias</option>
+            </select>
+        </p>
+        <p>
+            <label for="YYYY">Selecione o ano da ação</label><br>
+            <select id="YYYY" name="YYYY" required>
+                <option value="" class="nada">-- ano --</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+            </select>
+        </p>
+        <p>
+            <label for="AA">Selecione o ID da ação</label><br>
+            <select id="AA" name="AA" required>
+                <option value="" class="nada">-- id da ação --</option>
+                <option value="01">Ação 01/2022 - Elaboração de testes montagem de provas do Enem</option>
+                <option value="02">Ação 02/2022 - Gerir Banco Nacional de Itens</option>
+                <option value="03">Ação 03/2022 - Gestão da Integridade Pública</option>
+                <option value="03">Ação 03/2022 - Processo de Montagem de testes do Enem</option>
+                <option value="07">Ação 07/2022 - Processo de Concessão e Pagamentos da GECC</option>
+                <option value="08">Ação 08/2022 - Gestão Orçamentária</option>
+                <option value="09">Ação 09/2022 - Licitações e Contratos</option>
+                <option value="04">Ação 04/2023 - Consultoria no Processo de Gestão de Riscos</option>
+                <option value="05">Ação 05/2023 - Processos de Gestão da Contratação de Serviços Especializados de Aplicação do Enem/Desenvolver e Monitorar a Logistica dos Exames e valiação</option>
+                <option value="06">Ação 06/2023 - Auditoria do Processo de Gestão do Banco de Dados de Especialistas</option>
+                <option value="07">Ação 07/2023 - Auditoria do Portifólio de Projetos e Processos</option>
+                <option value="1">Acompanhamento do PAINT</option>
+                <option value="2">RAINT/2022</option>
+                <option value="3">PAINT/2024</option>
+                <option value="4">Acompanhamento/levantamento de auditorias CGU e TCU</option>
+                <option value="5">Parecer sobre a prestação de contas anual do Inep</option>
+                <option value="6">Supervisão</option>
+                <option value="7">Monitoramento CGU/TCU</option>
+                <option value="8">Monitoramento de recomendações</option>
+                <option value="9">Gestão da Unidade</option>
+                <option value="10">Gestão documental e controle de demandas externas.</option>
+            </select>
+        </p>
+        <p>
+            <label for="SP">Selecione o id da Sprint</label><br>
+            <select id="SP" name="SP" required>
+                <option value="" class="nada">-- id da Sprint --</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+            </select>
+        </p>
+        <p>
+            <button id="reset">Apagar</button>
+            <button id="gerar">Gerar</button>
+            <input type="text" id="Ret" value="" readonly>
+            <button id="copiar" onclick="copiarResultado()">Copiar</button>
+        </p>
+    </form>
+    <footer>
+        <p class="copyright">&copy; Copyright Audin INEP - <script>document.write(new Date().getFullYear())</script></p>
+    </footer>
+</body>
+</html>
