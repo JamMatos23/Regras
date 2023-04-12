@@ -12,7 +12,7 @@
     <header>
         <div class="topnav">
             <div>
-                <img class="logo-image" src="inep-logo-1.png" height="100px" alt="Inepnet"> 
+                <img class="logo-image" src="inep-logo-1.png" height="100px" alt="Inepnet">
                 <h1>Gerador de Descrição</h1>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <form>
         <p>
             <label for="DDD">Selecione a demanda </label><br>
-            <select id="DDD" name="DDD" required onchange="atualizarDPAT()">
+            <select id="DDD" name="DDD" required>
                 <option value="" class="nada">-- demanda --</option>
                 <option value="1">Planejamento Anual</option>
                 <option value="2">Avaliação</option>
@@ -39,7 +39,7 @@
         </p>
         <p>
             <label for="AT">Selecione a atividade</label><br>
-            <select id="AT" name="AT" required onchange="atualizarATPPP()">
+            <select id="AT" name="AT" required>
                 <option value="" class="nada">-- atividade --</option>
                 <option data-group="1" value="2">Elaboração/Atualização do PAINT</option>
                 <option data-group="1" value="3">Elaboração/Atualização do RAINT</option>
@@ -59,7 +59,6 @@
                 <option data-group="5" value="1">Monitoramento das Recomendações</option>
                 <option data-group="5" value="2">Contabilização de benefícios</option>
                 <option data-group="6" value="1">Acompanhamento de Diligências TCU</option>
-                <option data-group="9" value="1">Outros</option>
                 <option data-group="6" value="2">Acompanhamento de Demandas CGU</option>
                 <option data-group="6" value="3">Análise de admissibilidade de Denúncias</option>
                 <option data-group="6" value="4">Suporte a Ação de Auditoria do TCU</option>
@@ -72,7 +71,7 @@
                 <option data-group="9" value="2">Desenvolvimento/Manutenção de Aplicativo</option>
                 <option data-group="9" value="1">Manipulação de Base de Dados</option>
                 <option data-group="9" value="3">Desenvolvimento/Manutenção de Painel Gerencial</option>
-                <option data-group="8" value="4">Gestão do SEI</option>
+                <option data-group="9" value="4">Gestão/Suporte e-Aud</option>
                 <option data-group="9" value="5">Gestão do SharePoint</option>
                 <option data-group="9" value="6">Outros</option>
                 <option data-group="10" value="1">Participação em cursos</option>
@@ -84,35 +83,37 @@
             <label for="PP">Selecione o ID do produto</label><br>
             <select id="PP" name="PP" required>
                 <option value="" class="nada">-- id do produto --</option>
-                <option value="1">PAINT Preliminar</option>
-                <option value="1">RAINT Preliminar</option>
-                <option value="1">Universo de auditoria</option>
-                <option value="2">PAINT Definitivo</option>
-                <option value="2">RAINT Definitivo</option>
-                <option value="1">Análise Preliminar</option>
-                <option value="1">Escopo da Auditoria</option>
-                <option value="1">Recomendações cadastradas</option>
-                <option value="1">Relatório Preliminar</option>
-                <option value="2">Matriz de Riscos</option>
-                <option value="2">Papéis de Trabalho</option>
-                <option value="2">Relatório Final</option>
-                <option value="2">Matriz de Achados</option>
-                <option value="3">Matriz de Planejamento</option>
-                <option value="1">Recomendação monitorada</option>
-                <option value="2">Benefício contabilizado</option>
-                <option value="1">Construção da matriz de avaliação</option>
-                <option value="1">Plano de ação aprovado</option>
-                <option value="1">Relatório aprovado</option>
+                <option data-subgroup="1" data-group="2"  value="1">PAINT Preliminar</option>
+                <option data-subgroup="1" data-group="3"  value="1">RAINT Preliminar</option>
+                <option data-subgroup="1" data-group="1" value="1">Universo de auditoria</option>
+                <option data-subgroup="1" data-group="2" value="2">PAINT Definitivo</option>
+                <option data-subgroup="1" data-group="3"  value="2">RAINT Definitivo</option>
+                <option data-subgroup="2" data-group="1"  value="1">Análise Preliminar</option>
+                <option data-subgroup="2" data-group="2"  value="1">Escopo da Auditoria</option>
+                <option data-subgroup="2" data-group="4"  value="1">Recomendações cadastradas</option>
+                <option data-subgroup="4" data-group="4"  value="1" hidden>Recomendações cadastradas</option>
+                <option data-subgroup="2" data-group="3" value="1">Relatório Preliminar</option>
+                <option data-subgroup="2" data-group="1"  value="2">Matriz de Riscos</option>
+                <option data-subgroup="2" data-group="2"  value="2">Papéis de Trabalho</option>
+                <option data-subgroup="2" data-group="3"  value="2">Relatório Final</option>
+                <option data-subgroup="2" data-group="2"  value="2">Matriz de Achados</option>
+                <option data-subgroup="2" data-group="1"  value="3">Matriz de Planejamento</option>
+                <option data-subgroup="5" data-group="1"  value="1">Recomendação monitorada</option>
+                <option data-subgroup="5" data-group="2"  value="2">Benefício contabilizado</option>
+                <option data-subgroup="7" data-group="1" value="1">Matriz de avaliação</option>
+                <option data-subgroup="7" data-group="1" value="2">Avaliação IA-CM</option>
+                <option data-subgroup="7" data-group="2" value="1">Plano de ação </option>
+                <option data-subgroup="7" data-group="3" value="1">Relatório de Avaliação IA-CM</option>
                 <option value="2">Avaliação inserida no e-aud</option>
-                <option value="1">Normativo</option>
-                <option value="2">Parecer</option>
-                <option value="3">Manual Operacional</option>
-                <option value="4">POP</option>
-                <option value="1">Aplicativo</option>
-                <option value="1">Consulta SQL</option>
-                <option value="1">Painel Gerencial</option>
-                <option value="1">Atestado Médico</option>
-                <option value="2">Férias</option>
+                <option data-subgroup="8" data-group="2" value="1">Normativo</option>
+                <option data-subgroup="8" data-group="2" value="2">Parecer</option>
+                <option data-subgroup="8" data-group="2" value="3">Manual</option>
+                <option data-subgroup="8" data-group="2" value="4">POP</option>
+                <option data-subgroup="9" data-group="2" value="1">Aplicativo</option>
+                <option data-subgroup="9" data-group="1" value="1">Consulta SQL</option>
+                <option data-subgroup="9" data-group="3" value="1">Painel Gerencial</option>
+                <option data-subgroup="11" data-group="1" value="1">Atestado Médico</option>
+                <option data-subgroup="11" data-group="1" value="2">Férias</option>
             </select>
         </p>
         <p>
@@ -183,3 +184,4 @@
     </footer>
 </body>
 </html>
+
