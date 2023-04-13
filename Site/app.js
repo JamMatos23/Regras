@@ -705,7 +705,7 @@ primeiraColuna.addEventListener('change', function() {
      for (var i = 0; i < 3; i++) {
       selectPP.options[i].style.display = "block";
      }
-   } else if (selectDDDText == "Capacitação") {
+   } else if (selectDDDText == "Capacitação" || selectDDDText == "Outros" || selectDDDText == "Participação em reuniões/GT" || selectDDDText == "Demandas Externas" || selectDDDText == "Demandas Extraordinárias") {
      selectPP.options[0].text = "-- id do produto --";
      selectPP.options[0].value = "";
      
@@ -731,19 +731,29 @@ primeiraColuna.addEventListener('change', function() {
      for (var i = 0; i < 5; i++) {
       selectPP.options[i].style.display = "block";
      }
-   } else {
-    for (var i = 0; i < selectPP.options.length; i++) {
-      selectPP.options[i].style.display = "block";
-     }
-   }    
-     
-     
-     
-    if (selectDDDText == "") {
+   } else if (selectDDDText == "Demandas de TIC") {
      selectPP.options[0].text = "-- id do produto --";
      selectPP.options[0].value = "";
-     selectPP.options[1].text = "";
-     selectPP.options[1].value = "";
+     selectPP.options[1].text = "Aplicativo";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "Painel Gerencial";
+     selectPP.options[2].value = "1";
+     selectPP.options[3].text = "Consulta SQL";
+     selectPP.options[3].value = "1";
+
+     for (var i = 4; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 4; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   } else if (selectDDDText == "Monitoramento") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "Benefício contabilizado";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "Recomendação monitorada";
+     selectPP.options[2].value = "1";
      
      for (var i = 1; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
@@ -751,7 +761,49 @@ primeiraColuna.addEventListener('change', function() {
      for (var i = 0; i < 1; i++) {
       selectPP.options[i].style.display = "block";
      }
-   }
+   } else if (selectDDDText == "PGMQ") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "Matriz de Avaliação";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "Avaliação IA-CM";
+     selectPP.options[2].value = "2";
+     selectPP.options[3].text = "Plano de Ação";
+     selectPP.options[3].value = "1";
+     selectPP.options[4].text = "Relatório de Avaliação IA-CM";
+     selectPP.options[4].value = "1";
+     
+     for (var i = 1; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 1; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   } else if (selectDDDText == "Planejamento Anual") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "PAINT Preliminar";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "PAINT Definitivo";
+     selectPP.options[2].value = "2";
+     selectPP.options[3].text = "RAINT Preliminar";
+     selectPP.options[3].value = "1";
+     selectPP.options[4].text = "RAINT Definitivo";
+     selectPP.options[4].value = "2";
+     selectPP.options[5].text = "Universo de Auditoria";
+     selectPP.options[5].value = "1";
+     
+     for (var i = 1; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 1; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   }  else {
+    for (var i = 0; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   }  
    
 }); 
 
