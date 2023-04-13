@@ -50,9 +50,9 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[1].value = "1";
      selectAT.options[2].text = "Execução";
      selectAT.options[2].value = "2";
-     selectAT.options[3].text = "Achados de Auditoria";
+     selectAT.options[3].text = "Relatoria";
      selectAT.options[3].value = "3";
-     selectAT.options[4].text = "Relatoria";
+     selectAT.options[4].text = "Achados de Auditoria";
      selectAT.options[4].value = "4";
 
     for (var i = 5; i < selectAT.options.length; i++) {
@@ -82,18 +82,18 @@ primeiraColuna.addEventListener('change', function() {
    } //Demandas Externas
 
    else if (selectDDD.value == 6) {
-     selectAT.options[0].text = "-- atividade --";
-     selectAT.options[0].value = "";
-     selectAT.options[1].text = "Contabilização de benefícios";
-     selectAT.options[1].value = "1";
-     selectAT.options[2].text = "Acompanhamento de Demandas CGU";
-     selectAT.options[2].value = "2";
-     selectAT.options[3].text = "Análise de admissibilidade de Denúncias";
-     selectAT.options[3].value = "3";
-     selectAT.options[4].text = "Suporte a Ação de Auditoria do TCU";
-     selectAT.options[4].value = "4";
-     selectAT.options[5].text = "Suporte a ação de Auditoria do CGU";
-     selectAT.options[5].value = "5";
+    selectAT.options[0].text = "-- atividade --";
+    selectAT.options[0].value = "";
+    selectAT.options[1].text = "Acompanhamento de Diligências TCU";
+    selectAT.options[1].value = "1";
+    selectAT.options[2].text = "Acompanhamento de Demandas CGU";
+    selectAT.options[2].value = "2";
+    selectAT.options[3].text = "Análise de admissibilidade de Denúncias";
+    selectAT.options[3].value = "3";
+    selectAT.options[4].text = "Suporte a Ação de Auditoria do TCU";
+    selectAT.options[4].value = "4";
+    selectAT.options[5].text = "Suporte a ação de Auditoria do CGU";
+    selectAT.options[5].value = "5";
 
      for (var i = 6; i < selectAT.options.length; i++) {
       selectAT.options[i].style.display = "none";
@@ -126,9 +126,9 @@ primeiraColuna.addEventListener('change', function() {
    else if (selectDDD.value == 8) {
      selectAT.options[0].text = "-- atividade --";
      selectAT.options[0].value = "";
-     selectAT.options[1].text = "Produção/Atualização de documentos";
+     selectAT.options[1].text = "Gestão do SEI";
      selectAT.options[1].value = "1";
-     selectAT.options[2].text = "Gestão do SEI";
+     selectAT.options[2].text = "Produção/Atualização de documentos";
      selectAT.options[2].value = "2";
 
      for (var i = 3; i < selectAT.options.length; i++) {
@@ -148,7 +148,7 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[2].value = "2";
      selectAT.options[3].text = "Desenvolvimento/Manutenção de Painel Gerencial";
      selectAT.options[3].value = "3";
-     selectAT.options[4].text = "Gestão do e-AUD";
+     selectAT.options[4].text = "Gestão/Suporte do e-AUD";
      selectAT.options[4].value = "4";
      selectAT.options[5].text = "Gestão do SharePoint";
      selectAT.options[5].value = "5";
@@ -426,9 +426,9 @@ segundaColuna.addEventListener('change', function() {
    else if (selectATText == "Auto-Avaliação do IA-CM") {
      selectPP.options[0].text = "-- id do produto --";
      selectPP.options[0].value = "";
-     selectPP.options[1].text = "Construção da matriz de avaliação";
+     selectPP.options[1].text = "Matriz de avaliação";
      selectPP.options[1].value = "1";
-     selectPP.options[2].text = "Avaliação inserida no e-aud";
+     selectPP.options[2].text = "Avaliação IA-CM";
      selectPP.options[2].value = "2";
      for (var i = 3; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
@@ -440,7 +440,7 @@ segundaColuna.addEventListener('change', function() {
    else if (selectATText == "Elaboração de Plano de Ação") {
      selectPP.options[0].text = "-- id do produto --";
      selectPP.options[0].value = "";
-     selectPP.options[1].text = "Plano de ação aprovado";
+     selectPP.options[1].text = "Plano de ação";
      selectPP.options[1].value = "1";
      for (var i = 2; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
@@ -449,10 +449,10 @@ segundaColuna.addEventListener('change', function() {
       selectPP.options[i].style.display = "block";
      }     
    }
-   else if (selectATText == "Relatório de Avaliação IA-CM") {
+   else if (selectATText == "Elaboração de Relatório de Avaliação IA-CM") {
      selectPP.options[0].text = "-- id do produto --";
      selectPP.options[0].value = "";
-     selectPP.options[1].text = "Relatório aprovado";
+     selectPP.options[1].text = "Relatório de Avaliação IA-CM";
      selectPP.options[1].value = "1";
      for (var i = 2; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
@@ -520,12 +520,10 @@ segundaColuna.addEventListener('change', function() {
      selectPP.options[0].value = "";
      selectPP.options[1].text = "Painel Gerencial";
      selectPP.options[1].value = "1";
-     selectPP.options[2].text = "";
-     selectPP.options[2].value = "";
-     for (var i = 3; i < selectPP.options.length; i++) {
+     for (var i = 2; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
      }
-     for (var i = 0; i < 3; i++) {
+     for (var i = 0; i < 2; i++) {
       selectPP.options[i].style.display = "block";
      }     
    }
@@ -592,11 +590,8 @@ segundaColuna.addEventListener('change', function() {
      }     
    }
    else if (selectATText == "-- atividade --") {
-
      for (var i = 0; i < selectPP.options.length; i++) {
-
       selectPP.options[i].style.display = "block";
-
      }
    }
 });
