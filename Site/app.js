@@ -292,7 +292,8 @@ segundaColuna.addEventListener('change', function() {
      selectPP.options[1].value = "1";
      selectPP.options[2].text = "Papéis de Trabalho";
      selectPP.options[2].value = "2";
-     selectPP.options[3].text = "Matriz de Achados";selectPP.options[3].value = "3";
+     selectPP.options[3].text = "Matriz de Achados";
+     selectPP.options[3].value = "3";
      for (var i = 4; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
      }
