@@ -20,7 +20,7 @@
     <form>
         <p>
             <label for="DDD">Selecione a demanda </label><br>
-            <select id="DDD" name="DDD" required onchange="atualizarDPAT()">
+            <select id="DDD" name="DDD" required>
                 <option value="" class="nada">-- demanda --</option>
                 <option value="1">Planejamento Anual</option>
                 <option value="2">Avaliação</option>
@@ -39,38 +39,44 @@
         </p>
         <p>
             <label for="AT">Selecione a atividade</label><br>
-            <select id="AT" name="AT" required onchange="atualizarATPPP()">
+            <select id="AT" name="AT" required>
                 <option value="" class="nada">-- atividade --</option>
-                <option valor="1" value="2">Elaboração/Atualização do PAINT</option>
-                <option value="3">Elaboração/Atualização do RAINT</option>
-                <option value="1">Mapeamento do Universo de Auditoria</option>
-                <option value="1">Planejamento</option>
-                <option value="2">Execução</option>
-                <option value="4">Achados de Auditoria</option>
-                <option value="3">Relatoria</option>
-                <option value="1">Monitoramento das Recomendações</option>
-                <option value="2">Contabilização de benefícios</option>
-                <option value="1">Acompanhamento de Diligências TCU</option>
-                <option value="1">Outros</option>
-                <option value="2">Acompanhamento de Demandas CGU</option>
-                <option value="3">Apuração de Denúncias do Falabr/Solicito</option>
-                <option value="4">Suporte a Ação de Auditoria do TCU</option>
-                <option value="5">Suporte a ação de Auditoria do CGU</option>
-                <option value="1">Auto-Avaliação do IA-CM</option>
-                <option value="2">Elaboração de Plano de Ação</option>
-                <option value="3">Relatório de Avaliação IA-CM</option>
-                <option value="2">Produção/Atualização de documentos</option>
-                <option value="1">Gestão do SEI</option>
-                <option value="2">Desenvolvimento/Manutenção de Aplicativo</option>
-                <option value="1">Manipulação de Base de Dados</option>
-                <option value="3">Desenvolvimento/Manutenção de Painel Gerencial</option>
-                <option value="4">Gestão do e-AUD</option>
-                <option value="5">Gestão do SharePoint</option>
-                <option value="6">Outros</option>
-                <option value="1">Participação em cursos</option>
-                <option value="2">Estudo individual</option>
-                <option value="1">Ausência</option>
-                <option value="2">Ausência</option>
+                <option data-group="1" value="2">Elaboração/Atualização do PAINT</option>
+                <option data-group="1" value="3">Elaboração/Atualização do RAINT</option>
+                <option data-group="1" value="1">Mapeamento do Universo de Auditoria</option>
+                <option data-group="2" value="1">Planejamento</option>
+                <option data-group="2" value="2">Execução</option>
+                <option data-group="2" value="4">Achados de Auditoria</option>
+                <option data-group="2" value="3">Relatoria</option>
+                <option hidden data-group="3" value="1">Planejamento</option>
+                <option hidden data-group="3" value="2">Execução</option>
+                <option hidden data-group="3" value="4">Achados de Auditoria</option>
+                <option hidden data-group="3" value="3">Relatoria</option>
+                <option hidden data-group="4" value="1">Planejamento</option>
+                <option hidden data-group="4" value="2">Execução</option>
+                <option hidden data-group="4" value="4">Achados de Auditoria</option>
+                <option hidden data-group="4" value="3">Relatoria</option>
+                <option data-group="5" value="1">Monitoramento das Recomendações</option>
+                <option data-group="5" value="2">Contabilização de benefícios</option>
+                <option data-group="6" value="1">Acompanhamento de Diligências TCU</option>
+                <option data-group="6" value="2">Acompanhamento de Demandas CGU</option>
+                <option data-group="6" value="3">Análise de admissibilidade de Denúncias</option>
+                <option data-group="6" value="4">Suporte a Ação de Auditoria do TCU</option>
+                <option data-group="6" value="5">Suporte a ação de Auditoria do CGU</option>
+                <option data-group="7" value="1">Auto-Avaliação do IA-CM</option>
+                <option data-group="7" value="2">Elaboração de Plano de Ação</option>
+                <option data-group="7" value="3">Relatório de Avaliação IA-CM</option>
+                <option data-group="8" value="2">Produção/Atualização de documentos</option>
+                <option data-group="8" value="1">Gestão do SEI</option>
+                <option data-group="9" value="2">Desenvolvimento/Manutenção de Aplicativo</option>
+                <option data-group="9" value="1">Manipulação de Base de Dados</option>
+                <option data-group="9" value="3">Desenvolvimento/Manutenção de Painel Gerencial</option>
+                <option data-group="9" value="4">Gestão/Suporte e-Aud</option>
+                <option data-group="9" value="5">Gestão do SharePoint</option>
+                <option data-group="9" value="6">Outros</option>
+                <option data-group="10" value="1">Participação em cursos</option>
+                <option data-group="10" value="2">Estudo individual</option>
+                <option data-group="11" value="1">Ausência</option>
             </select>
         </p>
         <p>

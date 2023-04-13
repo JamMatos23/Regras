@@ -1,0 +1,97 @@
+option.nada {
+    text-align: center;
+    width: auto;
+}
+
+*:focus {
+    outline: 4px solid teal;
+}
+
+h1 {
+    font-size: 60px;
+    text-align: center;
+    margin: 0;
+    padding: 20px 0;
+    
+}
+
+input, select {
+    width: 200px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #0072d4;
+    padding: 0 20px 20px 20px;
+    position: relative;
+    height: 100vh;
+
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+
+    overflow: hidden;
+}
+
+header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+}
+
+footer {
+    background-color: black;
+    color: #ddd;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+select:target-text {
+    text-align: center;
+}
+
+select:invalid {
+    outline: 2px solid red;
+}
+
+#reset {
+    background-color: rgb(228, 44, 44);
+    color: #eee;
+
+    border: none;
+    border-radius: 4px;
+
+    padding: 5px 10px;
+
+    cursor: pointer;
+}
+
+#reset:hover {
+    background-color: rgb(145, 11, 38);
+}
+
+#gerar {
+    background-color: yellowgreen;
+    color: #eee;
+
+    border: none;
+    border-radius: 4px;
+
+    padding: 5px 10px;
+
+    cursor: pointer;
+}
+
+#gerar:hover {
+    background-color: green;
+}
+
