@@ -595,118 +595,165 @@ segundaColuna.addEventListener('change', function() {
      }
    }
 });
-const possibilidades = [
-   {
-     text: '-- idAcao --',
-     ano: '',
-     value: ''
-   },
-   {
-     text: 'Ação 01/2022 - Elaboração de testes montagem de provas do Enem',
-     ano: 2022,
-     value: '01'
-   },
-   {
-     text: 'Ação 02/2022 - Gerir Banco Nacional de Itens',
-     ano: 2022,
-     value: '02'
-   },
-   {
-     text: 'Ação 03/2022 - Gestão da Integridade Pública',
-     ano: 2022,
-     value: '03'
-   },
-   {
-     text: 'Ação 03/2022 - Processo de Montagem de testes do Enem',
-     ano: 2022,
-     value: '03'
-   },
-   {
-     text: 'Ação 07/2022 - Processo de Concessão e Pagamentos da GECC',
-     ano: 2022,
-     value: '07'
-   },
-   {
-     text: 'Ação 08/2022 - Gestão Orçamentária',
-     ano: 2022,
-     value: '08'
-   },
-   {
-     text: 'Ação 09/2022 - Licitações e Contratos',
-     ano: 2022,
-     value: '09'
-   },
-   {
-     text: 'Ação 04/2023 - Consultoria no Processo de Gestão de Riscos',
-     ano: 2023,
-     value: '04'
-   },
-   {
-     text: 'Ação 05/2023 - Processos de Gestão da Contratação de Serviços Especializados de Aplicação do Enem/Desenvolver e Monitorar a Logistica dos Exames e valiação',
-     ano: 2023,
-     value: '05'
-   },
-   {
-     text: 'Ação 06/2023 - Auditoria do Processo de Gestão do Banco de Dados de Especialistas',
-     ano: 2023,
-     value: '06'
-   },
-   {
-     text: 'Ação 07/2023 - Auditoria do Portifólio de Projetos e Processos',
-     ano: 2023,
-     value: '07'
-   },
-   {
-     text: 'Acompanhamento do PAINT/RAINT',
-     ano: 2023,
-     value: '1'
-   },
-   {
-     text: 'RAINT/2022',
-     ano: 2023,
-     value: '2'
-   },
-   {
-     text: 'PAINT/2024',
-     ano: 2023,
-     value: '3'
-   },
-   {
-     text: 'Acompanhamento/levantamento de auditorias CGU e TCU',
-     ano: 2023,
-     value: '4'
-   },
-   {
-     text: 'Parecer sobre a prestação de contas anual do Inep',
-     ano: 2023,
-     value:'5'
-   },
-   {
-     text: 'Supervisão',
-     ano: 2023,
-     value:'6'
-   },
-   {
-     text: 'Monitoramento CGU/TCU',
-     ano: 2023,
-     value:'7'
-   },
-   {
-     text: 'Monitoramento de recomendações',
-     ano: 2023,
-     value:'8'
-   },
-   {
-     text: 'Gestão da Unidade',
-     ano: 2023,
-     value:'9'
-   },
-   {
-     text: 'Gestão documental e controle de demandas externas.',
-     ano: 2023,
-     value:'10'
-   },
-]
+
+primeiraColuna.addEventListener('change', function() {
+   var selectDDD = document.getElementById("DDD");
+   var selectedOption = selectDDD.options[selectDDD.selectedIndex];
+   var selectDDDText = selectedOption.text;
+   var selectAA = document.getElementById("AA");
+   if (selectDDDText == "Apuração" || selectDDDText == "Avaliação" || selectDDDText == "Consultoria" || selectDDDText == "Monitoramento") {
+     selectAA.options[0].text = "-- id da ação --";
+     selectAA.options[0].value = "";
+     selectAA.options[1].text = "Ação 01/2022 - Elaboração de testes montagem de provas do Enem";
+     selectAA.options[1].value = "01";
+     selectAA.options[2].text = "Ação 02/2022 - Gerir Banco Nacional de Itens";
+     selectAA.options[2].value = "02";
+     selectAA.options[3].text = "Ação 03/2022 - Gestão da Integridade Pública";
+     selectAA.options[3].value = "03";
+     selectAA.options[4].text = "Ação 03/2022 - Processo de Montagem de testes do Enem";
+     selectAA.options[4].value = "03";
+     selectAA.options[5].text = "Ação 07/2022 - Processo de Concessão e Pagamentos da GECC";
+     selectAA.options[5].value = "07";
+     selectAA.options[6].text = "Ação 08/2022 - Gestão Orçamentária";
+     selectAA.options[6].value = "08";    
+     selectAA.options[7].text = "Ação 09/2022 - Licitações e Contratos";
+     selectAA.options[7].value = "09";    
+     selectAA.options[8].text = "Ação 04/2023 - Consultoria no Processo de Gestão de Riscos";
+     selectAA.options[8].value = "04";    
+     selectAA.options[9].text = "Ação 05/2023 - Processos de Gestão da Contratação de Serviços Especializados de Aplicação do Enem/Desenvolver e Monitorar a Logistica dos Exames e valiação";
+     selectAA.options[9].value = "05";
+     selectAA.options[10].text = "Ação 06/2023 - Auditoria do Processo de Gestão do Banco de Dados de Especialistas";
+     selectAA.options[10].value = "06";     
+     selectAA.options[11].text = "Ação 07/2023 - Auditoria do Portifólio de Projetos e Processos";
+     selectAA.options[11].value = "07";
+     selectAA.options[12].text = "Acompanhamento do PAINT";
+     selectAA.options[12].value = "1"; 
+     selectAA.options[13].text = "RAINT/2022";
+     selectAA.options[13].value = "2"; 
+     selectAA.options[14].text = "PAINT/2024";
+     selectAA.options[14].value = "3"; 
+     selectAA.options[15].text = "Acompanhamento/levantamento de auditorias CGU e TCU";
+     selectAA.options[15].value = "4"; 
+     selectAA.options[16].text = "Parecer sobre a prestação de contas anual do Inep";
+     selectAA.options[16].value = "5"; 
+     selectAA.options[17].text = "Supervisão";
+     selectAA.options[17].value = "6"; 
+     selectAA.options[18].text = "Monitoramento CGU/TCU";
+     selectAA.options[18].value = "7"; 
+     selectAA.options[19].text = "Monitoramento de recomendações";
+     selectAA.options[19].value = "8"; 
+     selectAA.options[20].text = "Gestão da Unidade";
+     selectAA.options[20].value = "9"; 
+     selectAA.options[21].text = "Gestão documental e controle de demandas externas";
+     selectAA.options[21].value = "10"; 
+     
+     for (var i = 0; i <= selectAA.options.length; i++) {
+      selectAA.options[i].style.display = "block";
+     }
+   } else {
+    for (var i = 0; i <= selectAA.options.length; i++) {
+      selectAA.options[i].style.display = "none";
+     }   
+   }
+  });
+
+primeiraColuna.addEventListener('change', function() {
+   var selectDDD = document.getElementById("DDD");
+   var selectedOption = selectDDD.options[selectDDD.selectedIndex];
+   var selectDDDText = selectedOption.text;
+   var selectPP = document.getElementById("PP");
+
+   if (selectDDDText == "Apuração" || selectDDDText == "Avaliação" || selectDDDText == "Consultoria") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "Recomendações cadastradas";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "Escopo da Auditoria";
+     selectPP.options[2].value = "1";
+     selectPP.options[3].text = "Papéis de Trabalho";
+     selectPP.options[3].value = "2";
+     selectPP.options[4].text = "Matriz de Achados";
+     selectPP.options[4].value = "3";
+     selectPP.options[5].text = "Análise Preliminar";
+     selectPP.options[5].value = "1";
+     selectPP.options[6].text = "Matriz de Riscos";
+     selectPP.options[6].value = "2";
+     selectPP.options[7].text = "Matriz de Planejamento";
+     selectPP.options[7].value = "3";
+     selectPP.options[8].text = "Relatório Preliminar";
+     selectPP.options[8].value = "1";
+     selectPP.options[9].text = "Relatório Final";
+     selectPP.options[9].value = "2";     
+     
+     for (var i = 10; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 10; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   } else if (selectDDDText == "Ausência") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "Atestado Médico";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "Férias";
+     selectPP.options[2].value = "2";
+     
+     for (var i = 3; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 3; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   } else if (selectDDDText == "Capacitação") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     
+     for (var i = 0; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+
+   } else if (selectDDDText == "Demandas Administrativas") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "Normativo";
+     selectPP.options[1].value = "1";
+     selectPP.options[2].text = "Parecer";
+     selectPP.options[2].value = "2";
+     selectPP.options[3].text = "Manual";
+     selectPP.options[3].value = "3";
+     selectPP.options[4].text = "POP";
+     selectPP.options[4].value = "4";
+     
+     for (var i = 5; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 5; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   } else {
+    for (var i = 0; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   }    
+     
+     
+     
+    if (selectDDDText == "") {
+     selectPP.options[0].text = "-- id do produto --";
+     selectPP.options[0].value = "";
+     selectPP.options[1].text = "";
+     selectPP.options[1].value = "";
+     
+     for (var i = 1; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "none";
+     }
+     for (var i = 0; i < 1; i++) {
+      selectPP.options[i].style.display = "block";
+     }
+   }
+   
+}); 
 
 YYYY.addEventListener('change', ()=> {
    let arr = []
