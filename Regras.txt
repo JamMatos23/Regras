@@ -1,0 +1,95 @@
+demana;demanda e produto; demanda
+
+DATEDIFF(day,DtInicioPactoTrab,GETDATE()) <= 14
+
+<demanda>x</demanda><atividade>x</atividade><produto>x</produto><anoAcao>x</anoAcao><idAcao>x</idAcao><idSprint>x</idSprint>
+
+Fala com o pessoal do T.I para programarem o computador para ligar sozinho 
+
+Programa de trabalho relacionado ao PGD
+Programas de trabalhos relacionados ao PGD
+
+#Sobre o email do remetente será resolvido por ultimo
+
+#Comando do terminal para abrir o app que transforma em executaveis
+python -m auto_py_to_exe
+
+Se o auditor estivendo preenchedo a descrição para uma atividade que não seja auditoria não irá aparecer o campo idAcao
+
+Desenvolver melhor o campo idProduto e fazer a relação com as atividade
+
+Quando a descrição não estive no formato significa que ela é reunião e se tiver significa que é atividade com Produto
+
+5 dias úteis depois do termino
+
+1° Regra
+No 3 dia os planos já devem está lançados
+3 dias antes do 1° dia util do mês verificar se todos os servidores lançaram planos de projetos
+Se não tiverem lançado, mandar um alerta para o chefe e para o servidor
+Manda no terceiro dia e no dia do deadline
+
+2° Regra
+Campo descrição não está no padrão enviar um alerta para o chefe e o Chefe. Mostra o porque
+
+3° Regra
+Encerrou prazo do PT, servidor tem até o 5 dia util para registrar execuçao. Entao alertar o servidor e o Claudio via email.  Quando nao tiver mais pendencias, avisa a mim por email, para eu homologar.
+
+4° Regra
+Codigo para ver na view se tem plano de projeto do dia 16 até o 31 e enviar um email para o servidor e o chefe
+
+5° Se a data de registro estiver errada
+
+Modelo
+Se nome do servidor não estiver dentro do where enviar email para ele e para o chefe
+
+Primeiro, você precisa definir uma lista de feriados nacionais e regionais que podem afetar o cálculo dos dias úteis. Por exemplo1:
+
+feriados = [(1, 1), (21, 4), (1, 5), (7, 9), (12, 10), (2, 11), (15, 11), (25, 12),
+            # feriados regionais
+            (20, 1), # Rio de Janeiro
+            (25, 1), # São Paulo
+            # etc...
+           ]
+Segundo, você precisa criar uma função que verifica se uma data é um dia útil ou não. Você pode usar a função weekday() do módulo datetime para verificar se a data é um sábado ou domingo2. Por exemplo:
+
+def eh_dia_util(data):
+    # verifica se a data é um feriado nacional ou regional
+    if (data.day, data.month) in feriados:
+        return False
+    # verifica se a data é um sábado ou domingo
+    if data.weekday() >= 5:
+        return False
+    # caso contrário, é um dia útil
+    return True
+Terceiro, você precisa criar uma função que retorna o primeiro dia útil do mês. Você pode usar a função date() do módulo datetime para criar uma data com o primeiro dia do mês e depois verificar se ela é um dia útil usando a função anterior2. Se não for um dia útil, você pode incrementar a data em um dia até encontrar um dia útil. Por exemplo:
+
+def primeiro_dia_util(mes, ano):
+    # cria uma data com o primeiro dia do mês
+    data = datetime.date(ano, mes, 1)
+    # enquanto não for um dia útil,
+    while not eh_dia_util(data):
+        # incrementa a data em um dia 
+        data += datetime.timedelta(days=1)
+    # retorna a data encontrada 
+    return data 
+Quarto e último passo: você precisa criar uma função que retorna o terceiro dia útil antes do primeiro dia útil do mês. Você pode usar a função anterior para obter o primeiro dia útil e depois decrementar a data em três dias usando a função timedelta() do módulo datetime3. Você também precisa verificar se cada data decrementada é um dia útil usando a função eh_dia_util(). Se não for um dia útil, você precisa decrementar mais um dia até encontrar um dia útil. Por exemplo:
+
+def terceiro_dia_util_antes(mes ,ano):
+    # obtém o primeiro dia util do mes 
+    primeiro = primeiro_dia_util(mes ,ano)
+    # inicializa o contador de dias utéis antes 
+    dias_uteis_antes = 0 
+    # enquanto não chegar ao terceiro,
+     while dias_uteis_antes < 3:
+         # decrementa a data em um día 
+         primeiro -= datetime.timedelta(days=1)
+         # verifica se é um día util 
+         if eh_dia_util(primeiro):
+             # incrementa o contador de días utéis antes 
+             dias_uteis_antes += 1 
+     # retorna a data encontrada  
+     return primeiro
+
+D4N1UM-7R0N1X
+
+Criar um só arquivo para a infraestrutura dos códigos
