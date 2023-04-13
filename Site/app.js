@@ -618,6 +618,7 @@ apagar.addEventListener("click", event => {
    var selectAT = document.getElementById("AT");
    var selectDDD = document.getElementById("DDD");
    var selectPP = document.getElementById("PP");
+   
    for (var i = 0; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "block";
    }
