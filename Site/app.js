@@ -33,11 +33,12 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[3].text = "Mapeamento do Universo de Auditoria";
      selectAT.options[3].value = "3";
 
-     for (var i = 4; i < selectAT.options.length; i++) {
-
+    for (var i = 4; i < selectAT.options.length; i++) {
       selectAT.options[i].style.display = "none";
-
      }
+    for (var i = 0; i < 4; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //Avaliação/Consultoria/Apuração
 
@@ -54,11 +55,12 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[4].text = "Relatoria";
      selectAT.options[4].value = "4";
 
-     for (var i = 5; i < selectAT.options.length; i++) {
-
+    for (var i = 5; i < selectAT.options.length; i++) {
       selectAT.options[i].style.display = "none";
-
      }
+    for (var i = 0; i < 5; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //Monitoramento
 
@@ -71,10 +73,11 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[2].value = "2";
 
      for (var i = 3; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
+     for (var i = 0; i < 3; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //Demandas Externas
 
@@ -93,10 +96,11 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[5].value = "5";
 
      for (var i = 6; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
+     for (var i = 0; i < 6; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //PGMQ
 
@@ -111,10 +115,11 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[3].value = "3";
 
      for (var i = 4; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
+     for (var i = 0; i < 4; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //Demandas Administrativas
 
@@ -126,12 +131,12 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[2].text = "Gestão do SEI";
      selectAT.options[2].value = "2";
 
-     for (var i = 5; i < selectAT.options.length; i++) {
-
+     for (var i = 3; i < selectAT.options.length; i++) {
       selectAT.options[i].style.display = "none";
-
      }
-
+     for (var i = 0; i < 3; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
    } //Demandas de TIC
 
    else if (selectDDD.value == 9) {
@@ -151,10 +156,11 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[6].value = "6";
 
      for (var i = 7; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
+     for (var i = 0; i < 7; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //Capacitação
 
@@ -167,10 +173,11 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[2].value = "2";
 
      for (var i = 3; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
+     for (var i = 0; i < 3; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    } //Ausência
 
@@ -182,11 +189,11 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[1].value = "1";
 
      for (var i = 2; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
-
+     for (var i = 0; i < 2; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
    } //Participação em reuniões/GT/Outros
 
    else if (selectDDD.value == 12 || selectDDD.value == 13) {
@@ -196,19 +203,18 @@ primeiraColuna.addEventListener('change', function() {
      selectAT.options[1].value = "";
 
      for (var i = 2; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "none";
-
      }
+     for (var i = 0; i < 2; i++) {
+      selectAT.options[i].style.display = "block";
+     }     
 
    }
 
    else {
 
      for (var i = 0; i < selectAT.options.length; i++) {
-
       selectAT.options[i].style.display = "";
-
      }
 
    }
