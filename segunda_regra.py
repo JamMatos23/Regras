@@ -33,9 +33,9 @@ dadosconexao = (
 conexao = pyodbc.connect(dadosconexao)
 print("conexão bem sucedida!")
 
-list1 = ['MARCO JOSE BIANCHINI','SIMONE CAMPOS LIMA','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
+list1 = ['MARCO JOSE BIANCHINI','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
 #list2 = ['marco.bianchini@inep.gov.br','simone.lima@inep.gov.br','lenice.medeiros@inep.gov.br','anderson.oliveira@inep.gov.br','roselaine.silva@inep.gov.br'] #Lista com os emails 
-list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br']
+list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br']
 list3 = [] #Lista vazia
 
 # Importe a planilha Excel para um DataFrame do Pandas
@@ -43,17 +43,17 @@ df = pd.read_excel('C://Users\jamil.monteiro\Downloads\De-Para_codificada.xlsx')
 
 # Acesse as informações dentro da planilha
 listaQT = []
-listano = df.loc[0:1000, 'Ano']
+listano = [2022,2023]
 print(listano)
 listacao = ['01','02','03','04','05','06','07','08','09',1,2,3,4,5,6,7,8,9,10]
 print(listacao)
 listproduto = [1,2,3,4]
-listdemanda = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+listdemanda = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 listatividade = [1,2,3,4,5,6]
 listsprint = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
 #área onde acontecerar a pesquisa
-df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 68) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao not like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 68) order by NomeServidor, DtInicioPactoTrab", conexao)
+df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao not like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
 print(df)
 
 #Gerar todas as possibilidades
@@ -76,10 +76,10 @@ for valor in df['Descrição'].values:
         emails_str = ';'.join(emails) #separar os emails para o sistema poder lê e fazer os envios
         
         email.To = f"{emails_str}"
-        email.To = f"jamil.monteiro@inep.gov.br"
+        #email.To = f"jamil.monteiro@inep.gov.br"
         email.Subject = "Lembrete"
         email.HTMLBody = f"""
-        <p>Caros Chefe e Claudio, todos os servidores estão com o campo descrição fora do devido padrão.</p>
+        <p>Caros Chefe e Claudio, <b>todos os servidores estão com o campo descrição fora do devido padrão.</b></p>
         <p>Cordialmente,</p>
         <p>Email automático</p>
         """
@@ -91,7 +91,7 @@ for valor in df['Descrição'].values:
         email.To = f"jamil.monteiro@inep.gov.br"
         email.Subject = "Lembrete"
         email.HTMLBody = f"""
-        <p>Caros Chefe e Claudio, todos os servidores estão com o campo descrição dos Programas de trabalhos relacionados ao PGD dentro do padrão correto.</p>
+        <p>Caros Chefe e Claudio, <b>todos os servidores estão com o campo descrição dos Programas de trabalhos relacionados ao PGD dentro do padrão correto.</b></p>
         <p>{df.to_html()}</p>
         <p>Cordialmente,</p>
         <p>Email automático</p>
@@ -100,7 +100,7 @@ for valor in df['Descrição'].values:
         print("Email Enviado")
         exit()
     else:
-        dfs = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 68) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 68) order by NomeServidor, DtInicioPactoTrab", conexao)
+        dfs = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
         
         list3 = df['NomeServidor'].values
         print("Esses são os servidores que o campo 'Descrição' dos Programas de trabalhos relacionados ao PGD fora do padrão: ",list3)
@@ -115,7 +115,7 @@ for valor in df['Descrição'].values:
         email.To = f"{emails_str}"
         email.Subject = "Lembrete"
         email.HTMLBody = f"""
-        <p>Prezado(a) Servidor(a), Venho-lhe informar que, <b>possui nos Programas de Trabalhos atividades onde o campo descrição não está no padrão correto, peço-lhe que faça a mudança o quanto antes.</b></p>
+        <p><b>Prezado(a) Servidor(a), Venho-lhe informar que, possui nos Programas de Trabalhos atividades onde o campo descrição não está no padrão correto, peço-lhe que faça a mudança o quanto antes.</b></p>
         <p>{df.to_html()}</p>
         <p>Cordialmente,</p>
         <p>Email automático</p>
@@ -123,8 +123,11 @@ for valor in df['Descrição'].values:
         email.Send()
         # criar um email
         email = outlook.CreateItem(0)
-        sim = 'Servidores_ok.xlsx'
-        nao = 'Servidores_notok.xlsx'
+        
+        #sim = dfs.to_excel('Servidores_ok.xlsx')
+        #nao = df.to_excel('Servidores_notok.xlsx')
+        with pd.ExcelWriter('Servidores_ok.xlsx', engine='openpyxl', mode='a') as writer: df.to_excel(writer, sheet_name='Planilha1', index=False)
+        with pd.ExcelWriter('Servidores_notok.xlsx', engine='openpyxl', mode='a') as writer: df.to_excel(writer, sheet_name='Planilha1', index=False)
         
         #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
         email.To = f"jamil.monteiro@inep.gov.br"
@@ -137,12 +140,10 @@ for valor in df['Descrição'].values:
         <p>Cordialmente,</p>
         <p>Email automático</p>
         """
-        anexo = os.path.abspath(sim)
-        anexo1 = os.path.abspath(nao)
-        email.Attachments.Add(anexo)
-        email.Attachments.Add(anexo1)
-        #dfs.to_excel('sim.xlsx',index=False)
-        #df.to_excel('nao.xlsx',index=False)
+        attachment1 = "Servidores_ok.xlsx"
+        attachment2 = "Servidores_notok.xlsx"
+        email.Attachments.Add(attachment1) 
+        email.Attachments.Add(attachment2)
         email.Send()
         print("Email Enviado")
         exit()

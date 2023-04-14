@@ -66,10 +66,10 @@ if hj in previous_weekdays:
 
     #d = date(ano,mes,dia)
     #Área onde acontecerá a pesquisa
-    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab order by NomeServidor, DtInicioPactoTrab", conexao) #Query para selecionamos os servidores
-    list1 = ['MARCO JOSE BIANCHINI','SIMONE CAMPOS LIMA','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
-    #list2 = ['marco.bianchini@inep.gov.br','simone.lima@inep.gov.br','lenice.medeiros@inep.gov.br','anderson.oliveira@inep.gov.br','roselaine.silva@inep.gov.br'] #Lista com os emails 
-    list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br']
+    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-8') group by NomeServidor, DtInicioPactoTrab order by NomeServidor, DtInicioPactoTrab", conexao) #Query para selecionamos os servidores
+    list1 = ['MARCO JOSE BIANCHINI','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
+    #list2 = ['marco.bianchini@inep.gov.br','lenice.medeiros@inep.gov.br','anderson.oliveira@inep.gov.br','roselaine.silva@inep.gov.br'] #Lista com os emails 
+    list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br']
     list3 = [] #Lista vazia
     print(df)
 

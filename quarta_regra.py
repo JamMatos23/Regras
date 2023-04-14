@@ -32,9 +32,18 @@ def previous_three_weekdays(date):
   # Retornar a lista em ordem crescente;
   return sorted(weekdays)
 
+# Definir uma função que encontra o proximo dia útil a uma data;
+def left_weekday(date):
+  while not is_weekday(date): 
+    date -= datetime.timedelta(days=1)
+  return date
+
+anterior_weekday = left_weekday(dia16)
+print(f"O proximo dia útil anterior ao dia {dia16} é {anterior_weekday}")
 previous_weekdays = previous_three_weekdays(dia16)
 print(f"Os três dias úteis anteriores são {previous_weekdays}")
 
+#data feito para testar o codigo
 teste = date(ano,mes,14)
 
 # Verificar se o dia atual está dentro de previous_weekdays
@@ -62,22 +71,22 @@ if data in previous_weekdays:
   d = date(ano,mes,dia)
 
   #Área onde acontecerá a pesquisa
-  df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-10') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-17') group by NomeServidor, DtInicioPactoTrab order by NomeServidor, DtInicioPactoTrab", conexao) #Query para selecionamos os servidores
-  list1 = ['MARCO JOSE BIANCHINI','SIMONE CAMPOS LIMA','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
-  #list2 = ['marco.bianchini@inep.gov.br','simone.lima@inep.gov.br','lenice.medeiros@inep.gov.br','anderson.oliveira@inep.gov.br','roselaine.silva@inep.gov.br'] #Lista com os emails
-  list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br'] 
+  df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, DtFimPactoTrab FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-9') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-25') group by NomeServidor, DtInicioPactoTrab, DtFimPactoTrab order by NomeServidor, DtInicioPactoTrab", conexao) #Query para selecionamos os servidores
+  list1 = ['MARCO JOSE BIANCHINI','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
+  #list2 = ['marco.bianchini@inep.gov.br','lenice.medeiros@inep.gov.br','anderson.oliveira@inep.gov.br','roselaine.silva@inep.gov.br'] #Lista com os emails
+  list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br'] 
   list3 = [] #Lista vazia
 
   #Conferir os valores
   for valor in list1:
       #Função para caso o de todos os servidores tenham registrados os planos de projetos
-      if valor in df["NomeServidor"].values:
+      if all(valor) in df["NomeServidor"].values:
         print("Todos os servidores registraram planos de projetos para essa data.")
         email.To = f"jamil.monteiro@inep.gov.br"
-        #email.To = f"cleuber.fernandes@inep.gov.br;cleuber.fernandes@inep.gov.br"
+        #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
         email.Subject = "Lembrete"
         email.HTMLBody = f"""
-        <p>Lembrete: Caros Chefe e Claudio, todos os servidores já fizeram os devidos registros sobre as atividades dos Programs de Trabalhos referentes a segunda quinzena desse mês</p>
+        <p>Lembrete: Caros Chefe e Claudio, todos os servidores já fizeram os devidos registros sobre as atividades dos Programas de Trabalhos referentes a segunda quinzena desse mês</p>
         <p>Cordialmente,</p>
         <p>Email automático</p>
         """
@@ -100,7 +109,7 @@ if data in previous_weekdays:
           #email.To = f"{emails_str}"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Prezado(a) servidor(a), A inserção das atividades dos Programas de trabalhos devem ser realizados até o dia 16!</p>
+          <p>Lembrete: Prezado(a) servidor(a), A inserção das atividades dos Programas de trabalhos devem ser realizados até o fim do dia útil {anterior_weekday}.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -112,7 +121,7 @@ if data in previous_weekdays:
           #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Caros Chefe e Claudio, por enquanto nenhum servidor fez o registro das atividades dos Programas de Trabalhos entretanto, eles possuem até o dia para fazerem tais registros!</p>
+          <p>Lembrete: Caros Chefe e Claudio, informo que, até o momento, nenhum servidor registrou as atividades dos Programas de Trabalhos. Ressalto que o prazo para tais registros é até o final do dia útil {anterior_weekday}.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -131,7 +140,7 @@ if data in previous_weekdays:
           set1 = set(list1) #Converte a list1 em um set
           set_df = set(df['NomeServidor']) #Converte a coluna do dataframe em um set
           list3 = list(set1 - set_df) #Obtém os elementos que estão em set1 mas não em set_df e converte em uma lista
-          #print("Esses são os servidores que não registram os planos de projetos: ",list3)
+          print("Esses são os servidores que não registraram os planos de projetos: ",list3)
           list5 = list(zip(list3, list2))
           
           nomes = [nome for nome, email in list5] # extrai os nomes da tupla
@@ -143,7 +152,7 @@ if data in previous_weekdays:
           #email.To = f"{emails_str}"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Prezado(a) servidor(a), A inserção das atividades dos Programas de trabalhos devem ser realizados até o dia 16!</p>
+          <p>Lembrete: Prezado(a) servidor(a), A inserção das atividades dos Programas de trabalhos devem ser realizados até o fim do dia útil {anterior_weekday}.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -155,7 +164,7 @@ if data in previous_weekdays:
           #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Caros Chefe e Claudio, os servidores {list3} ainda não preencheram as atividades dos Programas de Trabalhos entretanto eles possuem até o dia para fazerem tais registros!</p>
+          <p>Lembrete: Caros Chefe e Claudio, informo que, até o momento, os servidores {list3} ainda não registraram as atividades dos Programas de Trabalhos. Lembro que o prazo para tais registros é até o final do dia útil {anterior_weekday}</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -165,4 +174,3 @@ if data in previous_weekdays:
 #Se o dia atual não for o dia correto então essa sequência ira ser realizada
 else:
   print(f"O dia atual ({data}) não está dentro dos três dias úteis anteriores ao décimo sexto dia útil do mês.")
-  
