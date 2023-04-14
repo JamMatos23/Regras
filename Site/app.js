@@ -199,15 +199,10 @@ primeiraColuna.addEventListener('change', function() {
    else if (selectDDD.value == 12 || selectDDD.value == 13) {
      selectAT.options[0].text = "-- atividade --";
      selectAT.options[0].value = "";
-     selectAT.options[1].text = "";
-     selectAT.options[1].value = "";
 
-     for (var i = 2; i < selectAT.options.length; i++) {
+     for (var i = 0; i < selectAT.options.length; i++) {
       selectAT.options[i].style.display = "none";
-     }
-     for (var i = 0; i < 2; i++) {
-      selectAT.options[i].style.display = "block";
-     }     
+     } 
 
    }
 
@@ -655,7 +650,7 @@ primeiraColuna.addEventListener('change', function() {
       selectAA.options[i].style.display = "none";
      }   
    }
-  });
+});
 
 primeiraColuna.addEventListener('change', function() {
    var selectDDD = document.getElementById("DDD");
@@ -755,10 +750,10 @@ primeiraColuna.addEventListener('change', function() {
      selectPP.options[2].text = "Recomendação monitorada";
      selectPP.options[2].value = "1";
      
-     for (var i = 1; i < selectPP.options.length; i++) {
+     for (var i = 3; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
      }
-     for (var i = 0; i < 1; i++) {
+     for (var i = 0; i < 3; i++) {
       selectPP.options[i].style.display = "block";
      }
    } else if (selectDDDText == "PGMQ") {
@@ -773,10 +768,10 @@ primeiraColuna.addEventListener('change', function() {
      selectPP.options[4].text = "Relatório de Avaliação IA-CM";
      selectPP.options[4].value = "1";
      
-     for (var i = 1; i < selectPP.options.length; i++) {
+     for (var i = 5; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
      }
-     for (var i = 0; i < 1; i++) {
+     for (var i = 0; i < 5; i++) {
       selectPP.options[i].style.display = "block";
      }
    } else if (selectDDDText == "Planejamento Anual") {
@@ -793,10 +788,10 @@ primeiraColuna.addEventListener('change', function() {
      selectPP.options[5].text = "Universo de Auditoria";
      selectPP.options[5].value = "1";
      
-     for (var i = 1; i < selectPP.options.length; i++) {
+     for (var i = 6; i < selectPP.options.length; i++) {
       selectPP.options[i].style.display = "none";
      }
-     for (var i = 0; i < 1; i++) {
+     for (var i = 0; i < 6; i++) {
       selectPP.options[i].style.display = "block";
      }
    }  else {
