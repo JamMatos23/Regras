@@ -101,9 +101,7 @@ select:invalid {
 }
 
 .select-container label {
-    margin-left: 0;
-    margin-bottom: 15%;
-    text-align: center;
+    margin-left: -7%;
 }
 
 .quest {
