@@ -41,7 +41,9 @@ def previous_three_weekdays(date):
   # Retornar a lista em ordem crescente;
   return sorted(weekdays)
 
-hj = date.today()
+# hj = date.today()
+hj = date(year=2023,month=4,day=15)
+
 # Testar a função com um exemplo
 first_weekday = first_weekday_of_month(ano, mes+1)
 print(f"O primeiro dia útil de {mes+1}/{ano} é {first_weekday}")

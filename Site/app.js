@@ -20,6 +20,22 @@ primeiraColuna.addEventListener('change', function() {
 
    var originalOptions = selectAT.innerHTML;
 
+   AA.value = ''
+   YYYY.value = ''
+   PP.value = ''
+   AT.value = ''
+   SP.value = ''
+   Ret.value = ''
+   var selectAT = document.getElementById("AT");
+   var selectPP = document.getElementById("PP");
+
+   for (var i = 0; i < selectPP.options.length; i++) {
+      selectPP.options[i].style.display = "block";
+   }
+   for (var i = 0; i < selectAT.options.length; i++) {
+      selectAT.options[i].style.display = "block";
+   }
+
    //Planejamento Anual
 
    if (selectDDD.value == 1) {
@@ -220,6 +236,13 @@ segundaColuna.addEventListener('change', function() {
    var selectedOption = selectAT.options[selectAT.selectedIndex];
    var selectATText = selectedOption.text;
    var selectPP = document.getElementById("PP");
+
+   AA.value = ''
+   YYYY.value = ''
+   PP.value = ''
+   SP.value = ''
+   Ret.value = ''
+
    //Elaboração/Atualização do PAINT
    if (selectATText == "Elaboração/Atualização do PAINT") {
      selectPP.options[0].text = "-- id do produto --";
@@ -596,6 +619,7 @@ primeiraColuna.addEventListener('change', function() {
    var selectedOption = selectDDD.options[selectDDD.selectedIndex];
    var selectDDDText = selectedOption.text;
    var selectAA = document.getElementById("AA");
+   var selectSP = document.getElementById("SP");
    if (selectDDDText == "Apuração" || selectDDDText == "Avaliação" || selectDDDText == "Consultoria" || selectDDDText == "Monitoramento") {
      selectAA.options[0].text = "-- id da ação --";
      selectAA.options[0].value = "";
@@ -642,14 +666,20 @@ primeiraColuna.addEventListener('change', function() {
      selectAA.options[21].text = "Gestão documental e controle de demandas externas";
      selectAA.options[21].value = "10"; 
      
-     for (var i = 0; i <= selectAA.options.length; i++) {
+    for (var i = 0; i < 22; i++) {
       selectAA.options[i].style.display = "block";
      }
+    for (var i = 0; i < selectSP.options.length; i++) {
+      selectSP.options[i].style.display = "block";
+     }
    } else {
-    for (var i = 0; i <= selectAA.options.length; i++) {
+    for (var i = 0; i < selectAA.options.length; i++) {
       selectAA.options[i].style.display = "none";
-     }   
-   }
+     }
+    for (var i = 0; i < selectSP.options.length; i++) {
+      selectSP.options[i].style.display = "none";
+     }  
+   }  
 });
 
 primeiraColuna.addEventListener('change', function() {
@@ -801,6 +831,7 @@ primeiraColuna.addEventListener('change', function() {
    }  
    
 });
+
 
 YYYY.addEventListener('change', ()=> {
    let arr = []
