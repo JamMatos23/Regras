@@ -800,7 +800,7 @@ primeiraColuna.addEventListener('change', function() {
      }
    }  
    
-}); 
+});
 
 YYYY.addEventListener('change', ()=> {
    let arr = []
@@ -813,7 +813,7 @@ YYYY.addEventListener('change', ()=> {
    arr.map(item => str += `<option value="${item.value}">${item.text}</option>`)
 
    AA.innerHTML = str
-})
+});
 
 enviar.addEventListener("click", event => {
    event.preventDefault()
@@ -826,7 +826,7 @@ enviar.addEventListener("click", event => {
    const PSP = SP.value
 
    Ret.value = ('<demanda>'+PDDD+'</demanda><atividade>'+PAT+'</atividade><produto>'+PPP+'</produto><anoAcao>'+PYYYY+'</anoAcao><idAcao>'+PAA+'</idAcao><idSprint>'+PSP+'</idSprint>');
-}); 
+});
 
 apagar.addEventListener("click", event => {
    event.preventDefault()
