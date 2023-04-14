@@ -99,6 +99,11 @@ select:invalid {
     display: inline-block;
 }
 
+.select-container label {
+    margin-left:-10%;
+    margin-bottom: 15%;
+}
+
 .quest {
     position: relative;
     top: 2px;
