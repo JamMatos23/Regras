@@ -43,6 +43,7 @@ df = pd.read_excel('C://Users\jamil.monteiro\Downloads\De-Para_codificada.xlsx')
 
 # Acesse as informações dentro da planilha
 listaQT = []
+listIdProduto= list(range(999999, 10000000))
 listano = [2022,2023]
 print(listano)
 listacao = ['01','02','03','04','05','06','07','08','09',1,2,3,4,5,6,7,8,9,10]
@@ -57,11 +58,11 @@ df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao,
 print(df)
 
 #Gerar todas as possibilidades
-com = itertools.product(listdemanda,listatividade,listproduto,listano,listacao,listsprint)
+com = itertools.product(listdemanda,listatividade,listproduto,listIdProduto,listano,listacao,listsprint)
 
 #Formatar cada combinação
 #<demanda>x</demanda><atividade>x</atividade><produto>x</produto><anoAcao>x</anoAcao><idAcao>x</idAcao><idSprint>x</idSprint>
-formato = [f"<demanda>{x[0]}</demanda><atividade>{x[1]}</atividade><produto>{x[2]}</produto><anoAcao>{x[3]}</anoAcao><idAcao>{x[4]}</idAcao><idSprint>{x[5]}</idSprint>" for x in com]
+formato = [f"<demanda>{x[0]}</demanda><atividade>{x[1]}</atividade><produto>{x[2]}</produto><idproduto>{x[3]}</idproduto><anoAcao>{x[4]}</anoAcao><idAcao>{x[5]}</idAcao><idSprint>{x[6]}</idSprint>" for x in com]
 
 for valor in df['Descrição'].values:
     #Verifica se todos os itens do campo descrição estão de acordo com o padrão
@@ -126,8 +127,8 @@ for valor in df['Descrição'].values:
         
         #sim = dfs.to_excel('Servidores_ok.xlsx')
         #nao = df.to_excel('Servidores_notok.xlsx')
-        with pd.ExcelWriter('Servidores_ok.xlsx', engine='openpyxl', mode='a') as writer: df.to_excel(writer, sheet_name='Planilha1', index=False)
-        with pd.ExcelWriter('Servidores_notok.xlsx', engine='openpyxl', mode='a') as writer: df.to_excel(writer, sheet_name='Planilha1', index=False)
+        with pd.ExcelWriter('Servidores_ok.xlsx', engine='openpyxl', mode='a',if_sheet_exists='replace') as writer: df.to_excel(writer, sheet_name='Planilha1', index=False)
+        with pd.ExcelWriter('Servidores_notok.xlsx', engine='openpyxl', mode='a',if_sheet_exists='replace') as writer: df.to_excel(writer, sheet_name='Planilha1', index=False)
         
         #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
         email.To = f"jamil.monteiro@inep.gov.br"
@@ -140,8 +141,8 @@ for valor in df['Descrição'].values:
         <p>Cordialmente,</p>
         <p>Email automático</p>
         """
-        attachment1 = "Servidores_ok.xlsx"
-        attachment2 = "Servidores_notok.xlsx"
+        attachment1 = "C://Users\jamil.monteiro\OneDrive - INEP\Documents\Projeto\Servidores_ok.xlsx"
+        attachment2 = "C://Users\jamil.monteiro\OneDrive - INEP\Documents\Projeto\Servidores_notok.xlsx"
         email.Attachments.Add(attachment1) 
         email.Attachments.Add(attachment2)
         email.Send()
