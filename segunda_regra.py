@@ -6,7 +6,6 @@ import pandas as pd
 import pyodbc
 import win32com.client as win32
 import itertools
-import os
 
 #Método para pegar a data atual;
 data = date.today()
@@ -38,31 +37,27 @@ list1 = ['MARCO JOSE BIANCHINI','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OL
 list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br']
 list3 = [] #Lista vazia
 
-# Importe a planilha Excel para um DataFrame do Pandas
-df = pd.read_excel('C://Users\jamil.monteiro\Downloads\De-Para_codificada.xlsx')
+#área onde acontecerar a pesquisa
+df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao not like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><idEaud>%%</idEaud><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
+print(df)
 
 # Acesse as informações dentro da planilha
 listaQT = []
-listIdProduto= list(range(999999, 10000000))
+listIdEaud= list()
+#listIdEaud = f"https://eaud.cgu.gov.br/api/auth/tarefa/{listaQT}/dto/json"
 listano = [2022,2023]
-print(listano)
 listacao = ['01','02','03','04','05','06','07','08','09',1,2,3,4,5,6,7,8,9,10]
-print(listacao)
 listproduto = [1,2,3,4]
 listdemanda = [1,2,3,4,5,6,7,8,9,10,11,12,13,14]
 listatividade = [1,2,3,4,5,6]
 listsprint = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
-#área onde acontecerar a pesquisa
-df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao not like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
-print(df)
-
 #Gerar todas as possibilidades
-com = itertools.product(listdemanda,listatividade,listproduto,listIdProduto,listano,listacao,listsprint)
+com = itertools.product(listdemanda,listatividade,listproduto,listIdEaud,listano,listacao,listsprint)
 
 #Formatar cada combinação
 #<demanda>x</demanda><atividade>x</atividade><produto>x</produto><anoAcao>x</anoAcao><idAcao>x</idAcao><idSprint>x</idSprint>
-formato = [f"<demanda>{x[0]}</demanda><atividade>{x[1]}</atividade><produto>{x[2]}</produto><idproduto>{x[3]}</idproduto><anoAcao>{x[4]}</anoAcao><idAcao>{x[5]}</idAcao><idSprint>{x[6]}</idSprint>" for x in com]
+formato = [f"<demanda>{x[0]}</demanda><atividade>{x[1]}</atividade><produto>{x[2]}</produto><idEaud>{x[3]}</idEaud><anoAcao>{x[4]}</anoAcao><idAcao>{x[5]}</idAcao><idSprint>{x[6]}</idSprint>" for x in com]
 
 for valor in df['Descrição'].values:
     #Verifica se todos os itens do campo descrição estão de acordo com o padrão
@@ -101,7 +96,7 @@ for valor in df['Descrição'].values:
         print("Email Enviado")
         exit()
     else:
-        dfs = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
+        dfs = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><idEaud>%%</idEaud><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-4') group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
         
         list3 = df['NomeServidor'].values
         print("Esses são os servidores que o campo 'Descrição' dos Programas de trabalhos relacionados ao PGD fora do padrão: ",list3)
