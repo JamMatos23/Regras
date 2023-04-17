@@ -12,16 +12,17 @@
     <header>
         <div class="topnav">
             <div>
-                <img class="logo-image" src="inep-logo-1.png" height="100px" alt="Inepnet">
+                <img class="logo-image" src="inep-logo-1.png" height="100px" alt="Inepnet"> 
                 <h1>Gerador de Descrição</h1>
             </div>
         </div>
     </header>
     <form>
         <p>
-            <label for="DDD">Selecione a demanda </label><br>
-            <select id="DDD" name="DDD" required>
-                <option value="" class="nada">-- demanda --</option>
+            <div class="select-container">
+            <label for="DDD">Demanda: </label><br>
+            <select id="DDD" name="DDD" >
+                <option value="" class="nada">-- Demanda --</option>
                 <option value="1">Planejamento Anual</option>
                 <option value="2">Avaliação</option>
                 <option value="3">Consultoria</option>
@@ -36,11 +37,19 @@
                 <option value="12">Participação em reuniões/GT</option>
                 <option value="13">Outros</option>
             </select>
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+            <span class="tooltiptext">Demandas: Neste campo será selecionado a demanda da descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
+            </div>
         </p>
         <p>
-            <label for="AT">Selecione a atividade</label><br>
-            <select id="AT" name="AT" required>
-                <option value="" class="nada">-- atividade --</option>
+            <div class="select-container">
+            <label for="AT">Atividade: </label><br>
+            <select id="AT" name="AT" >
+                <option value="" class="nada">-- Atividade --</option>
                 <option data-group="1" value="2">Elaboração/Atualização do PAINT</option>
                 <option data-group="1" value="3">Elaboração/Atualização do RAINT</option>
                 <option data-group="1" value="1">Mapeamento do Universo de Auditoria</option>
@@ -78,56 +87,86 @@
                 <option data-group="10" value="2">Estudo individual</option>
                 <option data-group="11" value="1">Ausência</option>
             </select>
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+            <span class="tooltiptext">Atividades: Neste campo será selecionado a atividade da descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
         </p>
         <p>
-            <label for="PP">Selecione o ID do produto</label><br>
-            <select id="PP" name="PP" required>
-                <option value="" class="nada">-- id do produto --</option>
-                <option data-subgroup="1" data-group="2"  value="1">PAINT Preliminar</option>
-                <option data-subgroup="1" data-group="3"  value="1">RAINT Preliminar</option>
-                <option data-subgroup="1" data-group="1" value="1">Universo de auditoria</option>
-                <option data-subgroup="1" data-group="2" value="2">PAINT Definitivo</option>
-                <option data-subgroup="1" data-group="3"  value="2">RAINT Definitivo</option>
-                <option data-subgroup="2" data-group="1"  value="1">Análise Preliminar</option>
-                <option data-subgroup="2" data-group="2"  value="1">Escopo da Auditoria</option>
-                <option data-subgroup="2" data-group="4"  value="1">Recomendações cadastradas</option>
-                <option data-subgroup="4" data-group="4"  value="1" hidden>Recomendações cadastradas</option>
-                <option data-subgroup="2" data-group="3" value="1">Relatório Preliminar</option>
-                <option data-subgroup="2" data-group="1"  value="2">Matriz de Riscos</option>
-                <option data-subgroup="2" data-group="2"  value="2">Papéis de Trabalho</option>
-                <option data-subgroup="2" data-group="3"  value="2">Relatório Final</option>
-                <option data-subgroup="2" data-group="2"  value="2">Matriz de Achados</option>
-                <option data-subgroup="2" data-group="1"  value="3">Matriz de Planejamento</option>
-                <option data-subgroup="5" data-group="1"  value="1">Recomendação monitorada</option>
-                <option data-subgroup="5" data-group="2"  value="2">Benefício contabilizado</option>
-                <option data-subgroup="7" data-group="1" value="1">Matriz de avaliação</option>
-                <option data-subgroup="7" data-group="1" value="2">Avaliação IA-CM</option>
-                <option data-subgroup="7" data-group="2" value="1">Plano de ação </option>
-                <option data-subgroup="7" data-group="3" value="1">Relatório de Avaliação IA-CM</option>
+            <div class="select-container">
+            <label for="PP">Produto: </label><br>
+            <select id="PP" name="PP" >
+                <option value="" class="nada">-- Produto --</option>
+                <option value="1">PAINT Preliminar</option>
+                <option value="1">RAINT Preliminar</option>
+                <option value="1">Universo de auditoria</option>
+                <option value="2">PAINT Definitivo</option>
+                <option value="2">RAINT Definitivo</option>
+                <option value="1">Análise Preliminar</option>
+                <option value="1">Escopo da Auditoria</option>
+                <option value="1">Recomendações cadastradas</option>
+                <option value="1">Relatório Preliminar</option>
+                <option value="2">Matriz de Riscos</option>
+                <option value="2">Papéis de Trabalho</option>
+                <option value="2">Relatório Final</option>
+                <option value="2">Matriz de Achados</option>
+                <option value="3">Matriz de Planejamento</option>
+                <option value="1">Recomendação monitorada</option>
+                <option value="2">Benefício contabilizado</option>
+                <option value="1">Construção da matriz de avaliação</option>
+                <option value="1">Plano de ação aprovado</option>
+                <option value="1">Relatório aprovado</option>
                 <option value="2">Avaliação inserida no e-aud</option>
-                <option data-subgroup="8" data-group="2" value="1">Normativo</option>
-                <option data-subgroup="8" data-group="2" value="2">Parecer</option>
-                <option data-subgroup="8" data-group="2" value="3">Manual</option>
-                <option data-subgroup="8" data-group="2" value="4">POP</option>
-                <option data-subgroup="9" data-group="2" value="1">Aplicativo</option>
-                <option data-subgroup="9" data-group="1" value="1">Consulta SQL</option>
-                <option data-subgroup="9" data-group="3" value="1">Painel Gerencial</option>
-                <option data-subgroup="11" data-group="1" value="1">Atestado Médico</option>
-                <option data-subgroup="11" data-group="1" value="2">Férias</option>
+                <option value="1">Normativo</option>
+                <option value="2">Parecer</option>
+                <option value="3">Manual Operacional</option>
+                <option value="4">POP</option>
+                <option value="1">Aplicativo</option>
+                <option value="1">Consulta SQL</option>
+                <option value="1">Painel Gerencial</option>
+                <option value="1">Atestado Médico</option>
+                <option value="2">Férias</option>
             </select>
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+            <span class="tooltiptext">Produto: Neste campo será selecionado o produto da descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
         </p>
         <p>
-            <label for="YYYY">Selecione o ano da ação</label><br>
-            <select id="YYYY" name="YYYY" required>
-                <option value="" class="nada">-- ano --</option>
+            <div class="select-container">
+            <label for="IPP">Id do Produto: </label><br>
+            <input id="IPP" name="IPP" min="7" max="7" type="number">
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+                <span class="tooltiptext">Id Produto: Neste campo será digitado/colado o id do produto(número de sete digito do e-Aud) para a descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
+        </p>
+        <p>
+            <div class="select-container">
+            <label for="YYYY">Ano da ação: </label><br>
+            <select id="YYYY" name="YYYY" >
+                <option value="" class="nada">-- Ano --</option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>
             </select>
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+            <span class="tooltiptext">Ano da Ação: Neste campo será selecionado o ano da ação para a descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
         </p>
         <p>
-            <label for="AA">Selecione o ID da ação</label><br>
-            <select id="AA" name="AA" required>
-                <option value="" class="nada">-- id da ação --</option>
+            <div class="select-container">
+            <label for="AA">Ação: </label><br>
+            <select id="AA" name="AA" >
+                <option value="" class="nada">-- Ação --</option>
                 <option value="01">Ação 01/2022 - Elaboração de testes montagem de provas do Enem</option>
                 <option value="02">Ação 02/2022 - Gerir Banco Nacional de Itens</option>
                 <option value="03">Ação 03/2022 - Gestão da Integridade Pública</option>
@@ -150,11 +189,18 @@
                 <option value="9">Gestão da Unidade</option>
                 <option value="10">Gestão documental e controle de demandas externas.</option>
             </select>
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+            <span class="tooltiptext">Ação: Neste campo será selecionado a ID da ação da descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
         </p>
         <p>
-            <label for="SP">Selecione o id da Sprint</label><br>
-            <select id="SP" name="SP" required>
-                <option value="" class="nada">-- id da Sprint --</option>
+        <div class="select-container">
+            <label for="SP">Sprint: </label><br>
+            <select id="SP" name="SP" >
+                <option value="" class="nada">-- Sprint --</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -171,6 +217,12 @@
                 <option value="14">14</option>
                 <option value="15">15</option>
             </select>
+            <div class="tooltip">
+            <div class ="quest">
+            ?
+            </div>
+            <span class="tooltiptext">Sprint: Neste campo será selecionado a ID do sprint da descrição a ser gerada. Se você não precisar preencher esse campo no seu registro, deixe-o em branco.</span>
+            </div>
         </p>
         <p>
             <button id="reset">Apagar</button>
@@ -178,10 +230,9 @@
             <input type="text" id="Ret" value="" readonly>
             <button id="copiar" onclick="copiarResultado()">Copiar</button>
         </p>
-    </form>
+        </form>
     <footer>
         <p class="copyright">&copy; Copyright Audin INEP - <script>document.write(new Date().getFullYear())</script></p>
     </footer>
 </body>
 </html>
-

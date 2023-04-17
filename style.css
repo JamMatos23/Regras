@@ -51,8 +51,9 @@ footer {
     background-color: black;
     color: #ddd;
     position: absolute;
-    bottom: 20px;
+    left: 0;
     width: 100%;
+    bottom: 20px;
 }
 
 select:target-text {
@@ -95,3 +96,46 @@ select:invalid {
     background-color: green;
 }
 
+.select-container {
+    display: inline-block;
+}
+
+.select-container label {
+    margin-left:-8%;
+    margin-bottom: 15%;
+}
+
+.quest {
+    position: relative;
+    top: 2px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+    text-align: center;
+    border-radius: 60%;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ffffff;
+}
+
+.tooltip .tooltiptext {
+    font-size: 12px;
+    visibility: hidden;
+    background-color: rgba(24, 24, 24, 0.75);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 1;
+    top: -15px;
+    left: 120%;
+    width: 890%;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
