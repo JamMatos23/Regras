@@ -41,7 +41,7 @@ def previous_three_weekdays(date):
   # Retornar a lista em ordem crescente;
   return sorted(weekdays)
 
-hj = date.today()
+hj = date(2023,4,26)
 # Testar a função com um exemplo
 first_weekday = first_weekday_of_month(ano, mes+1)
 print(f"O primeiro dia útil de {mes+1}/{ano} é {first_weekday}")
@@ -66,7 +66,7 @@ if hj in previous_weekdays:
 
     #d = date(ano,mes,dia)
     #Área onde acontecerá a pesquisa
-    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())-1, '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-8') group by NomeServidor, DtInicioPactoTrab order by NomeServidor, DtInicioPactoTrab", conexao) #Query para selecionamos os servidores
+    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where DtInicioPactoTrab BETWEEN CONCAT(YEAR(getdate()), '-', MONTH(GETDATE()), '-26') AND CONCAT(YEAR(getdate()), '-', MONTH(GETDATE())+1, '-8') group by NomeServidor, DtInicioPactoTrab order by NomeServidor, DtInicioPactoTrab", conexao) #Query para selecionamos os servidores
     list1 = ['MARCO JOSE BIANCHINI','LENICE MEDEIROS','ANDERSON SOARES FURTADO DE OLIVEIRA','ROSELAINE DE SOUZA SILVA'] #Lista que usaremos como comparaçõa
     #list2 = ['marco.bianchini@inep.gov.br','lenice.medeiros@inep.gov.br','anderson.oliveira@inep.gov.br','roselaine.silva@inep.gov.br'] #Lista com os emails 
     list2 = ['jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br','jamil.monteiro@inep.gov.br']
@@ -91,7 +91,7 @@ if hj in previous_weekdays:
           email.To = f"{emails_str}"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Prezado(a) servidor(a), A inserção das atividades do Programa de trabalho relacionado ao PGD devem ser realizadas até o 1° dia útil do mês que se aproxima!</p>
+          <p>Lembrete: Prezado(a) servidor(a). Informo que o prazo para inserir as atividades dos Programas de trabalho, referente a primeira quizena do mês {mes+1}, no sistema é até o fim do dia {first_weekday_of_month(ano,mes+1)}.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -100,11 +100,11 @@ if hj in previous_weekdays:
           # criar um email
           email = outlook.CreateItem(0)
           emails_str = ';'.join(emails)
-          #email.To = f"jamil.monteiro@inep.gov.br"
-          email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
+          email.To = f"jamil.monteiro@inep.gov.br"
+          #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Caros Chefe e Claudio, por enquanto nenhum servidor realizou o registro das atividades do Programa de Trabalho, entretanto eles possuem até o primeiro dia útil desse mês que se aproxima para fazerem tal registro.</p>
+          <p>Lembrete: Caros Chefe e Claudio. Até o momento, nenhum dos servidores registrou as atividades do Programa de Trabalho, referente a primeira quizena do mês {mes+1}, no sistema. Entretanto eles possuem até o fim do dia {first_weekday_of_month(ano,mes+1)} para fazerem tais registros.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -121,7 +121,7 @@ if hj in previous_weekdays:
           #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Caros Chefe e Claudio, todos os servidores fizeram os registros dos seus respectivos Programas de Trabalhos!</p>
+          <p>Lembrete: Caros Chefe e Claudio, todos os servidores fizeram os registros dos seus respectivos Programas de Trabalhos, referente a primeira quizena do mês {mes+1} no sistema.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -153,7 +153,7 @@ if hj in previous_weekdays:
           #email.To = f"{emails_str};"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Prezado(a) servidor(a), A inserção das atividades do Programa de Trabalho devem ser realizadas até o 1° dia útil do mês que vem!</p>
+          <p>Lembrete: Prezado(a) servidor(a). Informo que o prazo para inserir as atividades dos Programas de trabalho, referente a primeira quizena do mês {mes+1}, no sistema é até o fim do dia {first_weekday_of_month(ano,mes+1)}.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
@@ -161,12 +161,11 @@ if hj in previous_weekdays:
           # criar um email
           email = outlook.CreateItem(0)
           
-          emails_str = ';'.join(emails)
           email.To = f"jamil.monteiro@inep.gov.br"
           #email.To = f"cleuber.fernandes@inep.gov.br;luiz.senna@inep.gov.br"
           email.Subject = "Lembrete"
           email.HTMLBody = f"""
-          <p>Lembrete: Caro Chefe e Claudio, por enquanto apenas alguns dos servidores registraram as atividades do Programa de Trabalho, entretanto eles possuem até o primeiro dia útil desse mês que se aproxima para fazerem tal registro.!</p>
+          <p>Lembrete: Caro Chefe e Claudio, Até o momento, apenas alguns dos servidores({list4}) registraram as atividades do Programa de Trabalho, referente a primeira quizena do mês de {mes+1}, no sistema. Entretanto eles possuem até o fim do dia {first_weekday_of_month(ano,mes+1)} para fazerem tais registros.</p>
           <p>Cordialmente,</p>
           <p>Email automático</p>
           """
