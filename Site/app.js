@@ -13,8 +13,6 @@ var primeiraColuna = document.getElementById('DDD');
 var segundaColuna = document.getElementById('AT');
 var terceiraColuna = document.getElementById('PP');
 
-var idProduto = document.getElementById('IPP')
-
 primeiraColuna.addEventListener('change', function() {
    var selectDDD = document.getElementById("DDD");
 
@@ -871,7 +869,7 @@ enviar.addEventListener("click", function(event) { // Previne o comportamento pa
   // Aqui começa o seu código 
   const PAA = AA.value; const PYYYY = YYYY.value; const PPP = PP.value; const PDDD = DDD.value; const PAT = AT.value; const PSP = SP.value; const PIPP = IPP.value;
 
-  Ret.value = ('<demanda>'+PDDD+'</demanda><atividade>'+PAT+'</atividade><produto>'+PPP+'</produto><idproduto>'+PIPP+'</idproduto><anoAcao>'+PYYYY+'</anoAcao><idAcao>'+PAA+'</idAcao><idSprint>'+PSP+'</idSprint>') 
+  Ret.value = ('<demanda>'+PDDD+'</demanda><atividade>'+PAT+'</atividade><produto>'+PPP+'</produto><idEaud>'+PIPP+'</idEaud><anoAcao>'+PYYYY+'</anoAcao><idAcao>'+PAA+'</idAcao><idSprint>'+PSP+'</idSprint>') 
 });
   
 
