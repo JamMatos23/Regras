@@ -101,7 +101,8 @@ select:invalid {
 }
 
 .select-container label {
-    margin-left: -7%;
+    margin-left:-8%;
+    margin-bottom: 15%;
 }
 
 .quest {
@@ -123,6 +124,7 @@ select:invalid {
 .tooltip .tooltiptext {
     font-size: 12px;
     visibility: hidden;
+    -ms-visibility: hidden;
     background-color: rgba(24, 24, 24, 0.75);
     color: #fff;
     text-align: center;
