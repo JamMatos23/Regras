@@ -42,12 +42,13 @@ body {
     width: 100%;
     margin: 0 auto;
     background-color: #0072d4;
-    padding: 0 20px 20px 20px;
+    padding: 0 20px 0px 20px;
     position: relative;
     height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
     color: white;
-    overflow: hidden;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 header {
@@ -60,10 +61,12 @@ header {
 footer {
     background-color: black;
     color: #ddd;
-    position: absolute;
     left: 0;
     width: 100%;
-    bottom: 20px;
+    bottom: 0;
+    position: fixed;
+    text-align: center; 
+    z-index: -1;
 }
 
 select:target-text {
@@ -143,4 +146,10 @@ select:invalid {
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+.container {
+    flex:1 1 auto;
+    z-index: 0;
+
 }
