@@ -12,10 +12,15 @@ const Ret = document.getElementById('Ret');
 var primeiraColuna = document.getElementById('DDD');
 var segundaColuna = document.getElementById('AT');
 var terceiraColuna = document.getElementById('PP');
+var acaoColuna = document.getElementById('AA');
 
 // Desabilita o elemento select
 const selects = document.querySelectorAll("select");
 selects.forEach(select => select.disabled = true);
+
+// Desabilita o elemento input
+const inputs = document.querySelectorAll("input");
+inputs.forEach(input => input.disabled = true);
 
 // Carrega o arquivo Excel usando a biblioteca SheetJS js-xlsx
 const url = "De-Para.xlsx";
@@ -37,6 +42,8 @@ xhr.onload = function(e) {
   const tipoIndex = rows[1].indexOf("Tipo de Demanda");
   const codAtividadeIndex = rows[1].indexOf("CodAtividade");
   const atividadeIndex = rows[1].indexOf("Atividade");
+  const codProdutoIndex = rows[1].indexOf("CodProduto");
+  const produtoIndex = rows[1].indexOf("Produto");
 
   // Extrai as opções e valores dos dados da coluna para o elemento select DDD
   const optionsDDD = [];
@@ -63,31 +70,28 @@ for (let i = 0; i < optionsDDD.length; i++) {
   const option = document.createElement("option");
   option.text = optionsDDD[i];
   option.value = valuesDDD[i];
-  if (isNaN(option.value)) {
-    option.value = '';
-  }
   selectDDD.add(option);
 }
 
   // Extrai as opções e valores dos dados da coluna para o elemento select AT
   const optionsAT = [];
   const valuesAT = [];
-  const dddValues = [];
+  const dddAT = [];
   for (let i = 1; i < rows.length; i++) {
     const codAtividade = rows[i][codAtividadeIndex];
     const atividade = rows[i][atividadeIndex];
     const codDemanda = rows[i][codIndex];
 
     // Verifica se os valores são válidos
-    if (codAtividade === undefined || atividade === undefined) {
-      console.log("Valor inválido encontrado, parando o loop");
+    if (codAtividade === undefined && atividade === undefined) {
+      console.log("Valores inválido encontrado, parando o loop");
       break;
     }
 
-    if (codAtividade && atividade && !optionsAT.includes(atividade)) {
+    if ((codAtividade && atividade && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
       optionsAT.push(atividade);
       valuesAT.push(codAtividade);
-      dddValues.push(codDemanda);
+      dddAT.push(codDemanda);
     }
   }
 
@@ -97,28 +101,228 @@ for (let i = 0; i < optionsDDD.length; i++) {
     const option = document.createElement("option");
     option.text = optionsAT[i];
     option.value = valuesAT[i];
-    option.setAttribute("data-ddd", dddValues[i]);
+    option.setAttribute("data-ddd", dddAT[i]);
     selectAT.add(option);
+  }
+
+  // Extrai as opções e valores dos dados da coluna para o elemento select PP
+  const optionsPP = [];
+  const valuesPP = [];
+  const dddPP = [];
+  const atPP = [];
+  for (let i = 1; i < rows.length; i++) {
+    const codProduto = rows[i][codProdutoIndex];
+    const produto = rows[i][produtoIndex];
+    const codDemanda = rows[i][codIndex];
+    const codAtividade = rows[i][codAtividadeIndex];
+
+    // Verifica se os valores são válidos
+    if (codProduto === undefined && produto === undefined) {
+      console.log("Valores inválido encontrado, parando o loop");
+      break;
+    }
+
+    if ((codProduto && produto && !optionsPP.includes(produto)) && (codProduto !== undefined && produto !== undefined)) {
+      optionsPP.push(produto);
+      valuesPP.push(codProduto);
+      dddPP.push(codDemanda);
+      atPP.push(codAtividade);
+    }
+  }
+
+  // Preenche o elemento select PP com as opções e valores
+  const selectPP = document.getElementById("PP");
+  for (let i = 0; i < optionsPP.length; i++) {
+    const option = document.createElement("option");
+    option.text = optionsPP[i];
+    option.value = valuesPP[i];
+    option.setAttribute("data-ddd", dddPP[i]);
+    option.setAttribute("data-at", atPP[i]);
+    selectPP.add(option);
   }
 
   // Habilita os elementos select
   document.getElementById("DDD").disabled = false;
+
 };
+
 xhr.send();
+
+console.log(document.getElementById('DDD'))
+console.log(document.getElementById('AT'))
+console.log(document.getElementById('PP'))
 
 primeiraColuna.addEventListener('change', function() {
 
   var selectDDD = document.getElementById("DDD");
   var selectAT = document.getElementById("AT");
+  var selectPP = document.getElementById("PP");
+
+  document.getElementById("AT").disabled = true;
+  document.getElementById("PP").disabled = true;
+  document.getElementById("AA").disabled = true;
+  document.getElementById("YYYY").disabled = true;
+  document.getElementById("SP").disabled = true;
+  document.getElementById("IPP").disabled = true;
+
+  AA.value = ''
+  YYYY.value = ''
+  SP.value = ''
+  IPP.value = ''
+  Array.from(selectPP.options).forEach(function(option) {
+    if (isNaN(option.value)) {
+      PP.value = option.value;
+    }
+  });
+  Array.from(selectAT.options).forEach(function(option) {
+    if (isNaN(option.value)) {
+      AT.value = option.value;
+    }
+  });
 
   if (selectDDD.value !== '') {
+    // Filter options displayed based on data-ddd of selectElement equals the DDD selected on primeiraColuna change
+    Array.from(selectAT.options).forEach(function(option) {
+      if ((option.getAttribute('data-ddd') === selectDDD.value) || (!isNaN(selectAT.value))) {
+        option.style.display = 'block';
+      } else {
+        option.style.display = 'none';
+      }
+    });
     document.getElementById("AT").disabled = false;
-
   } else {
-      document.getElementById("AT").disabled = true;
+    document.getElementById("AT").disabled = true;
+  }
+});
+
+segundaColuna.addEventListener('change', function() {
+
+  var selectDDD = document.getElementById("DDD");
+  var selectAT = document.getElementById("AT");
+  var selectPP = document.getElementById("PP");
+
+  document.getElementById("PP").disabled = true;
+  document.getElementById("AA").disabled = true;
+  document.getElementById("YYYY").disabled = true;
+  document.getElementById("SP").disabled = true;
+  document.getElementById("IPP").disabled = true;
+
+  AA.value = ''
+  YYYY.value = ''
+  SP.value = ''
+  IPP.value = ''
+  Array.from(selectPP.options).forEach(function(option) {
+    if (isNaN(option.value)) {
+      PP.value = option.value;
+    }
+  });
+
+  if (selectDDD.value !== '') {
+    // Filter options displayed based on data-ddd of selectElement equals the DDD selected on primeiraColuna change
+    Array.from(selectPP.options).forEach(function(option) {
+      if ((option.getAttribute('data-ddd') === selectDDD.value && option.getAttribute('data-at') === selectAT.value) || (selectAT.value === '' && option.getAttribute('data-ddd') === '' && option.getAttribute('data-at') === '')) {
+        option.style.display = 'block';
+      } else {
+        option.style.display = 'none';
+      }
+    });
+    document.getElementById("PP").disabled = false;
+  } else {
+    document.getElementById("PP").disabled = true;
+  }
+});
+
+terceiraColuna.addEventListener('change', function() {
+
+  var selectDDD = document.getElementById("DDD");
+  var selectAT = document.getElementById("AT");
+  var selectPP = document.getElementById("PP");
+
+  var ano, acao, sprint;
+
+  if ([1, 2, 3, 4].includes(Number(selectDDD.value))) {
+    fetch('acao.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        acao = data;
+        // Get the select element ano
+        const selectAA = document.getElementById("AA");
+
+        // Create and append the options to the select element
+        acao.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectAA.add(option);
+    });
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro acao.json: ", error);
+      });
+
+    fetch('sprint.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        sprint = data;
+        // Get the select element ano
+        const selectSP = document.getElementById("SP");
+
+        // Create and append the options to the select element
+        sprint.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectSP.add(option);
+    });
+        
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro sprint.json: ", error);
+      });
+
+    fetch('ano.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        ano = data;
+
+        // Get the select element ano
+        const selectYYYY = document.getElementById("YYYY");
+
+        // Create and append the options to the select element
+        ano.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectYYYY.add(option);
+        });
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro ano.json: ", error);
+      });
+
+    document.getElementById("YYYY").disabled = false;
+    document.getElementById("AA").disabled = false;
+    document.getElementById("SP").disabled = false;
 
   }
 });
+
+
+// Apuração==4; Avaliação==2; Consultoria==3;
+acaoColuna.addEventListener('change', function() {
+  var selectAA = document.getElementById("AA");
+  var selectDDD = document.getElementById("DDD");
+
+  if (selectAA.value !== '' && ([2, 3, 4].includes(Number(selectDDD.value)))) {
+  document.getElementById("IPP").disabled = false;
+  } else {document.getElementById("IPP").disabled = false;}
+})
 
 // Adiciona um evento de mudança de valor 
 IPP.addEventListener('change', function() { 
@@ -172,20 +376,12 @@ apagar.addEventListener("click", event => {
    AT.value = ''
    SP.value = ''
    IPP.value = ''
-   Ret.value = ''
-   var selectAT = document.getElementById("AT");
-   var selectDDD = document.getElementById("DDD");
-   var selectPP = document.getElementById("PP");
+   Ret.value = '' 
+   // Desabilita o elemento select
+  const selects = document.querySelectorAll("select");
+  selects.forEach(select => select.disabled = true);
+  document.getElementById("DDD").disabled = false;
 
-   for (var i = 0; i < selectPP.options.length; i++) {
-      selectPP.options[i].style.display = "block";
-   }
-   for (var i = 0; i < selectDDD.options.length; i++) {
-      selectDDD.options[i].style.display = "block";
-   }
-   for (var i = 0; i < selectAT.options.length; i++) {
-      selectAT.options[i].style.display = "block";
-   }
 });
 
 function copiarResultado() {
