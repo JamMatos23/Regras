@@ -1,6 +1,7 @@
 import pandas as pd
 import openpyxl
 import pyodbc
+import math
 
 '''# Criando um dataframe de exemplo
 df = pd.DataFrame({"titulo": ["T1", "T2", "T3"], "descricao": ["<demanda>2</demanda><atividade>1</atividade><produto>3</produto>", "<demanda>1</demanda><atividade>2</atividade><produto>1</produto>", "<demanda>3</demanda><atividade>3</atividade><produto>2</produto>"]})'''
@@ -41,12 +42,27 @@ def verificar_descricao(descricao):
   dfs = pd.read_excel("C://Users\jamil.monteiro\OneDrive - INEP\Documents\Projeto\Site\De-Para codificada.xlsx", sheet_name="de-para",header=1)
   # Criando uma coluna com a concatenação de demanda, atividade e produto
   dfs["chave"] = dfs["CodDemanda"].astype(str) + "&" + dfs["CodAtividade"].astype(str) + "&" + dfs["CodProduto"].astype(str)
-  # Criando um dicionário que mapeia a chave para os valores das colunas 8, 10 e 11
+  # Criando um dicionário que mapeia a chave para os valores das colunas 1,4 e 7
   dic = dfs.set_index("index")[["CodDemanda", "CodAtividade", "CodProduto"]].to_dict(orient="index")
+  # Criando um dicionário para pegar os valores das colunas 10 e 11
+  ret = dfs.set_index("index")[["Atividade2", "nº da atividade"]].to_dict(orient="index")
   # Criando a chave a partir dos valores de demanda, atividade e produto da descrição
-  chave = str(demanda) + "&" + str(atividade) + "&" + str(produto)
+  chave = '&'.join([str(demanda), str(atividade), str(produto)])
   # Criando uma lista vazia para armazenar as novas chaves de dic
   novas_chaves = []
+  new_key = []
+
+  for k in ret:
+    atividade2 = ret[k]["Atividade2"]
+    numero = ret[k]["nº da atividade"]
+    
+    if math.isnan(numero):
+        numero = 0
+    else:
+        numero = int(numero)
+    
+    key = '-'.join([str(atividade2), str(numero)])
+    new_key.append(key)
 
   # Percorrendo as chaves de dic
   for k in dic:
@@ -54,21 +70,45 @@ def verificar_descricao(descricao):
     demanda = dic[k]['CodDemanda']
     atividade = dic[k]['CodAtividade']
     produto = dic[k]['CodProduto']
+    
+    # Verificando se os valores são NaN
+    if math.isnan(demanda):
+        demanda = 0
+    else:
+        demanda = int(demanda)
+    
+    if math.isnan(atividade):
+        atividade = 0
+    else:
+        atividade = int(atividade)
+    
+    if math.isnan(produto):
+        produto = 0
+    else:
+        produto = int(produto)
+    
     # Concatenando os valores com o caractere '&' e adicionando à lista de novas chaves
     nova_chave = '&'.join([str(demanda), str(atividade), str(produto)])
     novas_chaves.append(nova_chave)
+    
+  df6 = df['Título'].str.slice(0,6)
   # Verificando se a chave existe no dicionário
-  print("Chave: ", chave)
-  #print("Dic: ", dic)
   if chave in novas_chaves:
+    valor = chave
+    if key in df6: 
+      print("Key: ",key)
+      #print("New_key: ",new_key)
+      #print("Chave: ", chave)
+      #print("Dic: ", dic)
+      #print("Ret:", ret)
+      #print(df["Título"] == key)
       # Retornando o valor correspondente
-      valor = dic[chave]["Produto"] + "-" + dic[chave]["Atividade2"] + "-" + dic[chave]["nº da atividade"]
-      print(valor)
-      #valor2 = dic[chave]["CodDemanda"] + "-" + dic[chave]["CodAtividade"] + "-" + dic[chave]["CodProduto"]
+      valor = chave
+      #print(valor)
   else:
       # Retornando um valor padrão
       valor = "Não encontrado"
-      print(valor)
+      #print(valor)
   return valor
   # Extraindo a parte da descrição que interessa
   descricao = descricao.split("</produto>")[0] + "</produto>"
@@ -91,7 +131,7 @@ def verificar_descricao(descricao):
   # Imprimindo o valor
   print(valor)
   return(valor)
-  
+
 resultado = df["Descrição"].apply(verificar_descricao)
 '''print(resultado)
 if any(df['Título'].values) == resultado:
