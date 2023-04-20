@@ -5,6 +5,7 @@ const AT = document.getElementById('AT');
 const DDD = document.getElementById('DDD');
 const SP = document.getElementById('SP');
 const IPP = document.getElementById('IPP')
+const ISP = document.getElementById('ISP')
 const enviar = document.getElementById('gerar');
 const apagar = document.getElementById('reset');
 const Ret = document.getElementById('Ret');
@@ -13,14 +14,11 @@ var primeiraColuna = document.getElementById('DDD');
 var segundaColuna = document.getElementById('AT');
 var terceiraColuna = document.getElementById('PP');
 var acaoColuna = document.getElementById('AA');
+var eaudColuna = document.getElementById('IPP');
 
 // Desabilita o elemento select
 const selects = document.querySelectorAll("select");
 selects.forEach(select => select.disabled = true);
-
-// Desabilita o elemento input
-const inputs = document.querySelectorAll("input");
-inputs.forEach(input => input.disabled = true);
 
 // Carrega o arquivo Excel usando a biblioteca SheetJS js-xlsx
 const url = "De-Para.xlsx";
@@ -54,7 +52,6 @@ xhr.onload = function(e) {
 
     // Verifica se os valores são válidos
     if (cod === undefined || tipo === undefined) {
-      console.log("Valor inválido encontrado, parando o loop");
       break;
     }
 
@@ -70,6 +67,7 @@ for (let i = 0; i < optionsDDD.length; i++) {
   const option = document.createElement("option");
   option.text = optionsDDD[i];
   option.value = valuesDDD[i];
+  if (isNaN(option.value)){option.value = '';}
   selectDDD.add(option);
 }
 
@@ -84,7 +82,6 @@ for (let i = 0; i < optionsDDD.length; i++) {
 
     // Verifica se os valores são válidos
     if (codAtividade === undefined && atividade === undefined) {
-      console.log("Valores inválido encontrado, parando o loop");
       break;
     }
 
@@ -148,10 +145,6 @@ for (let i = 0; i < optionsDDD.length; i++) {
 
 xhr.send();
 
-console.log(document.getElementById('DDD'))
-console.log(document.getElementById('AT'))
-console.log(document.getElementById('PP'))
-
 primeiraColuna.addEventListener('change', function() {
 
   var selectDDD = document.getElementById("DDD");
@@ -182,17 +175,26 @@ primeiraColuna.addEventListener('change', function() {
 
   if (selectDDD.value !== '') {
     // Filter options displayed based on data-ddd of selectElement equals the DDD selected on primeiraColuna change
+    let hasMatch = false;
     Array.from(selectAT.options).forEach(function(option) {
-      if ((option.getAttribute('data-ddd') === selectDDD.value) || (!isNaN(selectAT.value))) {
+      if ((option.getAttribute('data-ddd') === selectDDD.value)) {
         option.style.display = 'block';
+        hasMatch = true;
       } else {
         option.style.display = 'none';
       }
     });
+    if (!hasMatch) {
+      let blankOption = document.createElement('option');
+      blankOption.text = '';
+      blankOption.value = '';
+      selectAT.add(blankOption);
+    }
     document.getElementById("AT").disabled = false;
   } else {
     document.getElementById("AT").disabled = true;
   }
+
 });
 
 segundaColuna.addEventListener('change', function() {
@@ -219,13 +221,21 @@ segundaColuna.addEventListener('change', function() {
 
   if (selectDDD.value !== '') {
     // Filter options displayed based on data-ddd of selectElement equals the DDD selected on primeiraColuna change
+    let hasMatch = false;
     Array.from(selectPP.options).forEach(function(option) {
-      if ((option.getAttribute('data-ddd') === selectDDD.value && option.getAttribute('data-at') === selectAT.value) || (selectAT.value === '' && option.getAttribute('data-ddd') === '' && option.getAttribute('data-at') === '')) {
+      if ((option.getAttribute('data-ddd') === selectDDD.value && option.getAttribute('data-at') === selectAT.value)) {
         option.style.display = 'block';
+        hasMatch = true;
       } else {
         option.style.display = 'none';
       }
     });
+    if (!hasMatch) {
+      let blankOption = document.createElement('option');
+      blankOption.text = '';
+      blankOption.value = '';
+      selectPP.add(blankOption);
+    }
     document.getElementById("PP").disabled = false;
   } else {
     document.getElementById("PP").disabled = true;
@@ -313,17 +323,78 @@ terceiraColuna.addEventListener('change', function() {
   }
 });
 
-
-// Apuração==4; Avaliação==2; Consultoria==3;
 acaoColuna.addEventListener('change', function() {
   var selectAA = document.getElementById("AA");
   var selectDDD = document.getElementById("DDD");
 
-  if (selectAA.value !== '' && ([2, 3, 4].includes(Number(selectDDD.value)))) {
-  document.getElementById("IPP").disabled = false;
-  } else {document.getElementById("IPP").disabled = false;}
-})
+  ISP.options.length = 0;
 
+  document.getElementById("ISP").disabled = true;
+
+  if (selectAA.value !== '' && ([2, 3, 4].includes(Number(selectDDD.value)))) {
+    let tasksSelect = document.getElementById("IPP");
+    fetch('idEaud.json')
+    .then(response => response.json())
+    .then(data => {
+
+      // Populate select element with data from JSON file
+      for (let task in data) {
+          let option = document.createElement("option");
+          option.text = task;
+          tasksSelect.add(option);
+          }
+    });
+    document.getElementById("IPP").disabled = false;
+  } else {document.getElementById("IPP").disabled = true;}
+});
+
+eaudColuna.addEventListener('click', function() {
+  var selectIPP = document.getElementById("IPP");
+
+  // Clear options of ISP select element
+  let ISP = document.getElementById("ISP");
+  while (ISP.options.length > 0) {
+    ISP.remove(0);
+  }
+  ISP.options.length = 0;
+
+  if (selectIPP.text !== '') {
+    let tasksSelect = document.getElementById("IPP");
+    let subtasksSelect = document.getElementById("ISP");
+
+    // Assign onchange property outside of fetch function
+    tasksSelect.onchange = function() {
+      subtasksSelect.options.length = 0;
+      let selectedTask = tasksSelect.options[tasksSelect.selectedIndex].text;
+      fetch('idEaud.json')
+      .then(response => response.json())
+      .then(data => {
+        // Populate select element with data from JSON file
+        for (let subtask of data[selectedTask]) {
+          // Check if option already exists
+          let optionExists = false;
+          for (let i = 0; i < subtasksSelect.options.length; i++) {
+            if (subtasksSelect.options[i].text === subtask) {
+              optionExists = true;
+              break;
+            }
+          }
+          // Add option if it doesn't already exist
+          if (!optionExists) {
+            let option = document.createElement("option");
+            option.text = subtask;
+            subtasksSelect.add(option);
+          }
+        }
+      });
+    }
+
+    tasksSelect.onchange();
+    document.getElementById("ISP").disabled = false;
+  } else {document.getElementById("ISP").disabled = true;}
+});
+
+/*
 // Adiciona um evento de mudança de valor 
 IPP.addEventListener('change', function() { 
   // Obtém o valor do input 
@@ -334,6 +405,7 @@ IPP.addEventListener('change', function() {
     alert("O número tem menos de 7 dígitos"); 
   }
 });
+*/
 
 /*
 IPP.addEventListener('input', function() {
@@ -343,6 +415,7 @@ IPP.addEventListener('input', function() {
 });
 */
 
+/*
 YYYY.addEventListener('change', ()=> {
    let arr = []
    let str = ''
@@ -355,33 +428,43 @@ YYYY.addEventListener('change', ()=> {
 
    AA.innerHTML = str
 });
+*/
 
 // Adiciona um evento de clique 
 enviar.addEventListener("click", function(event) { // Previne o comportamento padrão do botão 
   event.preventDefault();
 
   // Aqui começa o seu código 
-  const PAA = AA.value; const PYYYY = YYYY.value; const PPP = PP.value; const PDDD = DDD.value; const PAT = AT.value; const PSP = SP.value; const PIPP = IPP.value;
+  const PAA = AA.value; const PYYYY = YYYY.value; const PPP = PP.value; const PDDD = DDD.value; const PAT = AT.value; const PSP = SP.value; const PIPP = IPP.value; const PISP = ISP.value
 
-  Ret.value = ('<demanda>'+PDDD+'</demanda><atividade>'+PAT+'</atividade><produto>'+PPP+'</produto><idEaud>'+PIPP+'</idEaud><anoAcao>'+PYYYY+'</anoAcao><idAcao>'+PAA+'</idAcao><idSprint>'+PSP+'</idSprint>') 
+  Ret.value = ('<demanda>'+PDDD+'</demanda><atividade>'+PAT+'</atividade><produto>'+PPP+'</produto><idEaud>'+PIPP+'</idEaud><idSubEaud>'+PISP+'</idSubEaud><anoAcao>'+PYYYY+'</anoAcao><idAcao>'+PAA+'</idAcao><idSprint>'+PSP+'</idSprint>') 
 });
-  
 
 apagar.addEventListener("click", event => {
-   event.preventDefault()
-   AA.value = ''
-   YYYY.value = ''
-   PP.value = ''
-   DDD.value = ''
-   AT.value = ''
-   SP.value = ''
-   IPP.value = ''
-   Ret.value = '' 
-   // Desabilita o elemento select
+  event.preventDefault()
+  AA.value = ''
+  YYYY.value = ''
+  PP.value = ''
+  DDD.value = ''
+  AT.value = ''
+  SP.value = ''
+  IPP.value = ''
+  ISP.value = ''
+  Ret.value = '' 
+  AT.text = 'Atividade'
+  PP.text = 'Produto'
+
+  // Clear options of select elements
+  YYYY.options.length = 0;
+  AA.options.length = 0;
+  SP.options.length = 0;
+  IPP.options.length = 0;
+  ISP.options.length = 0;
+
+  // Desabilita o elemento select
   const selects = document.querySelectorAll("select");
   selects.forEach(select => select.disabled = true);
   document.getElementById("DDD").disabled = false;
-
 });
 
 function copiarResultado() {
