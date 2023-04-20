@@ -56,130 +56,137 @@ var eaudColuna = document.getElementById('IPP');
 const selects = document.querySelectorAll("select");
 selects.forEach(select => select.disabled = true);
 
-// Carrega o arquivo Excel usando a biblioteca SheetJS js-xlsx
-const url = "De-Para.xlsx";
-const xhr = new XMLHttpRequest();
-xhr.open("GET", url, true);
-xhr.responseType = "arraybuffer";
-xhr.onload = function(e) {
-  const arraybuffer = xhr.response;
-  const data = new Uint8Array(arraybuffer);
-  const workbook = XLSX.read(data, {type: "array"});
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
+window.addEventListener('load', function() {
+    // Show the animation when the page loads
+    document.querySelector('.box').style.display = 'flex';
 
-  // Extrai os dados do arquivo Excel
-  const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+    // Carrega o arquivo Excel usando a biblioteca SheetJS js-xlsx
+    const url = "De-Para.xlsx";
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "arraybuffer";
+    xhr.onload = function(e) {
+      const arraybuffer = xhr.response;
+      const data = new Uint8Array(arraybuffer);
+      const workbook = XLSX.read(data, {type: "array"});
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
 
-  // Encontra o índice da coluna de "CodDemanda", "TipoDemanda", "CodAtividade" e "Atividade"
-  const codIndex = rows[1].indexOf("CodDemanda");
-  const tipoIndex = rows[1].indexOf("Tipo de Demanda");
-  const codAtividadeIndex = rows[1].indexOf("CodAtividade");
-  const atividadeIndex = rows[1].indexOf("Atividade");
-  const codProdutoIndex = rows[1].indexOf("CodProduto");
-  const produtoIndex = rows[1].indexOf("Produto");
+      // Extrai os dados do arquivo Excel
+      const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
 
-  // Extrai as opções e valores dos dados da coluna para o elemento select DDD
-  const optionsDDD = [];
-  const valuesDDD = [];
-  for (let i = 1; i < rows.length; i++) {
-    const cod = rows[i][codIndex];
-    const tipo = rows[i][tipoIndex];
+      // Encontra o índice da coluna de "CodDemanda", "TipoDemanda", "CodAtividade" e "Atividade"
+      const codIndex = rows[1].indexOf("CodDemanda");
+      const tipoIndex = rows[1].indexOf("Tipo de Demanda");
+      const codAtividadeIndex = rows[1].indexOf("CodAtividade");
+      const atividadeIndex = rows[1].indexOf("Atividade");
+      const codProdutoIndex = rows[1].indexOf("CodProduto");
+      const produtoIndex = rows[1].indexOf("Produto");
 
-    // Verifica se os valores são válidos
-    if (cod === undefined || tipo === undefined) {
-      break;
+      // Extrai as opções e valores dos dados da coluna para o elemento select DDD
+      const optionsDDD = [];
+      const valuesDDD = [];
+      for (let i = 1; i < rows.length; i++) {
+        const cod = rows[i][codIndex];
+        const tipo = rows[i][tipoIndex];
+
+        // Verifica se os valores são válidos
+        if (cod === undefined || tipo === undefined) {
+          break;
+        }
+
+        if (cod && tipo && !optionsDDD.includes(tipo)) {
+          optionsDDD.push(tipo);
+          valuesDDD.push(cod);
+        }
+      }
+
+      // Preenche o elemento select DDD com as opções e valores
+    const selectDDD = document.getElementById("DDD");
+    for (let i = 0; i < optionsDDD.length; i++) {
+      const option = document.createElement("option");
+      option.text = optionsDDD[i];
+      option.value = valuesDDD[i];
+      if (isNaN(option.value)){option.value = '';}
+      selectDDD.add(option);
     }
 
-    if (cod && tipo && !optionsDDD.includes(tipo)) {
-      optionsDDD.push(tipo);
-      valuesDDD.push(cod);
-    }
-  }
+      // Extrai as opções e valores dos dados da coluna para o elemento select AT
+      const optionsAT = [];
+      const valuesAT = [];
+      const dddAT = [];
+      for (let i = 1; i < rows.length; i++) {
+        const codAtividade = rows[i][codAtividadeIndex];
+        const atividade = rows[i][atividadeIndex];
+        const codDemanda = rows[i][codIndex];
 
-  // Preenche o elemento select DDD com as opções e valores
-const selectDDD = document.getElementById("DDD");
-for (let i = 0; i < optionsDDD.length; i++) {
-  const option = document.createElement("option");
-  option.text = optionsDDD[i];
-  option.value = valuesDDD[i];
-  if (isNaN(option.value)){option.value = '';}
-  selectDDD.add(option);
-}
+        // Verifica se os valores são válidos
+        if (codAtividade === undefined && atividade === undefined) {
+          break;
+        }
 
-  // Extrai as opções e valores dos dados da coluna para o elemento select AT
-  const optionsAT = [];
-  const valuesAT = [];
-  const dddAT = [];
-  for (let i = 1; i < rows.length; i++) {
-    const codAtividade = rows[i][codAtividadeIndex];
-    const atividade = rows[i][atividadeIndex];
-    const codDemanda = rows[i][codIndex];
+        if ((codAtividade && atividade && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
+          optionsAT.push(atividade);
+          valuesAT.push(codAtividade);
+          dddAT.push(codDemanda);
+        }
+      }
 
-    // Verifica se os valores são válidos
-    if (codAtividade === undefined && atividade === undefined) {
-      break;
-    }
+      // Preenche o elemento select AT com as opções e valores
+      const selectAT = document.getElementById("AT");
+      for (let i = 0; i < optionsAT.length; i++) {
+        const option = document.createElement("option");
+        option.text = optionsAT[i];
+        option.value = valuesAT[i];
+        option.setAttribute("data-ddd", dddAT[i]);
+        selectAT.add(option);
+      }
 
-    if ((codAtividade && atividade && !optionsAT.includes(atividade)) && (codAtividade !== undefined && atividade !== undefined)) {
-      optionsAT.push(atividade);
-      valuesAT.push(codAtividade);
-      dddAT.push(codDemanda);
-    }
-  }
+      // Extrai as opções e valores dos dados da coluna para o elemento select PP
+      const optionsPP = [];
+      const valuesPP = [];
+      const dddPP = [];
+      const atPP = [];
+      for (let i = 1; i < rows.length; i++) {
+        const codProduto = rows[i][codProdutoIndex];
+        const produto = rows[i][produtoIndex];
+        const codDemanda = rows[i][codIndex];
+        const codAtividade = rows[i][codAtividadeIndex];
 
-  // Preenche o elemento select AT com as opções e valores
-  const selectAT = document.getElementById("AT");
-  for (let i = 0; i < optionsAT.length; i++) {
-    const option = document.createElement("option");
-    option.text = optionsAT[i];
-    option.value = valuesAT[i];
-    option.setAttribute("data-ddd", dddAT[i]);
-    selectAT.add(option);
-  }
+        // Verifica se os valores são válidos
+        if (codProduto === undefined && produto === undefined) {
+          console.log("Valores inválido encontrado, parando o loop");
+          break;
+        }
 
-  // Extrai as opções e valores dos dados da coluna para o elemento select PP
-  const optionsPP = [];
-  const valuesPP = [];
-  const dddPP = [];
-  const atPP = [];
-  for (let i = 1; i < rows.length; i++) {
-    const codProduto = rows[i][codProdutoIndex];
-    const produto = rows[i][produtoIndex];
-    const codDemanda = rows[i][codIndex];
-    const codAtividade = rows[i][codAtividadeIndex];
+        if ((codProduto && produto && !optionsPP.includes(produto)) && (codProduto !== undefined && produto !== undefined)) {
+          optionsPP.push(produto);
+          valuesPP.push(codProduto);
+          dddPP.push(codDemanda);
+          atPP.push(codAtividade);
+        }
+      }
 
-    // Verifica se os valores são válidos
-    if (codProduto === undefined && produto === undefined) {
-      console.log("Valores inválido encontrado, parando o loop");
-      break;
-    }
+      // Preenche o elemento select PP com as opções e valores
+      const selectPP = document.getElementById("PP");
+      for (let i = 0; i < optionsPP.length; i++) {
+        const option = document.createElement("option");
+        option.text = optionsPP[i];
+        option.value = valuesPP[i];
+        option.setAttribute("data-ddd", dddPP[i]);
+        option.setAttribute("data-at", atPP[i]);
+        selectPP.add(option);
+      }
 
-    if ((codProduto && produto && !optionsPP.includes(produto)) && (codProduto !== undefined && produto !== undefined)) {
-      optionsPP.push(produto);
-      valuesPP.push(codProduto);
-      dddPP.push(codDemanda);
-      atPP.push(codAtividade);
-    }
-  }
+      // Habilita os elementos select
+      document.getElementById("DDD").disabled = false;
 
-  // Preenche o elemento select PP com as opções e valores
-  const selectPP = document.getElementById("PP");
-  for (let i = 0; i < optionsPP.length; i++) {
-    const option = document.createElement("option");
-    option.text = optionsPP[i];
-    option.value = valuesPP[i];
-    option.setAttribute("data-ddd", dddPP[i]);
-    option.setAttribute("data-at", atPP[i]);
-    selectPP.add(option);
-  }
+      //Esconde Animação de Carregamento
+      document.querySelector('.box').style.display = 'none';
 
-  // Habilita os elementos select
-  document.getElementById("DDD").disabled = false;
-
-};
-
-xhr.send();
+    };
+  xhr.send();
+});
 
 primeiraColuna.addEventListener('change', function() {
 
