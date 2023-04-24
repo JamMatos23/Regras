@@ -358,16 +358,75 @@ terceiraColuna.addEventListener('change', function() {
         // Handle errors here
         console.error("Erro ano.json: ", error);
       });
-    if (([1, 2, 3, 4].includes(Number(selectDDD.value))) && ([1, 2, 3, 4].includes(Number(selectAT.value))) && ([1, 2, 3, 4].includes(Number(selectDDD.value)))){
-    document.getElementById("YYYY").disabled = false;
+    console.log("texto teste ",selectDDD.value)
+    if (selectDDD.value == 1){
+      document.getElementById("YYYY").disabled = false;
+      document.getElementById("AA").disabled = true;
+      document.getElementById("SP").disabled = true;
     }
-    if (([1, 2, 3, 4].includes(Number(selectDDD.value))) && ([1, 2, 3, 4].includes(Number(selectAT.value))) && ([1, 2, 3, 4].includes(Number(selectDDD.value)))){
-    document.getElementById("AA").disabled = false;
+    if ([2, 3, 4].includes(Number(selectDDD.value))){
+      document.getElementById("YYYY").disabled = false;
+      document.getElementById("AA").disabled = false;
+      document.getElementById("SP").disabled = false;
     }
-    if (([1, 2, 3, 4].includes(Number(selectDDD.value))) && ([1, 2, 3, 4].includes(Number(selectAT.value))) && ([1, 2, 3, 4].includes(Number(selectDDD.value)))){
-    document.getElementById("SP").disabled = false;
+  } else if (selectDDD.value == 5){
+      document.getElementById("YYYY").disabled = false;
+      document.getElementById("AA").disabled = false;
+      document.getElementById("SP").disabled = true;
+      let tasksSelect = document.getElementById("IPP");
+      fetch('acao.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        acao = data;
+        // Get the select element ano
+        const selectAA = document.getElementById("AA");
+
+        // Create and append the options to the select element
+        acao.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectAA.add(option);
+    });
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro acao.json: ", error);
+      });
+    fetch('ano.json')
+      .then(response => response.json())
+      .then(data => {
+        // Use the data here
+        ano = data;
+
+        // Get the select element ano
+        const selectYYYY = document.getElementById("YYYY");
+
+        // Create and append the options to the select element
+        ano.forEach(function(item) {
+          const option = document.createElement("option");
+          option.value = item.value;
+          option.text = item.text;
+          selectYYYY.add(option);
+        });
+      })
+      .catch(error => {
+        // Handle errors here
+        console.error("Erro ano.json: ", error);
+      });
+      fetch('idEaudMonitoramento.json')
+      .then(response => response.json())
+      .then(data => {
+        // Populate select element with data from JSON file
+        for (let task in data) {
+            let option = document.createElement("option");
+            option.text = task;
+            tasksSelect.add(option);
+            }
+      });
+      document.getElementById("IPP").disabled = false;
     }
-  }
 });
 
 acaoColuna.addEventListener('change', function() {
@@ -392,7 +451,21 @@ acaoColuna.addEventListener('change', function() {
           }
     });
     document.getElementById("IPP").disabled = false;
-  } else {document.getElementById("IPP").disabled = true;}
+  } else if (selectDDD.value === 5) {
+    let tasksSelect = document.getElementById("IPP");
+    fetch('idEaudMonitoramento.json')
+    .then(response => response.json())
+    .then(data => {
+
+      // Populate select element with data from JSON file
+      for (let task in data) {
+          let option = document.createElement("option");
+          option.text = task;
+          tasksSelect.add(option);
+          }
+    });
+    document.getElementById("IPP").disabled = false;
+    } else if (selectDDD.value == 5) {document.getElementById("IPP").disabled = false;} else {document.getElementById("IPP").disabled = true;}
 });
 
 eaudColuna.addEventListener('click', function() {
@@ -405,7 +478,7 @@ eaudColuna.addEventListener('click', function() {
   }
   ISP.options.length = 0;
 
-  if (selectIPP.text !== '') {
+  if (selectIPP.text !== '' && selectDDD != 5) {
     let tasksSelect = document.getElementById("IPP");
     let subtasksSelect = document.getElementById("ISP");
 
