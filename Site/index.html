@@ -129,8 +129,11 @@
         </p>
         </form>
         </div>
-    <footer>
-        <p class="copyright">&copy; Copyright Audin INEP - <script>document.write(new Date().getFullYear())</script></p>
-    </footer>
+        <footer>
+            <p class="copyright">&copy; Copyright Audin INEP - <span id="currentYear"></span></p>
+            <script>
+                document.getElementById("currentYear").textContent = new Date().getFullYear();
+            </script>
+        </footer>
 </body>
 </html>

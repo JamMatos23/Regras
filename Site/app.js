@@ -358,11 +358,15 @@ terceiraColuna.addEventListener('change', function() {
         // Handle errors here
         console.error("Erro ano.json: ", error);
       });
-
+    if (([1, 2, 3, 4].includes(Number(selectDDD.value))) && ([1, 2, 3, 4].includes(Number(selectAT.value))) && ([1, 2, 3, 4].includes(Number(selectDDD.value)))){
     document.getElementById("YYYY").disabled = false;
+    }
+    if (([1, 2, 3, 4].includes(Number(selectDDD.value))) && ([1, 2, 3, 4].includes(Number(selectAT.value))) && ([1, 2, 3, 4].includes(Number(selectDDD.value)))){
     document.getElementById("AA").disabled = false;
+    }
+    if (([1, 2, 3, 4].includes(Number(selectDDD.value))) && ([1, 2, 3, 4].includes(Number(selectAT.value))) && ([1, 2, 3, 4].includes(Number(selectDDD.value)))){
     document.getElementById("SP").disabled = false;
-
+    }
   }
 });
 
