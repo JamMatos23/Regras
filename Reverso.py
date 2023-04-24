@@ -31,6 +31,19 @@ def stripFunc(striptext, tagname):
         if (result == ""): result = "N/A"
         return result
 
+def formatFile(file_path: str):
+    # Read the file into a DataFrame
+    df = pd.read_excel(file_path)
+
+    # Update the column names
+    df.columns = ["Nome Servidor", "idEaud", "Demandas", "Atividades", "Produtos", "Ação", "Ano", "Sprint", "Descrição"]
+
+    # Remove rows with duplicate values in column 'Descrição'
+    df = df.drop_duplicates(subset=['Descrição'])
+
+    # Write the formatted DataFrame back to the file
+    df.to_excel(file_path, index=False)
+
 def descTrans(input):
     demandas_dict = {
         "1": "Planejamento Anual",
@@ -310,9 +323,9 @@ def descTrans(input):
         # Save workbook
         workbook.save(file_path)
     
+    formatFile("Reverso.xslx")
+
 for value in df['Descrição'].values:
 
-    # Imprimir apenas o valor da coluna Descrição
-    print(value)
     # Passar apenas o valor da coluna Descrição para a função descTrans
     descTrans(value)
