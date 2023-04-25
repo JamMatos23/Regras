@@ -31,19 +31,6 @@ def stripFunc(striptext, tagname):
         if (result == ""): result = "N/A"
         return result
 
-def formatFile(file_path: str):
-    # Read the file into a DataFrame
-    df = pd.read_excel(file_path)
-
-    # Update the column names
-    df.columns = ["Nome Servidor", "idEaud", "Demandas", "Atividades", "Produtos", "Ação", "Ano", "Sprint", "Descrição"]
-
-    # Remove rows with duplicate values in column 'Descrição'
-    df = df.drop_duplicates(subset=['Descrição'])
-
-    # Write the formatted DataFrame back to the file
-    df.to_excel(file_path, index=False)
-
 def descTrans(input):
     demandas_dict = {
         "1": "Planejamento Anual",
@@ -309,23 +296,24 @@ def descTrans(input):
     # Verificando se a linha é menor ou igual a 1048576
     if row <= 1048576 and row > 0:
         # Escrevendo os dados na mesma planilha
-        sheet.cell(row=row, column=1).value = df_filtrado.loc [:, 'NomeServidor'].to_string ()
-        sheet.cell(row=row, column=2).value = stripFunc(input, "idEaud")
-        sheet.cell(row=row, column=3).value = demandas_dict.get(demandas_key, "N/A")
-        sheet.cell(row=row, column=4).value = ativades_dict.get(demandas_key, {}).get(atividade_key, None)
-        sheet.cell(row=row, column=5).value = produtos_dict.get(demandas_key, {}).get(atividade_key, {}).get(produto_key, None)
+        sheet.cell(row=row, column=1).value = df_filtrado.loc [:, 'NomeServidor'].to_string (index = False)
+        sheet.cell(row=row, column=2).value = df_filtrado.loc [:, 'DtInicioPactoTrab'].to_string (index = False)
+        sheet.cell(row=row, column=3).value = stripFunc(input, "idEaud")
+        sheet.cell(row=row, column=4).value = demandas_dict.get(demandas_key, "N/A")
+        sheet.cell(row=row, column=5).value = ativades_dict.get(demandas_key, {}).get(atividade_key, None)
+        sheet.cell(row=row, column=6).value = produtos_dict.get(demandas_key, {}).get(atividade_key, {}).get(produto_key, None)
 
-        sheet.cell(row=row, column=6).value = acao_dict.get(acao_key, "N/A")
-        sheet.cell(row=row, column=7).value = stripFunc(input, "anoAcao")
-        sheet.cell(row=row, column=8).value = stripFunc(input, "idSprint")
-        sheet.cell(row=row, column=9).value = str(input)
+        sheet.cell(row=row, column=7).value = acao_dict.get(acao_key, "N/A")
+        sheet.cell(row=row, column=8).value = stripFunc(input, "anoAcao")
+        sheet.cell(row=row, column=9).value = stripFunc(input, "idSprint")
+        sheet.cell(row=row, column=10).value = str(input)
 
         # Save workbook
         workbook.save(file_path)
     
-    formatFile("Reverso.xslx")
-
 for value in df['Descrição'].values:
 
+    # Imprimir apenas o valor da coluna Descrição
+    print(value)
     # Passar apenas o valor da coluna Descrição para a função descTrans
     descTrans(value)
