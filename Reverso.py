@@ -18,7 +18,7 @@ dadosconexao = (
 conexao = pyodbc.connect(dadosconexao)
 print("conexão bem sucedida!")
 
-df = pd.read_sql_query(f"select left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%'", conexao)
+df = pd.read_sql_query(f"select left(descricao, 500) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%'", conexao)
 
 # input = "<demanda>2</demanda><atividade>2</atividade><produto>2</produto><anoAcao>2023</anoAcao><idAcao>7</idAcao><idSprint></idSprint>"
 
@@ -30,6 +30,19 @@ def stripFunc(striptext, tagname):
         result = match.group(1)
         if (result == ""): result = "N/A"
         return result
+
+def formatFile(file_path: str):
+    # Read the file into a DataFrame
+    df = pd.read_excel(file_path)
+
+    # Update the column names
+    df.columns = ["Nome Servidor", "Data Inicio Plano de Trabalho","Data Termino Plano de Trabalho", "idEaud", "Demandas", "Atividades", "Produtos", "Ação", "Ano", "Sprint", "Descrição"]
+
+    # Remove rows with duplicate values in column 'Descrição'
+    df = df.drop_duplicates(subset=['Descrição'])
+
+    # Write the formatted DataFrame back to the file
+    df.to_excel(file_path, index=False)
 
 def descTrans(input):
     demandas_dict = {
@@ -263,7 +276,7 @@ def descTrans(input):
     conexao = pyodbc.connect(dadosconexao)
     print("conexão bem sucedida!")
 
-    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, left(descricao, 200) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' group by NomeServidor, DtInicioPactoTrab, left(descricao, 200) order by NomeServidor, DtInicioPactoTrab", conexao)
+    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, DtFimPactoTrab, left(descricao, 500) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' group by NomeServidor, DtInicioPactoTrab,DtFimPactoTrab, left(descricao, 500) order by NomeServidor, DtInicioPactoTrab", conexao)
 
     # Creating calling Keys
     demandas_key = str(stripFunc(input, "demanda"))
@@ -278,7 +291,8 @@ def descTrans(input):
     if os.path.exists(file_path):
         # Carregando o workbook existente
         workbook = openpyxl.load_workbook(file_path)
-        sheet = workbook.get_sheet_by_name('Principal')  # Obtendo a referência da aba existente
+        sheet = workbook.get_sheet_by_name('Sheet1') # Obtendo a referência da aba existente
+        #sheet.title = 'Principal'  # Renomeando a aba
     else:
         # Criando um novo workbook
         workbook = openpyxl.Workbook()
@@ -298,22 +312,23 @@ def descTrans(input):
         # Escrevendo os dados na mesma planilha
         sheet.cell(row=row, column=1).value = df_filtrado.loc [:, 'NomeServidor'].to_string (index = False)
         sheet.cell(row=row, column=2).value = df_filtrado.loc [:, 'DtInicioPactoTrab'].to_string (index = False)
-        sheet.cell(row=row, column=3).value = stripFunc(input, "idEaud")
-        sheet.cell(row=row, column=4).value = demandas_dict.get(demandas_key, "N/A")
-        sheet.cell(row=row, column=5).value = ativades_dict.get(demandas_key, {}).get(atividade_key, None)
-        sheet.cell(row=row, column=6).value = produtos_dict.get(demandas_key, {}).get(atividade_key, {}).get(produto_key, None)
+        sheet.cell(row=row, column=3).value = df_filtrado.loc [:, 'DtFimPactoTrab'].to_string (index = False)
+        sheet.cell(row=row, column=4).value = stripFunc(input, "idEaud")
+        sheet.cell(row=row, column=5).value = demandas_dict.get(demandas_key, "N/A")
+        sheet.cell(row=row, column=6).value = ativades_dict.get(demandas_key, {}).get(atividade_key, None)
+        sheet.cell(row=row, column=7).value = produtos_dict.get(demandas_key, {}).get(atividade_key, {}).get(produto_key, None)
 
-        sheet.cell(row=row, column=7).value = acao_dict.get(acao_key, "N/A")
-        sheet.cell(row=row, column=8).value = stripFunc(input, "anoAcao")
-        sheet.cell(row=row, column=9).value = stripFunc(input, "idSprint")
-        sheet.cell(row=row, column=10).value = str(input)
+        sheet.cell(row=row, column=8).value = acao_dict.get(acao_key, "N/A")
+        sheet.cell(row=row, column=9).value = stripFunc(input, "anoAcao")
+        sheet.cell(row=row, column=10).value = stripFunc(input, "idSprint")
+        sheet.cell(row=row, column=11).value = str(input)
 
         # Save workbook
         workbook.save(file_path)
     
+    formatFile("Reverso.xlsx")
+
 for value in df['Descrição'].values:
 
-    # Imprimir apenas o valor da coluna Descrição
-    print(value)
     # Passar apenas o valor da coluna Descrição para a função descTrans
     descTrans(value)
