@@ -9,7 +9,7 @@ $output = shell_exec('python get_data.py');
 echo $output;
 */
 // Get the path to the config.json file
-$config_file = __DIR__ . '/config.json';
+$config_file = __DIR__ . 'sec/config.json';
 
 // Read the contents of the config.json file
 $config = json_decode(file_get_contents($config_file), true);
