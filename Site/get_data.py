@@ -6,7 +6,7 @@ conn = None
 
 try:
     # Get the path to the config.json file
-    config_file = os.path.join(os.path.dirname(__file__), "sec/config.json")
+    config_file = os.path.join(os.path.dirname(__file__), "config.json")
 
     # Read the contents of the config.json file
     with open(config_file, 'r') as f:
@@ -40,6 +40,7 @@ try:
             print("Error: cursor.fetchall() returned None")
         else:
             # Encode the rows as a JSON object and print it
+
             print(json.dumps(rows))
     else:
         print("Connection failed")

@@ -165,7 +165,7 @@ window.addEventListener('load', function() {
       document.querySelector('.box').style.display = 'none';
     }
   };
-  xhr.open("GET", "get_data.php", true);
+  xhr.open("GET", "http://127.0.0.1:5000/get_data", true);
   xhr.send();
 });
 
