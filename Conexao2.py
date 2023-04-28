@@ -77,9 +77,12 @@ print("Aqui estão os valores dos atividades do de-para: ", df[col2].values)
 print("Aqui estão os valores dos produtos do de-para: ", df[col3].values)
 
 # verifique se existem linhas em que os valores nas três primeiras colunas são iguais
-mask = (df[col1].isin(dfs['demanda'])) & (df[col2].isin(dfs['atividade'])) & (df[col3].isin(dfs['produto']))
+#mask = (df[col1].isin(dfs['demanda'])) & (df[col2].isin(dfs['atividade'])) & (df[col3].isin(dfs['produto']))
+mask = (dfs['demanda'].isin(df[col1])) & (dfs['atividade'].isin(df[col2])) & (dfs['produto'].isin(df[col3]))
 # selecione apenas as linhas em que a máscara é verdadeira
-matches = df[mask]
+matches = dfs[mask]
+# Removendo colunas sem valores
+#matches = df[mask].dropna(axis=1, how='all')
 
 print(matches)
 
