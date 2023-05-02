@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
 <li>É fundamental que os planos sejam lançados até o <strong>1º dia</strong> do mês.</li>
 <li>Para garantir que todos os servidores cumpram esse prazo, é necessário realizar uma verificação <strong>3 dias antes</strong> do 1º dia útil do mês.</li>
 <li>Caso algum servidor não tenha lançado seu plano dentro do prazo estabelecido, é importante enviar um <strong>alerta</strong> para o supervisor e para o servidor em questão.</li>
-<li>O alerta deve ser enviado no <strong>3º dia</strong> e no <strong>dia do prazo</strong> final para garantir que a situação seja resolvida o mais rápido possível.</li>
+<li>O alerta deve ser enviado nos <strong>3 dias úteis anteriores</strong> e no <strong>dia do prazo</strong> final para garantir que a situação seja resolvida o mais rápido possível.</li>
 </ul>
 </section>
 <section id="padrão-para-o-campo-descrição" class="level3">
@@ -102,11 +102,13 @@ ul.task-list li input[type="checkbox"] {
 <li>Quando todas as pendências forem resolvidas, é importante enviar um email para você informando que a homologação pode ser realizada.</li>
 </ul>
 </section>
-<section id="verificação-de-planos-de-projetos" class="level3">
-<h3 class="anchored" data-anchor-id="verificação-de-planos-de-projetos">4. Verificação de Planos de Projetos</h3>
+<section id="prazo-para-lançamento-de-planos-1" class="level3">
+<h3 class="anchored" data-anchor-id="prazo-para-lançamento-de-planos-1">4. Prazo para Lançamento de Planos</h3>
 <ul>
-<li>É necessário utilizar um código específico para verificar na view se há planos de projetos lançados entre os dias <strong>16 e 31</strong> do mês.</li>
-<li>Caso haja planos nesse período, é importante enviar um email para o servidor responsável e para o supervisor informando sobre a situação.</li>
+<li>É fundamental que os planos sejam lançados até o <strong>16º dia</strong> do mês.</li>
+<li>Para garantir que todos os servidores cumpram esse prazo, é necessário realizar uma verificação <strong>3 dias antes</strong> do 16º dia do mês.</li>
+<li>Caso algum servidor não tenha lançado seu plano dentro do prazo estabelecido, é importante enviar um <strong>alerta</strong> para o supervisor e para o servidor em questão.</li>
+<li>O alerta deve ser enviado nos <strong>3 dias úteis anteriores</strong> e no <strong>dia do prazo</strong> final para garantir que a situação seja resolvida o mais rápido possível.</li>
 </ul>
 </section>
 <section id="verificação-da-data-de-registro" class="level3">
@@ -143,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="gerador-de-descrição-para-integração-de-plataformas" class="level1">
 <h1>Gerador de Descrição para Integração de Plataformas</h1>
-<p>O gerador de descrição é uma ferramenta desenvolvida para auxiliar na integração entre as plataformas SISGP e SharePoint (Servidor Interno INEP). Ele utiliza arquivos JSON para popular elementos de seleção em uma interface web, permitindo que os usuários gerem descrições padronizadas para os planos de projetos de forma rápida e eficiente.</p>
+<p>O gerador de descrição é uma ferramenta desenvolvida para auxiliar na integração entre as plataformas SISGP e SharePoint. Ele utiliza arquivos JSON para popular elementos de seleção em uma interface web, permitindo que os usuários gerem descrições padronizadas para os planos de projetos de forma rápida e eficiente.</p>
 <p>Os dados contidos nos arquivos JSON são atualizados automaticamente por meio de um script desenvolvido em Python. Esse script acessa diretamente o banco de dados SQL e atualiza os arquivos JSON na interface web, garantindo que as informações estejam sempre atualizadas e precisas.</p>
 <p>O gerador de descrição utiliza um pseudocódigo específico para gerar as descrições padronizadas. Esse pseudocódigo é composto por delimitadores que indicam o tipo de informação contida em cada campo. Por exemplo, o delimitador <code>&lt;demanda&gt;1&lt;/demanda&gt;</code> indica que o valor “1” se refere à demanda do plano de projeto.</p>
 <p>Os demais delimitadores utilizados pelo gerador de descrição incluem <code>&lt;atividade&gt;</code>, <code>&lt;produto&gt;</code>, <code>&lt;idEaud&gt;</code>, <code>&lt;anoAcao&gt;</code>, <code>&lt;idAcao&gt;</code> e <code>&lt;idSprint&gt;</code>. Cada delimitador é utilizado para separar os valores correspondentes aos respectivos campos, permitindo que o gerador de descrição crie descrições precisas e padronizadas para os planos de projetos.</p>

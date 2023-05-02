@@ -22,7 +22,7 @@ output:
 - É fundamental que os planos sejam lançados até o **1º dia** do mês.
 - Para garantir que todos os servidores cumpram esse prazo, é necessário realizar uma verificação **3 dias antes** do 1º dia útil do mês.
 - Caso algum servidor não tenha lançado seu plano dentro do prazo estabelecido, é importante enviar um **alerta** para o supervisor e para o servidor em questão.
-- O alerta deve ser enviado no **3º dia** e no **dia do prazo** final para garantir que a situação seja resolvida o mais rápido possível.
+- O alerta deve ser enviado nos **3 dias úteis anteriores** e no **dia do prazo** final para garantir que a situação seja resolvida o mais rápido possível.
 
 ### 2. Padrão para o Campo Descrição
 - É importante que o campo descrição esteja de acordo com o padrão estabelecido pela empresa.
@@ -34,9 +34,11 @@ output:
 - Caso a execução não tenha sido registrada dentro desse prazo, é necessário enviar um **alerta** para para o supervisor e para o servidor via email.
 - Quando todas as pendências forem resolvidas, é importante enviar um email para você informando que a homologação pode ser realizada.
 
-### 4. Verificação de Planos de Projetos
-- É necessário utilizar um código específico para verificar na view se há planos de projetos lançados entre os dias **16 e 31** do mês.
-- Caso haja planos nesse período, é importante enviar um email para o servidor responsável e para o supervisor informando sobre a situação.
+### 4. Prazo para Lançamento de Planos
+- É fundamental que os planos sejam lançados até o **16º dia** do mês.
+- Para garantir que todos os servidores cumpram esse prazo, é necessário realizar uma verificação **3 dias antes** do 16º dia do mês.
+- Caso algum servidor não tenha lançado seu plano dentro do prazo estabelecido, é importante enviar um **alerta** para o supervisor e para o servidor em questão.
+- O alerta deve ser enviado nos **3 dias úteis anteriores** e no **dia do prazo** final para garantir que a situação seja resolvida o mais rápido possível.
 
 ### 5. Verificação da Data de Registro
 - É fundamental verificar se a data de registro dos planos está correta.
@@ -57,7 +59,7 @@ output:
 - A atualização do dashboard gerencial permite que os usuários tenham acesso às informações mais recentes e precisas sobre o andamento dos planos de projetos.
 
 # Gerador de Descrição para Integração de Plataformas
-O gerador de descrição é uma ferramenta desenvolvida para auxiliar na integração entre as plataformas SISGP e SharePoint (Servidor Interno INEP). Ele utiliza arquivos JSON para popular elementos de seleção em uma interface web, permitindo que os usuários gerem descrições padronizadas para os planos de projetos de forma rápida e eficiente.
+O gerador de descrição é uma ferramenta desenvolvida para auxiliar na integração entre as plataformas SISGP e SharePoint. Ele utiliza arquivos JSON para popular elementos de seleção em uma interface web, permitindo que os usuários gerem descrições padronizadas para os planos de projetos de forma rápida e eficiente.
 
 Os dados contidos nos arquivos JSON são atualizados automaticamente por meio de um script desenvolvido em Python. Esse script acessa diretamente o banco de dados SQL e atualiza os arquivos JSON na interface web, garantindo que as informações estejam sempre atualizadas e precisas.
 
