@@ -19,7 +19,7 @@ dadosconexao = (
 conexao = pyodbc.connect(dadosconexao)
 print("conexão bem sucedida!")
 
-dfs = pd.read_sql_query(f"select left(descricao, 500) as Descrição, titulo as Título FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN DATEADD (DAY, 1, EOMONTH (GETDATE (), -1)) and GETDATE () and SituacaoPactoTrabalho != 'Executado' and SituacaoPactoTrabalho != 'Rejeitado'", conexao)
+dfs = pd.read_sql_query(f"select left(descricao, 500) as Descrição, titulo as Título FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN DATEADD (DAY, 1, EOMONTH (GETDATE (), -2)) and GETDATE () and SituacaoPactoTrabalho != 'Executado' and SituacaoPactoTrabalho != 'Rejeitado'", conexao)
 
 # lendo o resultado da consulta SQL em um dataframe pandas
 #dfs = pd.read_sql_query(query, conexao)
@@ -67,7 +67,8 @@ df[col3] = df[col3].astype(int)
 
 dfs['demanda'] = dfs['demanda'].astype(int)
 dfs['atividade'] = dfs['atividade'].astype(int)
-dfs['produto'] = dfs['produto'].astype(int)
+dfs['produto'] = dfs['produto'].replace('', '0').astype(int)
+#dfs['produto'] = dfs['produto'].astype(int)
 
 print("Aqui estão os valores das demandas preenchidos pelos servidores: ",dfs["demanda"].values)
 print("Aqui estão os valores das atividades preenchidos pelos servidores: ",dfs["atividade"].values)
@@ -79,8 +80,11 @@ print("Aqui estão os valores dos produtos do de-para: ", df[col3].values)
 # verifique se existem linhas em que os valores nas três primeiras colunas são iguais
 #mask = (df[col1].isin(dfs['demanda'])) & (df[col2].isin(dfs['atividade'])) & (df[col3].isin(dfs['produto']))
 mask = (dfs['demanda'].isin(df[col1])) & (dfs['atividade'].isin(df[col2])) & (dfs['produto'].isin(df[col3]))
+notmask = ~(dfs['demanda'].isin(df[col1])) & ~(dfs['atividade'].isin(df[col2])) & ~(dfs['produto'].isin(df[col3]))
+
 # selecione apenas as linhas em que a máscara é verdadeira
 matches = dfs[mask]
+notmatches = dfs[notmask]
 # Removendo colunas sem valores
 #matches = df[mask].dropna(axis=1, how='all')
 
@@ -97,6 +101,7 @@ email.Subject = "Lembrete"
 email.HTMLBody = f"""
 <p>Caro Jamil, Você finalmente conseguiu aqui os valores que estão batendo o que está na descrição com o que está no campo título.</p>
 <p>{matches.to_html()}</p>
+<p>Aqui estão os que não estão batendo{notmatches}</p>
 <p>Cordialmente,</p>
 <p>Email automático</p>
 """
