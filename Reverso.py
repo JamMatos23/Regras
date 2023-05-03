@@ -3,8 +3,8 @@ import pyodbc
 import pandas as pd
 import openpyxl
 import os
-from xlutils.copy import copy
-from openpyxl.utils.dataframe import dataframe_to_rows
+import win32com.client as win32
+from openpyxl.utils import get_column_letter
 
 # Fazer a conexão com a base de dados
 dadosconexao = (
@@ -18,7 +18,7 @@ dadosconexao = (
 conexao = pyodbc.connect(dadosconexao)
 print("conexão bem sucedida!")
 
-df = pd.read_sql_query(f"select left(descricao, 500) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%'", conexao)
+df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, DtFimPactoTrab, DtInicioPactoTrabAtividade, DtFimPactoTrabAtividade, titulo, left(descricao, 500) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%< idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN DATEADD (DAY, 15, EOMONTH (GETDATE (), -2)) and GETDATE () and SituacaoPactoTrabalho != 'Executado' and SituacaoPactoTrabalho != 'Rejeitado'group by NomeServidor, DtInicioPactoTrab,DtFimPactoTrab, left(descricao, 500),DtInicioPactoTrabAtividade,DtFimPactoTrabAtividade, titulo order by NomeServidor, DtInicioPactoTrab", conexao)
 
 # input = "<demanda>2</demanda><atividade>2</atividade><produto>2</produto><anoAcao>2023</anoAcao><idAcao>7</idAcao><idSprint></idSprint>"
 
@@ -36,7 +36,7 @@ def formatFile(file_path: str):
     df = pd.read_excel(file_path)
 
     # Update the column names
-    df.columns = ["Nome Servidor", "Data Inicio Plano de Trabalho","Data Termino Plano de Trabalho", "idEaud", "Demandas", "Atividades", "Produtos", "Ação", "Ano", "Sprint", "Descrição"]
+    df.columns = ["Nome Servidor", "Data Inicio Plano de Trabalho","Data Termino Plano de Trabalho","Data Inicio Atividade Plano de Trabalho","Data Termino Atividade Plano de Trabalho", "Atividade/Ação", "idEaud", "Demandas", "Atividades", "Produtos", "Ano", "Ação", "Sprint", "Descrição"]
 
     # Remove rows with duplicate values in column 'Descrição'
     df = df.drop_duplicates(subset=['Descrição'])
@@ -276,7 +276,7 @@ def descTrans(input):
     conexao = pyodbc.connect(dadosconexao)
     print("conexão bem sucedida!")
 
-    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, DtFimPactoTrab, left(descricao, 500) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%</idAcao><idSprint>%%</idSprint>%' group by NomeServidor, DtInicioPactoTrab,DtFimPactoTrab, left(descricao, 500) order by NomeServidor, DtInicioPactoTrab", conexao)
+    df = pd.read_sql_query(f"SELECT NomeServidor, DtInicioPactoTrab, DtFimPactoTrab, DtInicioPactoTrabAtividade, DtFimPactoTrabAtividade, titulo, left(descricao, 500) as Descrição FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] where descricao like '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto><anoAcao>%%</anoAcao><idAcao>%%< idAcao><idSprint>%%</idSprint>%' and DtInicioPactoTrab BETWEEN DATEADD (DAY, 15, EOMONTH (GETDATE (), -2)) and GETDATE () and SituacaoPactoTrabalho != 'Executado' and SituacaoPactoTrabalho != 'Rejeitado'group by NomeServidor, DtInicioPactoTrab,DtFimPactoTrab, left(descricao, 500),DtInicioPactoTrabAtividade,DtFimPactoTrabAtividade, titulo order by NomeServidor, DtInicioPactoTrab", conexao)
 
     # Creating calling Keys
     demandas_key = str(stripFunc(input, "demanda"))
@@ -292,6 +292,7 @@ def descTrans(input):
         # Carregando o workbook existente
         workbook = openpyxl.load_workbook(file_path)
         sheet = workbook.get_sheet_by_name('Sheet1') # Obtendo a referência da aba existente
+        sheet = workbook.active
         #sheet.title = 'Principal'  # Renomeando a aba
     else:
         # Criando um novo workbook
@@ -313,15 +314,31 @@ def descTrans(input):
         sheet.cell(row=row, column=1).value = df_filtrado.loc [:, 'NomeServidor'].to_string (index = False)
         sheet.cell(row=row, column=2).value = df_filtrado.loc [:, 'DtInicioPactoTrab'].to_string (index = False)
         sheet.cell(row=row, column=3).value = df_filtrado.loc [:, 'DtFimPactoTrab'].to_string (index = False)
-        sheet.cell(row=row, column=4).value = stripFunc(input, "idEaud")
-        sheet.cell(row=row, column=5).value = demandas_dict.get(demandas_key, "N/A")
-        sheet.cell(row=row, column=6).value = ativades_dict.get(demandas_key, {}).get(atividade_key, None)
-        sheet.cell(row=row, column=7).value = produtos_dict.get(demandas_key, {}).get(atividade_key, {}).get(produto_key, None)
+        sheet.cell(row=row, column=4).value = df_filtrado.loc [:, 'DtInicioPactoTrabAtividade'].to_string (index = False)
+        sheet.cell(row=row, column=5).value = df_filtrado.loc [:, 'DtFimPactoTrabAtividade'].to_string (index = False)
+        sheet.cell(row=row, column=6).value = df_filtrado.loc [:, 'titulo'].to_string (index = False)
+        sheet.cell(row=row, column=7).value = stripFunc(input, "idEaud")
+        sheet.cell(row=row, column=8).value = demandas_dict.get(demandas_key, "N/A")
+        sheet.cell(row=row, column=9).value = ativades_dict.get(demandas_key, {}).get(atividade_key, None)
+        sheet.cell(row=row, column=10).value = produtos_dict.get(demandas_key, {}).get(atividade_key, {}).get(produto_key, None)
 
-        sheet.cell(row=row, column=8).value = acao_dict.get(acao_key, "N/A")
-        sheet.cell(row=row, column=9).value = stripFunc(input, "anoAcao")
-        sheet.cell(row=row, column=10).value = stripFunc(input, "idSprint")
-        sheet.cell(row=row, column=11).value = str(input)
+        sheet.cell(row=row, column=11).value = stripFunc(input, "anoAcao")
+        sheet.cell(row=row, column=12).value = acao_dict.get(acao_key, "N/A")
+        sheet.cell(row=row, column=13).value = stripFunc(input, "idSprint")
+        sheet.cell(row=row, column=14).value = str(input)
+        
+        '''# Ajuste o tamanho da coluna para se ajustar ao conteúdo
+        for col in sheet.columns:
+            max_length = 0
+            column = col[0].column_letter  # Obtenha a letra da coluna
+            for cell in col:
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(cell.value)
+                except:
+                    pass
+            adjusted_width = (max_length + 2)
+            sheet.column_dimensions[column].width = adjusted_width'''
 
         # Save workbook
         workbook.save(file_path)
@@ -332,3 +349,4 @@ for value in df['Descrição'].values:
 
     # Passar apenas o valor da coluna Descrição para a função descTrans
     descTrans(value)
+    
