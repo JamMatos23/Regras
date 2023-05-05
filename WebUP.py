@@ -78,6 +78,7 @@ def update_depara_json():
                 'Atividade': row[3],
                 'CodProduto': row[4],
                 'Produto': row[5],
+                'Atividade2': row[6],
                 'nº da atividade': row[7],
                 'Atividade PGD': row[8]
             }
