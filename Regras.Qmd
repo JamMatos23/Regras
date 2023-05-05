@@ -19,55 +19,82 @@ output:
 ## Diretrizes para o Lançamento de Planos de Projetos
 
 ### 1. Prazo para Lançamento de Planos
-- É fundamental que os planos sejam lançados até o **1º dia** do mês.
-- Para garantir que todos os servidores cumpram esse prazo, é necessário realizar uma verificação **3 dias antes** do 1º dia útil do mês.
+- É fundamental que os planos sejam lançados dentro do prazo.
+- Para garantir que todos os servidores cumpram esse prazo, é necessário sempre realizar uma verificação quanto aos prazos a serem cumpridos e se eles já foram entregues.
 - Caso algum servidor não tenha lançado seu plano dentro do prazo estabelecido, é importante enviar um **alerta** para o supervisor e para o servidor em questão.
 - O alerta deve ser enviado nos **3 dias úteis anteriores** e no **dia do prazo** final para garantir que a situação seja resolvida o mais rápido possível.
+
+1. Defina uma lista de servidores e seus respectivos prazos para lançamento de planos.
+2. Crie uma função para verificar se os planos foram lançados dentro do prazo estabelecido para cada servidor.
+3. Caso algum servidor não tenha lançado seu plano dentro do prazo, crie uma função para enviar um alerta para o supervisor e para o servidor em questão.
+4. Programe o envio do alerta nos 3 dias úteis anteriores e no dia do prazo final.
+5. Certifique-se de que o bot execute a verificação regularmente para garantir que todos os servidores cumpram o prazo estabelecido.
 
 ### 2. Padrão para o Campo Descrição
 - É importante que o campo descrição esteja de acordo com o padrão estabelecido pela empresa.
 - Caso o campo descrição não esteja no padrão, é necessário enviar um **alerta** para o supervisor e para o servidor responsável pelo lançamento do plano.
-- O alerta deve conter informações detalhadas sobre **por que** o campo descrição não está de acordo com o padrão estabelecido.
+- O alerta deve conter informações detalhadas sobre **por que** o campo descrição não está de acordo com o padrão estabelecido. Apontado aonde está o erro e, se possível, mostrando uma solução plausível.
+
+1. Defina o padrão estabelecido pela empresa para o campo descrição.
+2. Crie uma função para verificar se o campo descrição está de acordo com o padrão estabelecido.
+3. Caso o campo descrição não esteja no padrão, crie uma função para enviar um alerta para o supervisor e para o servidor responsável pelo lançamento do plano.
+4. Certifique-se de que o alerta contenha informações detalhadas sobre por que o campo descrição não está de acordo com o padrão estabelecido, apontando onde está o erro e, se possível, mostrando uma solução plausível.
+5. Programe o bot para executar a verificação regularmente.
 
 ### 3. Prazo para Registro de Execução
 - Após o encerramento do prazo do PT, o servidor tem até o **5º dia** útil para registrar a execução do plano.
 - Caso a execução não tenha sido registrada dentro desse prazo, é necessário enviar um **alerta** para para o supervisor e para o servidor via email.
 - Quando todas as pendências forem resolvidas, é importante enviar um email para você informando que a homologação pode ser realizada.
 
-### 4. Prazo para Lançamento de Planos
-- É fundamental que os planos sejam lançados até o **16º dia** do mês.
-- Para garantir que todos os servidores cumpram esse prazo, é necessário realizar uma verificação **3 dias antes** do 16º dia do mês.
-- Caso algum servidor não tenha lançado seu plano dentro do prazo estabelecido, é importante enviar um **alerta** para o supervisor e para o servidor em questão.
-- O alerta deve ser enviado nos **3 dias úteis anteriores** e no **dia do prazo** final para garantir que a situação seja resolvida o mais rápido possível.
+1. Defina o prazo para registro de execução como o 5º dia útil após o encerramento do prazo do PT.
+2. Crie uma função para verificar se a execução foi registrada dentro do prazo estabelecido.
+3. Caso a execução não tenha sido registrada dentro do prazo, crie uma função para enviar um alerta para o supervisor e para o servidor via email.
+4. Programe o bot para enviar um email para você informando que a homologação pode ser realizada quando todas as pendências forem resolvidas.
+5. Certifique-se de que o bot execute a verificação regularmente.
+
+### 4. Gerador de Descrição
+- O gerador de descrição é uma ferramenta desenvolvida para auxiliar na integração entre as plataformas SISGP e SharePoint. Ele utiliza arquivos JSON para popular elementos de seleção em uma interface web, permitindo que os usuários gerem descrições padronizadas para os planos de projetos de forma rápida e eficiente.
+- Os dados contidos nos arquivos JSON são atualizados automaticamente por meio de um script desenvolvido em Python. Esse script acessa diretamente o banco de dados SQL e atualiza os arquivos JSON na interface web, garantindo que as informações estejam sempre atualizadas e precisas.
+
+1. Desenvolva uma interface web que utilize arquivos JSON para popular elementos de seleção.
+2. Crie uma ferramenta que permita aos usuários gerar descrições padronizadas para os planos de projetos de forma rápida e eficiente.
+3. Desenvolva um script em Python para atualizar automaticamente os dados contidos nos arquivos JSON.
+4. Programe o script para acessar diretamente o banco de dados SQL e atualizar os arquivos JSON na interface web.
+5. Certifique-se de que as informações estejam sempre atualizadas e precisas.
 
 ### 5. Verificação da Data de Registro
 - É fundamental verificar se a data de registro dos planos está correta.
 - Caso a data de registro esteja incorreta, é necessário tomar as medidas necessárias para corrigi-la e garantir que todos os registros estejam de acordo com as diretrizes estabelecidas.
 
-### 6. Atualização do Site
+1. Crie uma função para verificar se a data de registro dos planos está correta.
+2. Caso a data de registro esteja incorreta, tome as medidas necessárias para corrigi-la.
+3. Certifique-se de que todos os registros estejam de acordo com as diretrizes estabelecidas.
+4. Programe o bot para executar a verificação regularmente.
+
+### 6. Atualização das Informações do Site
 - É importante garantir que o site esteja sempre atualizado com as informações mais recentes.
 - Para isso, deve-se utilizar o script em Python para buscar os dados diretamente no banco SQL e atualizar os arquivos JSON na interface web.
 - A atualização do site deve ser realizada regularmente para garantir que as informações estejam sempre precisas e atualizadas.
 
+1. Utilize o script em Python para buscar os dados diretamente no banco SQL.
+2. Atualize os arquivos JSON na interface web com as informações obtidas do banco de dados.
+3. Programe a atualização do site para ser realizada regularmente.
+4. Certifique-se de que as informações estejam sempre precisas e atualizadas.
+
 ### 7. Função Reversa
 - Essa função permite que uma descrição gerada pelo gerador de descrição e seja transformada novamente em texto legível.
 - Isso facilita a compreensão das informações contidas nas descrições geradas pelo gerador de descrição e aumenta a eficiência do processo de integração entre as plataformas SISGP e SharePoint.
+
+1. Desenvolva uma função que receba como entrada uma descrição gerada pelo gerador de descrição.
+2. Crie um algoritmo para transformar a descrição em texto legível.
+3. Integre a função reversa ao gerador de descrição para facilitar a compreensão das informações contidas nas descrições geradas.
+4. Certifique-se de que a função reversa aumente a eficiência do processo de integração entre as plataformas SISGP e SharePoint.
 
 ### 8. Atualização do Dashboard Gerencial SharePoint
 - É importante garantir que o dashboard gerencial do SharePoint da Auditoria do INEP esteja sempre atualizado com as informações mais recentes.
 - Para isso, deve-se utilizar os dados importados e conferidos para atualizar o dashboard gerencial regularmente.
 - A atualização do dashboard gerencial permite que os usuários tenham acesso às informações mais recentes e precisas sobre o andamento dos planos de projetos.
 
-# Gerador de Descrição para Integração de Plataformas
-O gerador de descrição é uma ferramenta desenvolvida para auxiliar na integração entre as plataformas SISGP e SharePoint. Ele utiliza arquivos JSON para popular elementos de seleção em uma interface web, permitindo que os usuários gerem descrições padronizadas para os planos de projetos de forma rápida e eficiente.
-
-Os dados contidos nos arquivos JSON são atualizados automaticamente por meio de um script desenvolvido em Python. Esse script acessa diretamente o banco de dados SQL e atualiza os arquivos JSON na interface web, garantindo que as informações estejam sempre atualizadas e precisas.
-
-O gerador de descrição utiliza um pseudocódigo específico para gerar as descrições padronizadas. Esse pseudocódigo é composto por delimitadores que indicam o tipo de informação contida em cada campo. Por exemplo, o delimitador `<demanda>1</demanda>` indica que o valor “1” se refere à demanda do plano de projeto.
-
-Os demais delimitadores utilizados pelo gerador de descrição incluem `<atividade>`, `<produto>`, `<idEaud>`, `<anoAcao>`, `<idAcao>` e `<idSprint>`. Cada delimitador é utilizado para separar os valores correspondentes aos respectivos campos, permitindo que o gerador de descrição crie descrições precisas e padronizadas para os planos de projetos.
-
-Com o gerador de descrição, os usuários podem facilmente gerar descrições padronizadas para os planos de projetos, garantindo a consistência das informações entre as plataformas SISGP e SharePoint. Isso facilita a integração entre as duas plataformas e aumenta a eficiência do processo de lançamento de planos de projetos.
-
-
-
+1. Utilize os dados importados e conferidos para atualizar o dashboard gerencial.
+2. Programe a atualização do dashboard gerencial para ser realizada regularmente.
+3. Certifique-se de que os usuários tenham acesso às informações mais recentes e precisas sobre o andamento dos planos de projetos.

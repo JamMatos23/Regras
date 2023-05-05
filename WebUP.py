@@ -72,12 +72,14 @@ def update_depara_json():
     if rows is not None:
         for row in rows:
             item = {
-                'Tipo de Demanda': row[1],
                 'CodDemanda': row[0],
+                'Tipo de Demanda': row[1],
                 'CodAtividade': row[2],
                 'Atividade': row[3],
                 'CodProduto': row[4],
-                'Produto': row[5]
+                'Produto': row[5],
+                'nº da atividade': row[7],
+                'Atividade PGD': row[8]
             }
             data.append(item)
 
