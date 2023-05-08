@@ -54,8 +54,32 @@ SituacaoPactoTrabalho = ‘’ ‘Rejeitado’ ‘Rascunho’ ‘Executado’.
 - As mensagens de notificação estarão também em arquivos externos `avisoNCob1.html` e `avisoNCob2.html`.
 
 ### Validar Conclusão do Plano de Trabalho
-- Caso plano de trabalho não esteja com todas atividades concluídas até o prazo, avisar o servidor.
-- 1 Único aviso.
+
+#### Objetivo
+
+Verificar se os servidores concluíram todas as atividades do plano de trabalho dentro do prazo e enviar notificações caso não tenham.
+
+#### Ações a serem tomadas
+
+1. Caso o plano de trabalho não esteja com todas as atividades concluídas até o prazo, enviar um aviso ao servidor.
+
+#### Passos
+
+1. Obter dados do SQL usando a consulta SELECT *.
+2. Separar os dados por servidor e verificar o status mais recente de SituacaoPactoTrabalho para cada servidor.
+3. Para cada servidor:
+  1. Se todas as atividades com o mesmo pactoTrabalhoId tiverem status Concluída, ignorar e passar para o próximo servidor.
+  2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML avisoConc1.html.
+  3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML avisoNConc.html.
+  4. Adicionar o servidor à lista de servidores não concluídos em um arquivo nConc.json.
+  5. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
+
+#### Observações
+
+- As conexões com o banco de dados SQL devem ser implementadas em um arquivo local chamado Conexao.py, que possui uma função para executar consultas SQL.
+- As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
+- As mensagens de notificação estarão também em arquivos externos avisoConc1.html e avisoNConc.html.
+
 
 ### Verificar Campo Descrição
 - Caso trabalho 'Enviado para Aceite'.
@@ -63,6 +87,7 @@ SituacaoPactoTrabalho = ‘’ ‘Rejeitado’ ‘Rascunho’ ‘Executado’.
 - Verificar se Descrição coincide com atividade.
 - Caso erro, apontar o(s) erro(s) ao servidor. Para servidor e Supervisor.
 - Caso tudo correto, enviar para supervisor para Análise.
+
 
 ### Verificar existencia do produto no eAud
 - Atividade Avaliação ou Consultoria.
