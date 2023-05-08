@@ -80,14 +80,22 @@ Verificar se os servidores concluíram todas as atividades do plano de trabalho 
 - As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
 - As mensagens de notificação estarão também em arquivos externos avisoConc1.html e avisoNConc.html.
 
-
 ### Verificar Campo Descrição
-- Caso trabalho 'Enviado para Aceite'.
-- Verificar se Descrição está correta.
-- Verificar se Descrição coincide com atividade.
-- Caso erro, apontar o(s) erro(s) ao servidor. Para servidor e Supervisor.
-- Caso tudo correto, enviar para supervisor para Análise.
 
+#### Objetivo
+Verificar se o campo Descrição está correto e coincide com a atividade quando o trabalho está ‘Enviado para Aceite’. Caso haja algum erro, apontar o(s) erro(s) ao servidor e ao supervisor.
+
+#### Passos
+
+1. Obter a lista de trabalhos com status ‘Enviado para Aceite’ do banco de dados usando uma consulta SQL.
+2. Para cada trabalho na lista:
+  1. Verificar se o campo Descrição está correto e coincide com a atividade.
+  2. Se houver algum erro, enviar uma notificação ao servidor e ao supervisor apontando o(s) erro(s) usando a função do arquivo Email.py com mensagem descErro.html.
+  3. Se tudo estiver correto, enviar o trabalho para o supervisor para análise com a mensagem descAceita.html.
+
+#### Observações
+As conexões com o banco de dados devem ser implementadas em um arquivo local chamado Conexao.py, que possui uma função para executar consultas SQL.
+As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
 
 ### Verificar existencia do produto no eAud
 - Atividade Avaliação ou Consultoria.

@@ -3,7 +3,7 @@ import json
 import mysql.connector
 
 def auditoria(query):
-    with open('sec/config.json', 'r') as f:
+    with open('C:/Users/navinchandry.ruas/Documents/.git/Regras/sec/config.json', 'r') as f:
         config = json.load(f)
     conn = mysql.connector.connect(
         host=config['dbHost'],

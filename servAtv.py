@@ -1,14 +1,14 @@
 import json
 from datetime import datetime, timedelta
 from Conexao import pontalina, auditoria
-from emailFunc import enviar_notificacao, enviar_notificacao_supervisor
+from emailFunc import personalizar_html, enviar_notificacao, enviar_notificacao_supervisor
 
 def verificar_plano_trabalho():
     # 1. Lista servidores do banco SQL. Portalina
-    servidores = pontalina("SELECT * FROM(servidores)")
+    servidores = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")
 
     # 1,5. Verificar Lista de Férias no SQL. Auditor
-    ferias = auditoria("SELECT * FROM(ferias)")
+    ferias = auditoria("SELECT * FROM Ferias")
 
     # Carregar lista de servidores notificados
     with open('notificados.json', 'r') as f:
@@ -21,7 +21,7 @@ def verificar_plano_trabalho():
                 continue
 
             # 2. Verificar status StuacaoPactoTrabalho de cada servidor
-            situacao = pontalina(f"SELECT SituacaoPactoTrabalho FROM(servidores) WHERE(servidor='{servidor}')")
+            situacao = pontalina(f"SELECT SituacaoPactoTrabalho FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]  WHERE(servidor='{servidor}')")
 
             # 3. Caso SituacaoPactoTrabalho = '' 'Rejeitado' 'Rascunho' 'Executado' {Enviar Notificação}
             if situacao in ['', 'Rejeitado', 'Rascunho', 'Executado']:
@@ -43,8 +43,4 @@ def verificar_plano_trabalho():
     with open('notificados.json', 'w') as f:
         json.dump(notificados, f)
 
-def personalizar_html(arquivo_html, servidor):
-    with open(arquivo_html, 'r') as f:
-        html = f.read()
-    html_personalizado = html.replace('{servidor}', servidor)
-    return html_personalizado
+verificar_plano_trabalho()

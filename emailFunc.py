@@ -44,3 +44,10 @@ def enviar_notificacao_supervisor(servidor, arquivo_html):
         server.starttls()
         server.login('seu_usuario', 'sua_senha')
         server.send_message(msg)
+
+def personalizar_html(arquivo_html, valores):
+    with open(arquivo_html, 'r') as f:
+        html = f.read()
+    for chave, valor in valores.items():
+        html = html.replace('{' + chave + '}', str(valor))
+    return html
