@@ -80,22 +80,34 @@ Verificar se os servidores concluíram todas as atividades do plano de trabalho 
 - As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
 - As mensagens de notificação estarão também em arquivos externos avisoConc1.html e avisoNConc.html.
 
+
 ### Verificar Campo Descrição
+- Caso trabalho 'Enviado para Aceite'.
+- Verificar se Descrição está correta.
+- Verificar se Descrição coincide com atividade.
+- Caso haja algum erro, apontar o(s) erro(s) ao servidor. Para servidor e Supervisor.
+- Caso tudo correto, enviar para supervisor para Análise.
 
 #### Objetivo
-Verificar se o campo Descrição está correto e coincide com a atividade quando o trabalho está ‘Enviado para Aceite’. Caso haja algum erro, apontar o(s) erro(s) ao servidor e ao supervisor.
+
+O objetivo desta tarefa é realizar uma consulta por meio de uma query para verificar se há algum registro com o valor "Enviado para Aceite" na coluna SituacaoPactoTrabalho da base de dados PGD_SUSEP_PROD. Essa verificação será feita considerando a data atual e um período de um mês.
+
+#### Ações a serem tomadas
+
+1. Caso o resultado dessa consulta seja positivo, será realizado um procedimento adicional de comparação. Será verificado se a junção dos números dentro de "%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto>%" utilizando da tabela De-Para para comparação, geram um resultado que é igual aos primeiros 6 caracteres da coluna título.
+
+2. Se a comparação não produzir um resultado válido, será enviado um e-mail informando sobre a inconsistência encontrada. Nesse e-mail, serão abordados os seguintes pontos: detalhes do problema identificado, explicação do motivo pelo qual a comparação é considerada inválida e a atividade registrada para o respectivo servidor e supervisor.
+
+3. Por outro lado, se a comparação for positiva e não houver atividade registrada de forma incorreta, será enviado um e-mail apenas ao supervisor informando sobre a ausência de atividades registradas de forma inadequada.
 
 #### Passos
-
-1. Obter a lista de trabalhos com status ‘Enviado para Aceite’ do banco de dados usando uma consulta SQL.
-2. Para cada trabalho na lista:
-  1. Verificar se o campo Descrição está correto e coincide com a atividade.
-  2. Se houver algum erro, enviar uma notificação ao servidor e ao supervisor apontando o(s) erro(s) usando a função do arquivo Email.py com mensagem descErro.html.
-  3. Se tudo estiver correto, enviar o trabalho para o supervisor para análise com a mensagem descAceita.html.
-
-#### Observações
-As conexões com o banco de dados devem ser implementadas em um arquivo local chamado Conexao.py, que possui uma função para executar consultas SQL.
-As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
+1. Obter dados do SQL usando a consulta SELECT NomeServidor, DtInicioPactoTrab,DtInicioPactoTrabAtividade,LEFT(descricao, 500) as Descrição, titulo as Título FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE descricao LIKE '%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto>%' AND SituacaoPactoTrabalho = 'Enviado para aceito'.
+2. Criar um dataframe chamado de df com os valores que estão dentro de <demanda></demanda>, <atividade></atividade> e <produto></produto> da coluna Descrição e com somentes os 6 primeiros caracteres de cada valor da coluna titulo.
+3. Criar outro dataframe chamado de dfs com os valores existentes no De-Para.
+4. Adaptar os valores dos dois dataframes para que fiquem no mesmo modelo e não ocorra algum erro durante a comparação.
+5. Verificar quais são as combinações possiveis para os valores das colunas CodDemanda, CodAtividade e CodProduto de acordo com o De-Para retornando a junção dos valores das colunas Atividade2 e nº da atividade.
+6. Comparar se os valores pegos em <demanda></demanda>, <atividade></atividade> e <produto></produto> formam alguma combinação de acordo com o De-Para e qual valor é retornado então depois comparar com os valores da coluna titulo.
+7. Se o valor da coluna titulo não for compativel com o retorno das colunas Atividade2 e nº da atividade enviar um email para o servidor com uma planilha com todos os valores que não combinam explicando o porque não combinar junto com o arquivo De-Para em anexo.
 
 ### Verificar existencia do produto no eAud
 - Atividade Avaliação ou Consultoria.
@@ -103,7 +115,33 @@ As funções para enviar as notificações por email devem ser implementadas em 
 - No dia seguinte avisar supervisor e servidor novamente.
 - Se concluído atividades e produtos avisar supervisor.
 
+#### Objetivo
+Verificar se o id registrado existe dentro do eAud e se sim verificar se há a existência de um arquivo em anexo
+
+#### Ações a serem tomadas
+1. Realizar uma query que retorne somente os valores nos quais os valores da coluna Atividade sejam iguais a Avaliação ou Consultoria com base na dada atual.
+2. Se não houver correspondetes enviar um email para o servidor falando para que o faça no mesmo dia.
+3. Executar novamente essa query no dia seguinte e se o servidor não tiver feito remandar um email para ele e dessa vez tambem mandar para o supervisor.
+
+#### Passos
+
+
 ### Atualizar Gerador de Descrição
 
-### Atualização do Dashboard Gerencial SharePoint
-- 'Em Execução' ou 'Autorizado' enviar dados para SharePoint.
+#### Objetivo
+Realizar melhorias para otimizar a execução do site.
+
+#### Ações a serem tomadas
+1. Utilizar do JavaScript para fazer a conexão as bases de dados presentes tanto no MySQL Workbench e SQL Server Management Studio
+
+#### Passos
+
+### Atualização do Dashboard Gerencial SharePoint - 'Em Execução' ou 'Autorizado' enviar dados para SharePoint.
+
+#### Objetivo
+Criar um filtro no Dashboard que permitar selecionar no campo SituacaoPactoTrabalho os dados onde são ou "Em Execução" ou "Autorizado" 
+
+#### Ações a serem tomadas
+Utilizar do PowerBI para fazer um novo filtro no Dashboard Gerencial SharePoint onde se possar escolher os valores que desejar mostrar por meio do campo SituacaoPactoTrabalho
+
+#### Passos
