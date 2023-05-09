@@ -1,46 +1,57 @@
 import json
-from datetime import datetime, timedelta
 from Conexao import pontalina, auditoria
-from emailFunc import personalizar_html, enviar_notificacao, enviar_notificacao_supervisor
+from emailFunc import enviar_notificacao, enviar_notificacao_supervisor, personalizar_html
 
-def verificar_plano_trabalho():
-    # 1. Lista servidores do banco SQL. Portalina
+def verificar_planos_trabalho():
+    # Obter a lista de servidores do banco SQL Portalina
     servidores = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")
 
-    # 1,5. Verificar Lista de Férias no SQL. Auditor
+    # Obter a lista de férias do banco SQL Auditor
     ferias = auditoria("SELECT * FROM Ferias")
 
-    # Carregar lista de servidores notificados
-    with open('notificados.json', 'r') as f:
-        notificados = json.load(f)
+    # Verificar se a variável ferias é None
+    if ferias is None:
+        print("Erro: a função auditoria('SELECT * FROM Ferias') retornou None")
+        return
 
-    if servidores is not None:
-        for servidor in servidores:
-            # 2.5. Caso Servidor em Férias Ativo, ignorar...
-            if servidor in ferias:
+    # Verificar se a variável ferias é iterável
+    if not isinstance(ferias, (list, tuple)):
+        print(f"Erro: a função auditoria('SELECT * FROM Ferias') retornou um valor não iterável: {ferias}")
+        return
+
+    # Verificar se o arquivo notificado.json existe
+    try:
+        with open('notificado.json', 'r') as f:
+            notificados = json.load(f)
+    except FileNotFoundError:
+        notificados = {}
+
+    # Para cada servidor na lista de servidores
+    for servidor in servidores:
+        # Verificar se a variável ferias é None
+        if ferias is not None:
+            # Verificar se o servidor está na lista de férias
+            if any(servidor['servidor'] == ferias_servidor['servidor'] for ferias_servidor in ferias):
                 continue
 
-            # 2. Verificar status StuacaoPactoTrabalho de cada servidor
-            situacao = pontalina(f"SELECT SituacaoPactoTrabalho FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]  WHERE(servidor='{servidor}')")
+            # Verificar o status SituacaoPactoTrabalho do servidor
+            if servidor['SituacaoPactoTrabalho'] != 'Em execução':
+                # Verificar se o servidor já foi notificado anteriormente
+                if servidor['servidor'] not in notificados:
+                    # Enviar o primeiro aviso ao servidor
+                    enviar_notificacao(servidor['servidor'], 'avisoNCob1.html')
+                    # Registrar no arquivo notificado.json que o servidor foi notificado uma vez
+                    notificados[servidor['servidor']] = 1
+                elif notificados[servidor['servidor']] == 1:
+                    # Enviar o segundo aviso ao servidor e ao supervisor
+                    enviar_notificacao(servidor['servidor'], 'avisoNCob2.html')
+                    enviar_notificacao_supervisor(servidor['servidor'], 'avisoNCob2.html')
+                    # Registrar no arquivo notificado.json que o servidor foi notificado duas vezes
+                    notificados[servidor['servidor']] = 2
 
-            # 3. Caso SituacaoPactoTrabalho = '' 'Rejeitado' 'Rascunho' 'Executado' {Enviar Notificação}
-            if situacao in ['', 'Rejeitado', 'Rascunho', 'Executado']:
-                if servidor not in notificados:
-                    # Enviar primeiro aviso
-                    html_personalizado = personalizar_html('avisoNCob1.html', servidor)
-                    enviar_notificacao(servidor, html_personalizado)
-                    notificados[servidor] = {'avisos': 1, 'data_primeiro_aviso': str(datetime.now())}
-                elif notificados[servidor]['avisos'] == 1:
-                    data_primeiro_aviso = datetime.strptime(notificados[servidor]['data_primeiro_aviso'], '%Y-%m-%d %H:%M:%S.%f')
-                    if datetime.now() - data_primeiro_aviso > timedelta(days=2):
-                        # Enviar segundo aviso
-                        html_personalizado = personalizar_html('avisoNCob2.html', servidor)
-                        enviar_notificacao(servidor, html_personalizado)
-                        enviar_notificacao_supervisor(servidor, html_personalizado)
-                        notificados[servidor]['avisos'] = 2
-
-    # Salvar lista atualizada de servidores notificados
-    with open('notificados.json', 'w') as f:
+    # Salvar o arquivo notificado.json
+    with open('notificado.json', 'w') as f:
         json.dump(notificados, f)
 
-verificar_plano_trabalho()
+if __name__ == '__main__':
+    verificar_planos_trabalho()
