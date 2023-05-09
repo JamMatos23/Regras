@@ -24,33 +24,34 @@ output:
 
 #### Objetivo
 
-Verificar se os servidores possuem um plano de trabalho válido e enviar notificações caso não possuam.
+O objetivo deste script é verificar se os servidores possuem um plano de trabalho válido e enviar notificações caso não possuam.
 
 #### Condições para um plano de trabalho não coberto
 
-SituacaoPactoTrabalho = ‘’ ‘Rejeitado’ ‘Rascunho’ ‘Executado’.
+Um plano de trabalho é considerado não coberto se a coluna `SituacaoPactoTrabalho` do servidor no banco de dados Portalina for diferente de `‘Em execução’`.
 
 #### Ações a serem tomadas
 
-1. Caso o servidor não tenha um plano de trabalho válido, enviar um aviso ao servidor.
-2. Se após 2 dias do primeiro aviso o servidor ainda não tiver um plano de trabalho válido, enviar um segundo aviso ao servidor e ao supervisor.
+- Caso o servidor não tenha um plano de trabalho válido, enviar um aviso ao servidor.
+
+- Se na próxima vez que o script rodar o servidor ainda não tiver um plano de trabalho válido, enviar um segundo aviso ao servidor e ao supervisor.
 
 #### Passos
 
-1. Obter a lista de servidores do banco SQL Portalina usando a função `pontalina(query)` do arquivo `Conexao.py`.
-2. Obter a lista de férias do banco SQL Auditor usando a função `auditoria(query)` do arquivo `Conexao.py`.
+1. Obter a lista de servidores do banco SQL Portalina usando a função `pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")` do arquivo `Conexao.py`.
+2. Obter a lista de férias do banco SQL Auditor usando a função `auditoria("SELECT * FROM Ferias")` do arquivo `Conexao.py`.
 3. Para cada servidor na lista de servidores:
-  1. Verificar se o servidor está na lista de férias. Se estiver, ignorar e passar para o próximo servidor.
-  2. Verificar o status SituacaoPactoTrabalho do servidor no banco SQL Portalina usando a função `pontalina(query)` do arquivo `Conexao.py`.
-  3. Se o status SituacaoPactoTrabalho for ‘’ ‘Rejeitado’ ‘Rascunho’ ‘Executado’:
-    1. Verificar se o servidor já foi notificado anteriormente (verificando em um arquivo `notificado.json`).
-    2. Se o servidor não foi notificado anteriormente, enviar o primeiro aviso ao servidor usando a função `enviar_notificacao(servidor, mensangem)` do arquivo `Email.py` e registrar no arquivo `notificado.json` que o servidor foi notificado uma vez.
-    3. Se o servidor já foi notificado uma vez e já se passaram 2 dias desde o primeiro aviso, enviar o segundo aviso ao servidor e ao supervisor usando as funções `enviar_notificacao(servidor, mensagem)` e `enviar_notificacao_supervisor(servidor, menagem)` do arquivo Email.py e registrar no arquivo `notificado.json` que o servidor foi notificado duas vezes.
-
+4. Verificar se o servidor está na lista de férias. Se estiver, ignorar e passar para o próximo servidor.
+5. Verificar o status `SituacaoPactoTrabalho` do servidor nos dados importados do SQL.
+6. Se `SituacaoPactoTrabalho` for diferente de `‘Em execução’ || ‘Enviado para aceite’`: 
+  1. Verificar se o servidor já foi notificado anteriormente (verificando em um arquivo `notificado`.json). 
+  2. Se o servidor não foi notificado anteriormente, enviar o primeiro aviso ao servidor usando a função `enviar_notificacao(servidor, mensagem)` do arquivo `emailFunc.py` e registrar no arquivo notificado.json que o servidor foi notificado uma vez. 
+  3. Se o servidor já foi notificado uma vez e o servidor não tiver atualizado a `SituacaoPactoTrabalho`, na segunda vez que o script rodar, enviar o segundo aviso ao servidor e ao supervisor usando as funções `enviar_notificacao(servidor, mensagem)` e `enviar_notificacao_supervisor(servidor, mensagem)` do arquivo `emailFunc.py` e registrar no arquivo `notificado.json` que o servidor foi notificado duas vezes.
 #### Observações
 
 - As conexões com os bancos de dados Portalina e Auditor devem ser implementadas em um arquivo local chamado `Conexao.py`, que possui as funções `pontalina(query)` e `auditoria(query)`.
-- As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `Email.py`.
+- As mensagens de e-mail a serem enviadas devem ser personalizadas usando a função `personalizar_html(html, valores[])`.
+- As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `emailFunc.py`.
 - As mensagens de notificação estarão também em arquivos externos `avisoNCob1.html` e `avisoNCob2.html`.
 
 ### Validar Conclusão do Plano de Trabalho
@@ -61,41 +62,54 @@ Verificar se os servidores concluíram todas as atividades do plano de trabalho 
 
 #### Ações a serem tomadas
 
-1. Caso o plano de trabalho não esteja com todas as atividades concluídas até o prazo, enviar um aviso ao servidor.
+- Caso o plano de trabalho não esteja com todas as atividades concluídas até o prazo, enviar um aviso ao servidor.
 
 #### Passos
 
-1. Obter dados do SQL usando a consulta SELECT *.
-2. Separar os dados por servidor e verificar o status mais recente de SituacaoPactoTrabalho para cada servidor.
+1. Obter dados do SQL usando a consulta `pontalina('SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]')`.
+2. Separar os dados por servidor e verificar o mais recente SituacaoPactoTrabalho para cada servidor. Caso [DtFimPactoTrab] seja uma data com mais que um dia do dia atual, ignore.
 3. Para cada servidor:
   1. Se todas as atividades com o mesmo pactoTrabalhoId tiverem status Concluída, ignorar e passar para o próximo servidor.
-  2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML avisoConc1.html.
-  3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML avisoNConc.html.
-  4. Adicionar o servidor à lista de servidores não concluídos em um arquivo nConc.json.
+  2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML `avisoConc1.html`.
+  3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML `avisoNConc.html`.
+  4. Adicionar o servidor à lista de servidores não concluídos em um arquivo `nConc.json`.
   5. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
 
 #### Observações
 
-- As conexões com o banco de dados SQL devem ser implementadas em um arquivo local chamado Conexao.py, que possui uma função para executar consultas SQL.
-- As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
-- As mensagens de notificação estarão também em arquivos externos avisoConc1.html e avisoNConc.html.
+- As conexões com o banco de dados SQL devem ser implementadas em um arquivo local chamado `Conexao.py`, que possui uma função para executar consultas SQL.
+- As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `emailFunc.py`.
+- As mensagens de notificação estarão também em arquivos externos `avisoConc1.html` e `avisoNConc.html`.
 
 ### Verificar Campo Descrição
 
 #### Objetivo
-Verificar se o campo Descrição está correto e coincide com a atividade quando o trabalho está ‘Enviado para Aceite’. Caso haja algum erro, apontar o(s) erro(s) ao servidor e ao supervisor.
+
+- Caso trabalho 'Enviado para Aceite'.
+- Verificar se Descrição está correta.
+- Verificar se Descrição coincide com atividade.
+- Caso erro, apontar o(s) erro(s) ao servidor. Para servidor e Supervisor.
+- Caso tudo correto, enviar para supervisor para Análise.
+
+O objetivo desta tarefa é realizar uma consulta por meio de uma query para verificar se há algum registro com o valor "Enviado para Aceite" na coluna SituacaoPactoTrabalho da base de dados PGD_SUSEP_PROD. Essa verificação será feita considerando a data atual e um período de um mês.
+
+#### Ações a serem tomadas
+
+1. Caso o resultado dessa consulta seja positivo, será realizado um procedimento adicional de comparação. Será verificado se a junção dos números dentro de `%<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto>%` é igual aos primeiros 6 caracteres da coluna título.
+
+2. Se a comparação não produzir um resultado válido, será enviado um e-mail informando sobre a inconsistência encontrada. Nesse e-mail, serão abordados os seguintes pontos: detalhes do problema identificado, explicação do motivo pelo qual a comparação é considerada inválida e a atividade registrada para o respectivo servidor e supervisor.
+
+3. Por outro lado, se a comparação for positiva e não houver atividade registrada de forma incorreta, será enviado um e-mail apenas ao supervisor informando sobre a ausência de atividades registradas de forma inadequada.
 
 #### Passos
 
-1. Obter a lista de trabalhos com status ‘Enviado para Aceite’ do banco de dados usando uma consulta SQL.
-2. Para cada trabalho na lista:
-  1. Verificar se o campo Descrição está correto e coincide com a atividade.
-  2. Se houver algum erro, enviar uma notificação ao servidor e ao supervisor apontando o(s) erro(s) usando a função do arquivo Email.py com mensagem descErro.html.
-  3. Se tudo estiver correto, enviar o trabalho para o supervisor para análise com a mensagem descAceita.html.
-
-#### Observações
-As conexões com o banco de dados devem ser implementadas em um arquivo local chamado Conexao.py, que possui uma função para executar consultas SQL.
-As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
+1. Obter dados do SQL usando a consulta `portalina("SELECT NomeServidor, DtInicioPactoTrab,DtInicioPactoTrabAtividade,LEFT(descricao, 500) as Descrição, titulo as Título FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE descricao LIKE %<demanda>%%</demanda>%<atividade>%%</atividade><produto>%%</produto>% AND SituacaoPactoTrabalho = 'Enviado para aceito'")`.
+2. Criar um dataframe chamado de df com os valores que estão dentro de `<demanda></demanda>, <atividade></atividade> e <produto></produto>` da coluna Descrição e com somentes os 6 primeiros caracteres de cada valor da coluna titulo.
+3. Criar outro dataframe chamado de dfs com os valores existentes no De-Para.
+4. Adaptar os valores dos dois dataframes para que fiquem no mesmo modelo e não ocorra algum erro durante a comparação.
+5. Verificar quais são as combinações possiveis para os valores das colunas CodDemanda, CodAtividade e CodProduto de acordo com o De-Para retornando a junção dos valores das colunas Atividade2 e nº da atividade.
+6. Comparar se os valores pegos em `<demanda></demanda>`, `<atividade></atividade>` e `<produto></produto>` formam alguma combinação de acordo com o De-Para e qual valor é retornado então depois comparar com os valores da coluna titulo.
+7. Se o valor da coluna titulo não for compativel com o retorno das colunas Atividade2 e nº da atividade enviar um email para o servidor com uma planilha com todos os valores que não combinam explicando o porque não combinar junto com o arquivo De-Para em anexo.
 
 ### Verificar existencia do produto no eAud
 - Atividade Avaliação ou Consultoria.
