@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from extraUtils import gap , personalizar_html
 
 def verificar_planos_trabalho():
+    print('Verificando planos de trabalho...')
     # Obter a lista de servidores do banco SQL Portalina
     servidores = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")
 
@@ -103,3 +104,4 @@ def verificar_planos_trabalho():
                         
                 with open(gap('data\\notificados.json'), 'w') as f:
                     json.dump(notificados, f)
+    print('Verificação de planos de trabalho concluída')
