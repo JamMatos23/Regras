@@ -1,6 +1,8 @@
 import json
 from Conexao import pontalina, auditoria
-from emailFunc import enviar_notificacao, enviar_notificacao_supervisor, personalizar_html
+from emailFunc import enviar_notificacao, enviar_notificacao_supervisor
+from datetime import datetime, timedelta
+from extraUtils import gap , personalizar_html
 
 def verificar_planos_trabalho():
     # Obter a lista de servidores do banco SQL Portalina
@@ -19,39 +21,85 @@ def verificar_planos_trabalho():
         print(f"Erro: a função auditoria('SELECT * FROM Ferias') retornou um valor não iterável: {ferias}")
         return
 
-    # Verificar se o arquivo notificado.json existe
+    # Obter a data atual
+    hoje = datetime.now().date()
+
+    # Criar uma lista vazia para armazenar os nomes dos servidores em férias
+    servidores_em_ferias = []
+
+    # Iterar sobre a lista de férias
+    for ferias_servidor in ferias:
+        # Obter o nome do servidor
+        nome_servidor = ferias_servidor[0]
+        
+        # Iterar sobre os períodos de férias do servidor
+        for i in range(1, len(ferias_servidor), 2):
+            # Obter a data de início e a duração do período de férias
+            data_inicio_str = ferias_servidor[i]
+            duracao_str = ferias_servidor[i+1]
+            
+            # Verificar se data_inicio_str e duracao_str não estão vazios
+            if data_inicio_str and duracao_str:
+                # Converter data_inicio_str para um objeto datetime
+                data_inicio = datetime.strptime(data_inicio_str, '%d/%m/%Y').date()
+                
+                # Converter duracao_str para um inteiro
+                duracao = int(duracao_str)
+                
+                # Calcular a data de término do período de férias
+                data_termino = data_inicio + timedelta(days=duracao)
+                
+                # Verificar se hoje está dentro do período de férias
+                if data_inicio <= hoje <= data_termino:
+                    # Adicionar o nome do servidor à lista servidores_em_ferias
+                    servidores_em_ferias.append(nome_servidor)
+                    break
+
+    # Criar uma lista vazia para armazenar os servidores que não estão com o status 'Em execução'
+    servidores_notificados = []
+
+    # Criar um dicionário vazio para armazenar os servidores que já foram notificados
+    notificados = {}
+
+    # Verificar se o arquivo notificados.json existe
     try:
-        with open('notificado.json', 'r') as f:
+        with open(gap('data\\notificados.json'), 'r') as f:
             notificados = json.load(f)
     except FileNotFoundError:
-        notificados = {}
+        print("Erro: o arquivo notificados.json não existe")
 
     # Para cada servidor na lista de servidores
     for servidor in servidores:
-        # Verificar se a variável ferias é None
-        if ferias is not None:
-            # Verificar se o servidor está na lista de férias
-            if any(servidor['servidor'] == ferias_servidor['servidor'] for ferias_servidor in ferias):
-                continue
+        # Verificar se o servidor está na lista de férias
+        if servidor['NomeServidor'] in servidores_em_ferias:
+            continue
 
-            # Verificar o status SituacaoPactoTrabalho do servidor
-            if servidor['SituacaoPactoTrabalho'] != 'Em execução':
-                # Verificar se o servidor já foi notificado anteriormente
-                if servidor['servidor'] not in notificados:
-                    # Enviar o primeiro aviso ao servidor
-                    enviar_notificacao(servidor['servidor'], 'avisoNCob1.html')
-                    # Registrar no arquivo notificado.json que o servidor foi notificado uma vez
-                    notificados[servidor['servidor']] = 1
-                elif notificados[servidor['servidor']] == 1:
-                    # Enviar o segundo aviso ao servidor e ao supervisor
-                    enviar_notificacao(servidor['servidor'], 'avisoNCob2.html')
-                    enviar_notificacao_supervisor(servidor['servidor'], 'avisoNCob2.html')
-                    # Registrar no arquivo notificado.json que o servidor foi notificado duas vezes
-                    notificados[servidor['servidor']] = 2
+        # Verificar o status SituacaoPactoTrabalho do servidor
+        if servidor['SituacaoPactoTrabalho'] != 'Em execução':
+            
+            # Verificar se o servidor já foi notificado
+            if servidor['NomeServidor'] not in servidores_notificados:
+                
+                # Verificar se o servidor já foi notificado
+                if servidor['NomeServidor'] in notificados:
+                    # Checar se valor é maior que 1
+                    if notificados[servidor['NomeServidor']]['value'] == 1:
+                        print(f"E-mail de aviso já enviado para o servidor {servidor['NomeServidor']}, enviando segundo...")
+                        # Enviar notificação para o servidor
+                        
+                        enviar_notificacao(servidor['NomeServidor'], personalizar_html(gap('mail\\avisoNCob2.html'), valores={'nome' : servidor['NomeServidor'], 'data' : datetime.now().strftime('%d/%m/%Y')}))
+                        # Enviar notificação para o supervisor
+                        enviar_notificacao_supervisor(servidor['NomeServidor'], personalizar_html(gap('mail\\avisoNCob2.html'), valores={'nome' : servidor['NomeServidor'], 'data' : datetime.now().strftime('%d/%m/%Y')}))
+                        notificados[servidor['NomeServidor']] = {'value' : 2}
+                else:
+                    print(f"O servidor {servidor['NomeServidor']} não está com o status 'Em execução'")
+                    # Enviar notificação para o servidor
+                    enviar_notificacao(servidor['NomeServidor'], personalizar_html(gap('mail\\avisoNCob1.html'), valores={'nome' : servidor['NomeServidor'], 'data' : datetime.now().strftime('%d/%m/%Y')}))
+                    notificados[servidor['NomeServidor']] = {'value' : 1}
 
-    # Salvar o arquivo notificado.json
-    with open('notificado.json', 'w') as f:
-        json.dump(notificados, f)
 
-if __name__ == '__main__':
-    verificar_planos_trabalho()
+                # Adicionar o servidor à lista de servidores notificados
+                servidores_notificados.append(servidor['NomeServidor'])
+                        
+                with open(gap('data\\notificados.json'), 'w') as f:
+                    json.dump(notificados, f)

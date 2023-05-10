@@ -16,11 +16,11 @@ def auditoria(query):
     cur.execute(query)
     print("Conexão ao Banco de Dados SQL/Auditoria foi bem sucedida!")
     rows = cur.fetchall()
-    if rows != None:
-        for row in rows:
-            print(row)
     cur.close()
     conn.close()
+    
+    # Return the results of the query as a list of tuples
+    return rows
 
 def pontalina(query):
     dadosconexao = (
@@ -33,9 +33,13 @@ def pontalina(query):
     print("Conexão ao Banco de Dados SQL/Pontalina foi bem sucedida!")
     cur = conexao.cursor()
     cur.execute(query)
-    rows = cur.fetchall()
-    for row in rows:
-        print(row)
+    
+    # Get the column names
+    columns = [column[0] for column in cur.description]
+    
+    # Fetch the rows as a list of dictionaries
+    rows = [dict(zip(columns, row)) for row in cur.fetchall()]
+    
     cur.close()
     conexao.close()
 
@@ -43,5 +47,3 @@ def pontalina(query):
         return []
 
     return rows
-
-

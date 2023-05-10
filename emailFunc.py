@@ -1,53 +1,63 @@
-import smtplib
-from Conexao import pontalina
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import win32com.client as win32
+from extraUtils import corrigir_codificacao
 
-def enviar_notificacao(servidor, arquivo_html):
+def enviar_notificacao(servidor, html):
+
+    html_corrigido = corrigir_codificacao(html)
+
     # Obter o endereço de email do servidor
-    email_servidor = pontalina(f"SELECT email FROM(servidores) WHERE(servidor='{servidor}')")
+    email_servidor = "navinchandry.ruas@inep.gov.br"
+
+    print('Enviando notificação ao servidor...')
 
     # Criar mensagem de email
-    msg = MIMEMultipart()
-    msg['From'] = 'seu_email@dominio.com'
-    msg['To'] = email_servidor
-    msg['Subject'] = 'Notificação de Plano de Trabalho'
+    subject = 'Notificação de Plano de Trabalho'
 
-    # Adicionar conteúdo HTML à mensagem
-    with open(arquivo_html, 'r') as f:
-        html = f.read()
-    msg.attach(MIMEText(html, 'html'))
+    # Create the Outlook integration
+    outlook = win32.Dispatch('outlook.application')
 
-    # Enviar email
-    with smtplib.SMTP('seu_servidor_smtp', 587) as server:
-        server.starttls()
-        server.login('seu_usuario', 'sua_senha')
-        server.send_message(msg)
+    # Create a new email
+    email = outlook.CreateItem(0)
 
-def enviar_notificacao_supervisor(servidor, arquivo_html):
+    # Set the email properties
+    email.Subject = subject
+    email.BodyFormat = 2 # 2: olFormatHTML
+    email.HTMLBody = html_corrigido
+    email.To = email_servidor
+
+    # Send the email
+    try:
+        email.Send()
+        print('Email enviado com sucesso!')
+    except Exception as e:
+        print(f'Error: Failed to send email: {e}')
+
+def enviar_notificacao_supervisor(servidor, html):
+
+    html_corrigido = corrigir_codificacao(html)
+
     # Obter o endereço de email do supervisor do servidor
-    email_supervisor = pontalina(f"SELECT supervisor FROM(servidores) WHERE(servidor='{servidor}')")
+    email_supervisor = "navinchandry.ruas@inep.gov.br"
 
     # Criar mensagem de email
-    msg = MIMEMultipart()
-    msg['From'] = 'seu_email@dominio.com'
-    msg['To'] = email_supervisor
-    msg['Subject'] = 'Notificação de Plano de Trabalho'
+    subject = 'Sup Notificação de Plano de Trabalho'
 
-    # Adicionar conteúdo HTML à mensagem
-    with open(arquivo_html, 'r') as f:
-        html = f.read()
-    msg.attach(MIMEText(html, 'html'))
+    # Create the Outlook integration
+    outlook = win32.Dispatch('outlook.application')
 
-    # Enviar email
-    with smtplib.SMTP('seu_servidor_smtp', 587) as server:
-        server.starttls()
-        server.login('seu_usuario', 'sua_senha')
-        server.send_message(msg)
+    # Create a new email
+    email = outlook.CreateItem(0)
 
-def personalizar_html(arquivo_html, valores):
-    with open(arquivo_html, 'r') as f:
-        html = f.read()
-    for chave, valor in valores.items():
-        html = html.replace('{' + chave + '}', str(valor))
-    return html
+    # Set the email properties
+    email.Subject = subject
+    email.BodyFormat = 2 # 2: olFormatHTML
+    email.HTMLBody = html_corrigido
+    email.To = email_supervisor
+
+    # Send the email
+    try:
+        email.Send()
+        print('Email enviado com sucesso!')
+    except Exception as e:
+        print(f'Error: Failed to send email: {e}')
+
