@@ -67,13 +67,13 @@ Verificar se os servidores concluíram todas as atividades do plano de trabalho 
 #### Passos
 
 1. Obter dados do SQL usando a consulta `pontalina('SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]')`.
-2. Separar os dados por servidor e verificar o mais recente SituacaoPactoTrabalho para cada servidor. Caso [DtFimPactoTrab] seja uma data com mais que um dia do dia atual, ignore.
-3. Para cada servidor:
-  1. Se todas as atividades com o mesmo pactoTrabalhoId tiverem status Concluída, ignorar e passar para o próximo servidor.
-  2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML `avisoConc1.html`.
-  3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML `avisoNConc.html`.
-  4. Adicionar o servidor à lista de servidores não concluídos em um arquivo `nConc.json`.
-  5. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
+2. Caso DfFimPactoTrab seja o dia atual ou ja tenha vencido:
+  1. Para cada servidor:
+    1. Se todas as atividades 'SituaçãoAtividade' com o mesmo pactoTrabalhoId estiverem como Concluída, ignorar e passar para o próximo servidor.
+    2. Se a data DtFimPactoTrab for o dia atual, enviar uma notificação ao servidor usando o arquivo HTML `avisoConc1.html`.
+    3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML `avisoNConc.html`.
+      1. Adicionar o servidor à lista de servidores não concluídos em um arquivo `nConc.json`.
+      2. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
 
 #### Observações
 
