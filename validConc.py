@@ -6,7 +6,7 @@ from Conexao import pontalina
 
 def validar_conclusao_plano_trabalho():
     # 1. Obter dados do SQL usando a consulta SELECT *.
-    dados = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")
+    dados = pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor)")
     
     # 2. Separar os dados por servidor e verificar o status mais recente de SituacaoPactoTrabalho para cada servidor.
     servidores = {}
@@ -33,7 +33,7 @@ def validar_conclusao_plano_trabalho():
         dias_restantes = (dtFimPactoTrab - datetime.now()).days
         
         # 3.2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML avisoConc1.html.
-        if dias_restantes == 1:
+        if dias_restantes == 1 and servidor == todas_concluidas:
             print(f"Enviando notificação para {servidor}... falta 1 dia para vencer o prazo de conclusão do plano de trabalho.")
             enviar_notificacao(servidor, personalizar_html(gap('mail\\avisoConc1.html'), {'nome': servidor, 'data' : datetime.now().strftime('%d/%m/%Y')}))
         

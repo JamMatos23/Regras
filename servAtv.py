@@ -7,60 +7,10 @@ from extraUtils import gap , personalizar_html
 def verificar_planos_trabalho():
     print('Verificando planos de trabalho...')
     # Obter a lista de servidores do banco SQL Portalina
-    servidores = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")
+    servidores = pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor)")
     
-    """
-    # Obter a lista de férias do banco SQL Auditor
-    ferias = auditoria("SELECT * FROM Ferias")
-
-    # Verificar se a variável ferias é None
-    if ferias is None:
-        print("Erro: a função auditoria('SELECT * FROM Ferias') retornou None")
-        return
-
-    # Verificar se a variável ferias é iterável
-    if not isinstance(ferias, (list, tuple)):
-        print(f"Erro: a função auditoria('SELECT * FROM Ferias') retornou um valor não iterável: {ferias}")
-        return
-    """
-
     # Obter a data atual
     hoje = datetime.now().date()
-
-    """
-    # Criar uma lista vazia para armazenar os nomes dos servidores em férias
-    servidores_em_ferias = []
-
-    # Iterar sobre a lista de férias
-    for ferias_servidor in ferias:
-        # Obter o nome do servidor
-        nome_servidor = ferias_servidor[0]
-        
-        # Iterar sobre os períodos de férias do servidor
-        for i in range(1, len(ferias_servidor), 2):
-            # Obter a data de início e a duração do período de férias
-            data_inicio_str = ferias_servidor[i]
-            duracao_str = ferias_servidor[i+1]
-            
-            # Verificar se data_inicio_str e duracao_str não estão vazios
-            if data_inicio_str and duracao_str:
-                # Converter data_inicio_str para um objeto datetime
-                data_inicio = datetime.strptime(data_inicio_str, '%d/%m/%Y').date()
-                
-                # Converter duracao_str para um inteiro
-                duracao = int(duracao_str)
-                
-                # Calcular a data de término do período de férias
-                data_termino = data_inicio + timedelta(days=duracao)
-                
-                # Verificar se hoje está dentro do período de férias
-                if data_inicio <= hoje <= data_termino:
-                    # Adicionar o nome do servidor à lista servidores_em_ferias
-                    servidores_em_ferias.append(nome_servidor)
-                    break
-
-    print(f"Servidores em férias: {servidores_em_ferias}")  
-    """
     # Criar uma lista vazia para armazenar os servidores que não estão com o status 'Em execução'
     servidores_notificados = []
 
