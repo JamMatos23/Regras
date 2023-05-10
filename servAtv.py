@@ -8,7 +8,8 @@ def verificar_planos_trabalho():
     print('Verificando planos de trabalho...')
     # Obter a lista de servidores do banco SQL Portalina
     servidores = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")
-
+    
+    """
     # Obter a lista de férias do banco SQL Auditor
     ferias = auditoria("SELECT * FROM Ferias")
 
@@ -21,10 +22,12 @@ def verificar_planos_trabalho():
     if not isinstance(ferias, (list, tuple)):
         print(f"Erro: a função auditoria('SELECT * FROM Ferias') retornou um valor não iterável: {ferias}")
         return
+    """
 
     # Obter a data atual
     hoje = datetime.now().date()
 
+    """
     # Criar uma lista vazia para armazenar os nomes dos servidores em férias
     servidores_em_ferias = []
 
@@ -56,6 +59,8 @@ def verificar_planos_trabalho():
                     servidores_em_ferias.append(nome_servidor)
                     break
 
+    print(f"Servidores em férias: {servidores_em_ferias}")  
+    """
     # Criar uma lista vazia para armazenar os servidores que não estão com o status 'Em execução'
     servidores_notificados = []
 
@@ -71,10 +76,7 @@ def verificar_planos_trabalho():
 
     # Para cada servidor na lista de servidores
     for servidor in servidores:
-        # Verificar se o servidor está na lista de férias
-        if servidor['NomeServidor'] in servidores_em_ferias:
-            continue
-
+       
         # Verificar o status SituacaoPactoTrabalho do servidor
         if servidor['SituacaoPactoTrabalho'] != 'Em execução':
             

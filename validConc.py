@@ -22,7 +22,7 @@ def validar_conclusao_plano_trabalho():
     
     # 3. Para cada servidor:
     for servidor, atividades in servidores.items():
-        todas_concluidas = all(atividade['SituacaoAtividade'] == 'Concluída' for atividade in atividades)
+        todas_concluidas = all(atividade.get('SituacaoAtividade') == 'Concluída' for atividade in atividades)
         
         # 3.1. Se todas as atividades com o mesmo pactoTrabalhoId tiverem status Concluída, ignorar e passar para o próximo servidor.
         if todas_concluidas:
@@ -34,10 +34,12 @@ def validar_conclusao_plano_trabalho():
         
         # 3.2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML avisoConc1.html.
         if dias_restantes == 1:
+            print(f"Enviando notificação para {servidor}... falta 1 dia para vencer o prazo de conclusão do plano de trabalho.")
             enviar_notificacao(servidor, personalizar_html(gap('mail\\avisoConc1.html'), {'nome': servidor, 'data' : datetime.now().strftime('%d/%m/%Y')}))
         
         # 3.3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML avisoNConc.html.
         elif dias_restantes < 0:
+            print(f"Enviando notificação para {servidor}... já venceu o prazo de conclusão do plano de trabalho.")
             enviar_notificacao(servidor, personalizar_html(gap('mail\\avisoNConc.html'), {'nome': servidor, 'data' : datetime.now().strftime('%d/%m/%Y')}))
             enviar_notificacao_supervisor(servidor, personalizar_html(gap('mail\\avisoNConc.html'), {'nome': servidor}))
             
@@ -48,7 +50,7 @@ def validar_conclusao_plano_trabalho():
     # 3.5. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
     for servidor in list(nConc.keys()):
         atividades = servidores.get(servidor, [])
-        todas_concluidas = all(atividade['SituacaoAtividade'] == 'Concluída' for atividade in atividades)
+        todas_concluidas = all(atividade.get('SituacaoAtividade') == 'Concluída' for atividade in atividades)
         if todas_concluidas:
             del nConc[servidor]
     
