@@ -11,6 +11,8 @@ def verificar_plano_trabalho():
     with open(gap('data\\notificados.json'), 'r') as f:
         notificado = json.load(f)
 
+    temp = {}
+
     # Para cada servidor
     for servidor in servidores:
         nome_servidor = servidor['NomeServidor']
@@ -18,7 +20,6 @@ def verificar_plano_trabalho():
 
         # Verificar se há algum pactoTrabalho 'Em execução'
         em_execucao = False
-        bflag = False
         if situacao_pacto_trabalho == 'Em execução':
             em_execucao = True
             continue
@@ -27,10 +28,9 @@ def verificar_plano_trabalho():
         if not em_execucao and nome_servidor not in notificado:
             enviar_notificacao(nome_servidor, gap('mail\\avisoNCob1.html'))
             notificado[nome_servidor] = 1
-            bflag = True
+            temp[nome_servidor] = True
 
-
-        if notificado[nome_servidor] == 1 and not bflag:
+        if notificado[nome_servidor] == 1 and nome_servidor not in temp:
             enviar_notificacao(nome_servidor, gap('mail\\avisoNCob2.html'))
             enviar_notificacao_supervisor(nome_servidor, gap('mail\\avisoNCob2.html'))
             notificado[nome_servidor] = 2
