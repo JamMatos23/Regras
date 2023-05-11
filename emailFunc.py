@@ -8,7 +8,7 @@ def enviar_notificacao(servidor, html):
     # Obter o endereço de email do servidor
     email_servidor = "jamil.monteiro@inep.gov.br"
 
-    print('Enviando notificação ao servidor...')
+    print('Enviando notificação ao servidor... ' + servidor)
 
     # Criar mensagem de email
     subject = 'Notificação de Plano de Trabalho'
