@@ -6,7 +6,7 @@ def enviar_notificacao(servidor, html):
     html_corrigido = corrigir_codificacao(html)
 
     # Obter o endereço de email do servidor
-    email_servidor = "navinchandry.ruas@inep.gov.br"
+    email_servidor = "jamil.monteiro@inep.gov.br"
 
     print('Enviando notificação ao servidor...')
 
@@ -37,7 +37,7 @@ def enviar_notificacao_supervisor(servidor, html):
     html_corrigido = corrigir_codificacao(html)
 
     # Obter o endereço de email do supervisor do servidor
-    email_supervisor = "navinchandry.ruas@inep.gov.br"
+    email_supervisor = "jamil.monteiro@inep.gov.br"
 
     # Criar mensagem de email
     subject = 'Sup Notificação de Plano de Trabalho'
