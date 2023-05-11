@@ -22,15 +22,15 @@ def verificar_plano_trabalho():
             em_execucao = True
             continue
 
-        # Se nenhum pactoTrabalho estiver 'Em execução' e o servidor ainda não foi notificado, notificar o servidor e adicionar ao arquivo json
-        if not em_execucao and nome_servidor not in notificado:
-            enviar_notificacao(nome_servidor, gap('mail\\avisoNCob1.html'))
-            notificado[nome_servidor] = 1
-        
         if notificado[nome_servidor] == 1:
             enviar_notificacao(nome_servidor, gap('mail\\avisoNCob2.html'))
             enviar_notificacao_supervisor(nome_servidor, gap('mail\\avisoNCob2.html'))
             notificado[nome_servidor] = 2
+
+        # Se nenhum pactoTrabalho estiver 'Em execução' e o servidor ainda não foi notificado, notificar o servidor e adicionar ao arquivo json
+        if not em_execucao and nome_servidor not in notificado:
+            enviar_notificacao(nome_servidor, gap('mail\\avisoNCob1.html'))
+            notificado[nome_servidor] = 1
 
     # Salvar o arquivo notificado.json
     with open(gap('data\\notificados.json'), 'w') as f:
