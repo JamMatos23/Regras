@@ -38,15 +38,16 @@ Um plano de trabalho é considerado não coberto se a coluna `SituacaoPactoTraba
 
 #### Passos
 
-1. Obter a lista de servidores do banco SQL Portalina usando a função `pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]")` do arquivo `Conexao.py`.
+1. Obter a lista de servidores do banco SQL Portalina usando a função `pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor) order by NomeServidor")` do arquivo `Conexao.py`.
 2. Obter a lista de férias do banco SQL Auditor usando a função `auditoria("SELECT * FROM Ferias")` do arquivo `Conexao.py`.
-3. Para cada servidor na lista de servidores:
-4. Verificar se o servidor está na lista de férias. Se estiver, ignorar e passar para o próximo servidor.
-5. Verificar o status `SituacaoPactoTrabalho` do servidor nos dados importados do SQL.
-6. Se `SituacaoPactoTrabalho` for diferente de `‘Em execução’ || ‘Enviado para aceite’`: 
-  1. Verificar se o servidor já foi notificado anteriormente (verificando em um arquivo `notificado`.json). 
-  2. Se o servidor não foi notificado anteriormente, enviar o primeiro aviso ao servidor usando a função `enviar_notificacao(servidor, mensagem)` do arquivo `emailFunc.py` e registrar no arquivo notificado.json que o servidor foi notificado uma vez. 
-  3. Se o servidor já foi notificado uma vez e o servidor não tiver atualizado a `SituacaoPactoTrabalho`, na segunda vez que o script rodar, enviar o segundo aviso ao servidor e ao supervisor usando as funções `enviar_notificacao(servidor, mensagem)` e `enviar_notificacao_supervisor(servidor, mensagem)` do arquivo `emailFunc.py` e registrar no arquivo `notificado.json` que o servidor foi notificado duas vezes.
+3. Para cada SituaçãoPactoTrabalho de cada servidor:
+  1. Se `SituacaoPactoTrabalho` for igual a `‘Em execução’ || ‘Enviado para aceite’`, ignorar e passar para o próximo servidor.
+  2. Se `SituacaoPactoTrabalho` for diferente de `‘Em execução’ || ‘Enviado para aceite’`:
+    1. Verificar se o servidor está na lista de férias. Se estiver, ignorar e passar para o próximo servidor.
+    2. Verificar se o servidor já foi notificado anteriormente (verificando em um arquivo `notificado`.json). 
+    3. Se o servidor não foi notificado anteriormente, enviar o primeiro aviso ao servidor usando a função `enviar_notificacao(servidor, mensagem)` do arquivo `emailFunc.py` e registrar no arquivo notificado.json que o servidor foi notificado uma vez. 
+    4. Se o servidor já foi notificado uma vez e o servidor não tiver atualizado a `SituacaoPactoTrabalho`, na segunda vez que o script rodar, enviar o segundo aviso ao servidor e ao supervisor usando as funções `enviar_notificacao(servidor, mensagem)` e `enviar_notificacao_supervisor(servidor, mensagem)` do arquivo `emailFunc.py` e registrar no arquivo `notificado.json` que o servidor foi notificado duas vezes.
+
 #### Observações
 
 - As conexões com os bancos de dados Portalina e Auditor devem ser implementadas em um arquivo local chamado `Conexao.py`, que possui as funções `pontalina(query)` e `auditoria(query)`.
