@@ -1,4 +1,5 @@
 import os
+import re
 
 def gap(relative_path):
     # Get the directory of the script
@@ -32,3 +33,16 @@ def corrigir_codificacao(texto):
     texto = texto.replace('Ã§', 'ç')
     # Add more replacements as needed
     return texto
+
+def stripFunc(striptext, tagname):
+    regex = r'<{0}>(.*?)<\/{0}>'.format(tagname)
+    match = re.search(regex, striptext)
+
+    if match:
+        result = match.group(1)
+        if (result == ""): result = ''
+        return result
+
+def stripTrash(striptext):
+    numbers = ''.join(filter(lambda i: i.isdigit(), striptext))
+    return numbers

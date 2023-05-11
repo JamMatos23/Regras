@@ -1,23 +1,30 @@
-from emailFunc import enviar_notificacao, enviar_notificacao_supervisor, personalizar_html
-from Conexao import pontalina
+from emailFunc import enviar_notificacao, enviar_notificacao_supervisor
+from extraUtils import personalizar_html, gap, stripFunc
+from Conexao import pontalina, auditoria
 
 def verificar_campo_descricao():
-    # 1. Obter a lista de trabalhos com status ‘Enviado para Aceite’ do banco de dados usando uma consulta SQL. pontalina(query)
-    trabalhos = pontalina("SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE [Situação da Atividade]='Enviado para Aceite'")
-    
-    # 2. Para cada trabalho na lista:
-    for trabalho in trabalhos:
-        servidor = trabalho['NomeServidor']
-        descricao = trabalho['descricao']
-        atividade = trabalho['título']
-        
-        # 2.1. Verificar se o campo Descrição está correto e coincide com a atividade.
-        if descricao != atividade:
-            # 2.2. Se houver algum erro, enviar uma notificação ao servidor e ao supervisor apontando o(s) erro(s) usando a função do arquivo Email.py com mensagem descErro.html.
-            html_personalizado = personalizar_html('descErro.html', servidor)
-            enviar_notificacao(servidor, html_personalizado)
-            enviar_notificacao_supervisor(servidor, html_personalizado)
-        else:
-            # 2.3. Se tudo estiver correto, enviar o trabalho para o supervisor para análise com a mensagem descAceita.html.
-            html_personalizado = personalizar_html('descAceita.html', servidor)
-            enviar_notificacao_supervisor(servidor, html_personalizado)
+    dados = pontalina("SELECT [NomeServidor], [pactoTrabalhoId], [titulo], [descricao] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE [SituacaoPactoTrabalho] = 'Executado' and descricao like '%<demanda>%%</demanda>%'")
+    depara = auditoria("SELECT * FROM eAud.`De-Para`")
+
+    for dado in dados:
+        demanda = stripFunc(dado['descricao'], 'demanda')
+        atividade = stripFunc(dado['descricao'], 'atividade')
+        produto = stripFunc(dado['descricao'], 'produto')
+
+        # Check if the order of demanda, atividade, and produto is valid
+        if depara is not None:
+            for row in depara:
+                # Use integer indices to access the elements of the row tuple
+                if row[0] == demanda and row[2] == atividade and row[4] == produto:
+                    # The order is valid
+                    print(f"Servidor {dado['NomeServidor']} possui demanda, atividade e produto na ordem correta")
+                    break
+            else:
+                print(f"Servidor {dado['NomeServidor']} possui demanda, atividade e produto na ordem incorreta")
+                # The order is not valid
+                # Do something here
+                pass
+
+
+if __name__ == '__main__':
+    verificar_campo_descricao()

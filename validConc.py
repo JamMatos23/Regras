@@ -39,6 +39,3 @@ def validar_conclusao_plano_trabalho():
     # Salvar lista atualizada de servidores não concluídos
     with open(gap('data\\nConc.json'), 'w') as f:
         json.dump(nConc, f)
-
-if __name__ == '__main__':
-    validar_conclusao_plano_trabalho()
