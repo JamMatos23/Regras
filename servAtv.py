@@ -22,6 +22,8 @@ def verificar_plano_trabalho():
         em_execucao = False
         if situacao_pacto_trabalho == 'Em execução':
             em_execucao = True
+            if nome_servidor in notificado:
+                del notificado[nome_servidor]
             continue
 
         # Se nenhum pactoTrabalho estiver 'Em execução' e o servidor ainda não foi notificado, notificar o servidor e adicionar ao arquivo json
