@@ -18,19 +18,22 @@ def verificar_plano_trabalho():
 
         # Verificar se há algum pactoTrabalho 'Em execução'
         em_execucao = False
+        bflag = False
         if situacao_pacto_trabalho == 'Em execução':
             em_execucao = True
             continue
-
-        if notificado[nome_servidor] == 1:
-            enviar_notificacao(nome_servidor, gap('mail\\avisoNCob2.html'))
-            enviar_notificacao_supervisor(nome_servidor, gap('mail\\avisoNCob2.html'))
-            notificado[nome_servidor] = 2
 
         # Se nenhum pactoTrabalho estiver 'Em execução' e o servidor ainda não foi notificado, notificar o servidor e adicionar ao arquivo json
         if not em_execucao and nome_servidor not in notificado:
             enviar_notificacao(nome_servidor, gap('mail\\avisoNCob1.html'))
             notificado[nome_servidor] = 1
+            bflag = True
+
+
+        if notificado[nome_servidor] == 1 and not bflag:
+            enviar_notificacao(nome_servidor, gap('mail\\avisoNCob2.html'))
+            enviar_notificacao_supervisor(nome_servidor, gap('mail\\avisoNCob2.html'))
+            notificado[nome_servidor] = 2
 
     # Salvar o arquivo notificado.json
     with open(gap('data\\notificados.json'), 'w') as f:
