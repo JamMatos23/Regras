@@ -6,54 +6,36 @@ from Conexao import pontalina
 
 def validar_conclusao_plano_trabalho():
     # 1. Obter dados do SQL usando a consulta SELECT *.
-    dados = pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor)")
-    
-    # 2. Separar os dados por servidor e verificar o status mais recente de SituacaoPactoTrabalho para cada servidor.
-    servidores = {}
-    for dado in dados:
-        servidor = dado['NomeServidor']
-        if servidor not in servidores:
-            servidores[servidor] = []
-        servidores[servidor].append(dado)
-    
+    dados = pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor) order by NomeServidor")
+
+    nConc = {}
+
     # Carregar lista de servidores não concluídos
     with open(gap('data\\nConc.json'), 'r') as f:
         nConc = json.load(f)
     
-    # 3. Para cada servidor:
-    for servidor, atividades in servidores.items():
-        todas_concluidas = all(atividade.get('SituacaoAtividade') == 'Concluída' for atividade in atividades)
-        
-        # 3.1. Se todas as atividades com o mesmo pactoTrabalhoId tiverem status Concluída, ignorar e passar para o próximo servidor.
-        if todas_concluidas:
-            continue
-        
-        # Verificar se a data DtFimPactoTrab está próxima ou já passou
-        dtFimPactoTrab = min(datetime.strptime(atividade['DtFimPactoTrab'], '%Y-%m-%d') for atividade in atividades)
-        dias_restantes = (dtFimPactoTrab - datetime.now()).days
-        
-        # 3.2. Se a data DtFimPactoTrab estiver faltando 1 dia para vencer, enviar uma notificação ao servidor usando o arquivo HTML avisoConc1.html.
-        if dias_restantes == 1 and servidor == todas_concluidas:
-            print(f"Enviando notificação para {servidor}... falta 1 dia para vencer o prazo de conclusão do plano de trabalho.")
-            enviar_notificacao(servidor, personalizar_html(gap('mail\\avisoConc1.html'), {'nome': servidor, 'data' : datetime.now().strftime('%d/%m/%Y')}))
-        
-        # 3.3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML avisoNConc.html.
-        elif dias_restantes < 0:
-            print(f"Enviando notificação para {servidor}... já venceu o prazo de conclusão do plano de trabalho.")
-            enviar_notificacao(servidor, personalizar_html(gap('mail\\avisoNConc.html'), {'nome': servidor, 'data' : datetime.now().strftime('%d/%m/%Y')}))
-            enviar_notificacao_supervisor(servidor, personalizar_html(gap('mail\\avisoNConc.html'), {'nome': servidor}))
-            
-            # 3.4. Adicionar o servidor à lista de servidores não concluídos em um arquivo nConc.json.
-            if servidor not in nConc:
-                nConc[servidor] = {'data_primeiro_aviso': str(datetime.now())}
-    
-    # 3.5. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
-    for servidor in list(nConc.keys()):
-        atividades = servidores.get(servidor, [])
-        todas_concluidas = all(atividade.get('SituacaoAtividade') == 'Concluída' for atividade in atividades)
-        if todas_concluidas:
-            del nConc[servidor]
-    
+    for dado in dados:
+        if dado['SituacaoPactoTrabalho'] == 'Em execução' and dado['SituaçãoAtividade'] != 'Concluído':
+            date_string = dado['DtFimPactoTrab']
+            date_format = '%Y-%m-%d' # specify the format of the date string
+            date_object = datetime.strptime(date_string, date_format)
+
+            if dado['NomeServidor'] not in nConc:
+                today = datetime(2023, 5, 15).date()
+                if date_object.date() == today:
+                    # Enviar notificaçoa vence hoje
+                    print(f"Servidor {dado['NomeServidor']} está com pacto de trabalho em execução e vence hoje")
+                    html = personalizar_html(gap('mail\\avisoConc1.html'), {'nome': dado['NomeServidor'], 'data':date_object.strftime('%d/%m/%Y'), 'trabalhoid': dado['pactoTrabalhoId']})
+                    enviar_notificacao(dado['NomeServidor'], html)
+                    nConc[dado['NomeServidor']] = True 
+                elif date_object.date() < today:
+                    # Já venceu
+                    print(f"Servidor {dado['NomeServidor']} está com pacto de trabalho em execução e já venceu")
+                    html = personalizar_html(gap('mail\\avisoNConc.html'), {'nome': dado['NomeServidor'], 'data':date_object.strftime('%d/%m/%Y'), 'trabalhoid': dado['pactoTrabalhoId']})
+                    enviar_notificacao(dado['NomeServidor'], html)
+                    enviar_notificacao_supervisor(dado['NomeServidor'], html)
+                    nConc[dado['NomeServidor']] = True
+
     # Salvar lista atualizada de servidores não concluídos
     with open(gap('data\\nConc.json'), 'w') as f:
         json.dump(nConc, f)
