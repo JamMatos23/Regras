@@ -5,7 +5,9 @@ from extraUtils import personalizar_html, gap
 from Conexao import pontalina
 
 def validar_conclusao_plano_trabalho():
+    print("\n\n\nValidando conclusão do plano de trabalho...")
     # 1. Obter dados do SQL usando a consulta SELECT *.
+    print("Obtendo dados do SQL...")
     dados = pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor) order by NomeServidor")
 
     nConc = {}
@@ -13,7 +15,7 @@ def validar_conclusao_plano_trabalho():
     # Carregar lista de servidores não concluídos
     with open(gap('data\\nConc.json'), 'r') as f:
         nConc = json.load(f)
-    
+
     for dado in dados:
         if dado['SituacaoPactoTrabalho'] == 'Em execução' and dado['SituaçãoAtividade'] != 'Concluído':
             date_string = dado['DtFimPactoTrab']
@@ -36,6 +38,9 @@ def validar_conclusao_plano_trabalho():
                     enviar_notificacao_supervisor(dado['NomeServidor'], html)
                     nConc[dado['NomeServidor']] = True
 
+    print("Salvando lista atualizada de servidores não concluídos...")
     # Salvar lista atualizada de servidores não concluídos
     with open(gap('data\\nConc.json'), 'w') as f:
         json.dump(nConc, f)
+    print("Lista atualizada de servidores não concluídos salva com sucesso\n")
+    print("Conclusão do plano de trabalho validada com sucesso\n\n\n")

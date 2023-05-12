@@ -170,3 +170,44 @@ de controle.', 'pactoTrabalhoId': '3ECC3868-1FE9-4AF0-B486-926B561962A2', 'plano
 'Concluída', 'descricao': '11- Plano de gestão de riscos, integridade e governança: Execução das 
  atividades referentes às ações de controle (Riscos de Integridade).', 'tempoHomologado': Decimal('40.0'), 'nota': Decimal('9.00'), 'justificativa': None, 'consideracoesConclusao': 'Estudos sobre gestão de riscos'}, {'NomeServidor': 'MARCO JOSE BIANCHINI', 'SiglaUnidade': 'AUDIN     ', 'NomeUnidade': 'AUDITORIA INTERNA                       ', 'tfnDescricao': 'FPE-1022 ASSISTENTE', 'SituacaoPactoTrabalho': 'Executado', 'TipoPGD': 'Teletrabalho Parcial', 'titulo': 'ATV-01 - Participação em sessões e grupos de trabalho, reuniões e oficinas de equipe, de colegiado, de comissões 
 e comitês.', 'pactoTrabalhoId': 'C6F0D153-52EA-489C-9D38-978A3281B623', 'planoTrabalhoId': 'BCBB697E-8B39-4797-9C1C-F83455D6C2E6', 'DtInicioPactoTrab': '2022-07-18', 'DtFimPactoTrab': '2022-10-17', 'tempoComparecimento': None, 'cargaHorariaDiaria': 8, 'percentualExecucao': Decimal('100.00'), 'relacaoPrevistoRealizado': Decimal('100.00'), 'avaliacaoId': None, 'tempoTotalDisponivel': 528, 'quantidade': 1, 'tempoPrevis
+
+
+from emailFunc import enviar_notificacao, enviar_notificacao_supervisor
+from extraUtils import personalizar_html, gap, stripFunc, normalize
+from Conexao import pontalina, auditoria
+
+def verificar_campo_descricao():
+    dados = pontalina("SELECT [NomeServidor], [pactoTrabalhoId], [titulo], [descricao] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE [SituacaoPactoTrabalho] = 'Executado' and descricao like '%<demanda>%%</demanda>%'")
+    depara = auditoria("SELECT * FROM eAud.`De-Para`")
+
+    for dado in dados:
+        demanda = stripFunc(dado['descricao'], 'demanda')
+        atividade = stripFunc(dado['descricao'], 'atividade')
+        produto = stripFunc(dado['descricao'], 'produto')
+        atividadeSISGP = dado['titulo']
+
+        # Check if the order of demanda, atividade, and produto is valid
+        if depara is not None:
+            for row in depara:
+                # Use integer indices to access the elements of the row tuple
+                if row[0] == demanda and row[2] == atividade and row[4] == produto:
+                    # The order is valid
+                    print(f"Servidor {dado['NomeServidor']} possui demanda, atividade e produto na ordem correta")
+                    compAtv = f"{row[6]}-{row[7]} - {row[8]}"
+
+                    if compAtv == atividadeSISGP or normalize(compAtv) == normalize(atividadeSISGP):
+                        print(f"Servidor {dado['NomeServidor']} possui atividade SISGP correta")
+                        html = personalizar_html(gap('mail\\descCorreto.html'), {'nome': dado['NomeServidor'], 'descricao': dado['descricao'], 'atividade': atividadeSISGP, 'trabalhoid': dado['pactoTrabalhoId']})
+                        enviar_notificacao_supervisor(dado['NomeServidor'], html)
+                    else:
+                        print(f"Servidor {dado['NomeServidor']} possui atividade SISGP incorreta")
+                        html = personalizar_html(gap('mail\\AtvErrada.html'), {'nome': dado['NomeServidor'], 'descricao': dado['descricao'], 'atividade': atividadeSISGP, 'trabalhoid': dado['pactoTrabalhoId']})
+                        enviar_notificacao(dado['NomeServidor'], html)
+                        pass
+
+                    break
+            else:
+                print(f"Servidor {dado['NomeServidor']} possui demanda, atividade e produto na ordem incorreta")
+                html = personalizar_html(gap('mail\\descErrada.html'), {'nome': dado['NomeServidor'], 'descricao': dado['descricao'], 'atividade': atividadeSISGP, 'trabalhoid': dado['pactoTrabalhoId']})
+                enviar_notificacao(dado['NomeServidor'], html)
+                pass

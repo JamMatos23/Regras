@@ -1,3 +1,4 @@
+
 import win32com.client as win32
 from extraUtils import corrigir_codificacao
 
@@ -6,7 +7,8 @@ def enviar_notificacao(servidor, html):
     html_corrigido = corrigir_codificacao(html)
 
     # Obter o endereço de email do servidor
-    email_servidor = "jamil.monteiro@inep.gov.br"
+    #email_servidor = "jamil.monteiro@inep.gov.br"
+    email_servidor = "navinchandry.ruas@inep.gov.br"
 
     print('Enviando notificação ao servidor... ' + servidor)
 
@@ -37,7 +39,9 @@ def enviar_notificacao_supervisor(servidor, html):
     html_corrigido = corrigir_codificacao(html)
 
     # Obter o endereço de email do supervisor do servidor
-    email_supervisor = "jamil.monteiro@inep.gov.br"
+    #email_supervisor = "jamil.monteiro@inep.gov.br"
+    email_supervisor = "navinchandry.ruas@inep.gov.br"
+
 
     # Criar mensagem de email
     subject = 'Sup Notificação de Plano de Trabalho'
@@ -60,4 +64,3 @@ def enviar_notificacao_supervisor(servidor, html):
         print('Email enviado com sucesso!')
     except Exception as e:
         print(f'Error: Failed to send email: {e}')
-

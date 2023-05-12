@@ -55,55 +55,60 @@ Um plano de trabalho é considerado não coberto se a coluna `SituacaoPactoTraba
 - As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `emailFunc.py`.
 - As mensagens de notificação estarão também em arquivos externos `avisoNCob1.html` e `avisoNCob2.html`.
 
-### Validar Conclusão do Plano de Trabalho
+  ### Validar Conclusão do Plano de Trabalho
 
-#### Objetivo
+  #### Objetivo
 
-Verificar se os servidores concluíram todas as atividades do plano de trabalho dentro do prazo e enviar notificações caso não tenham.
+  Verificar se os servidores concluíram todas as atividades do plano de trabalho dentro do prazo e enviar notificações caso não tenham.
 
-#### Ações a serem tomadas
+  #### Ações a serem tomadas
 
-- Caso o plano de trabalho não esteja com todas as atividades concluídas até o prazo, enviar um aviso ao servidor.
+  - Caso o plano de trabalho não esteja com todas as atividades concluídas até o prazo, enviar um aviso ao servidor.
 
-#### Passos
+  #### Passos
 
-1. Obter dados do SQL usando a consulta `pontalina('SELECT * FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN]')`.
-2. Caso DfFimPactoTrab seja o dia atual ou ja tenha vencido:
-  1. Para cada servidor:
-    1. Se todas as atividades 'SituaçãoAtividade' com o mesmo pactoTrabalhoId estiverem como Concluída, ignorar e passar para o próximo servidor.
-    2. Se a data DtFimPactoTrab for o dia atual, enviar uma notificação ao servidor usando o arquivo HTML `avisoConc1.html`.
-    3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML `avisoNConc.html`.
-      1. Adicionar o servidor à lista de servidores não concluídos em um arquivo `nConc.json`.
-      2. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
+  1. Obter dados do SQL usando a consulta `pontalina("SELECT [NomeServidor], [SituacaoPactoTrabalho], [pactoTrabalhoId], [DtInicioPactoTrab], [DtFimPactoTrab], [SituaçãoAtividade] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE DtFimPactoTrab IN (SELECT MAX(DtFimPactoTrab) FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] GROUP BY NomeServidor) order by NomeServidor")`.
+  2. Caso DfFimPactoTrab seja o dia atual ou ja tenha vencido:
+    1. Para cada servidor:
+      1. Se todas as atividades 'SituaçãoAtividade' com o mesmo pactoTrabalhoId estiverem como Concluída, ignorar e passar para o próximo servidor.
+      2. Se a data DtFimPactoTrab for o dia atual, enviar uma notificação ao servidor usando o arquivo HTML `avisoConc1.html`.
+      3. Se a data DtFimPactoTrab já estiver vencida, enviar uma notificação ao servidor e ao supervisor usando o arquivo HTML `avisoNConc.html`.
+        1. Adicionar o servidor à lista de servidores não concluídos em um arquivo `nConc.json`.
+        2. Verificar se os servidores na lista já concluíram as atividades. Caso tenham concluído, remover da lista.
 
-#### Observações
+  #### Observações
 
-- As conexões com o banco de dados SQL devem ser implementadas em um arquivo local chamado `Conexao.py`, que possui uma função para executar consultas SQL.
-- As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `emailFunc.py`.
-- As mensagens de notificação estarão também em arquivos externos `avisoConc1.html` e `avisoNConc.html`.
+  - As conexões com o banco de dados SQL devem ser implementadas em um arquivo local chamado `Conexao.py`, que possui uma função para executar consultas SQL.
+  - As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `emailFunc.py`.
+  - As mensagens de notificação estarão também em arquivos externos `avisoConc1.html` e `avisoNConc.html`.
 
+  ### Verificar Campo Descrição
 
-### Verificar Campo Descrição
-- Caso trabalho 'Enviado para Aceite'.
-- Verificar se Descrição está correta.
-- Verificar se Descrição coincide com atividade.
-- Caso haja algum erro, apontar o(s) erro(s) ao servidor. Para servidor e Supervisor.
-- Caso tudo correto, enviar para supervisor para Análise.
+  - Quando o status do trabalho for ‘Enviado para Aceite’, verifique se a descrição está correta e corresponde à atividade.
+  - Se houver algum erro, informe ao servidor e ao supervisor.
 
-#### Objetivo
-Verificar se o campo Descrição está correto e coincide com a atividade quando o trabalho está ‘Enviado para Aceite’. Caso haja algum erro, apontar o(s) erro(s) ao servidor e ao supervisor.
+  #### Objetivo
 
-#### Passos
+  Verificar se o campo Descrição está correto e corresponde à atividade quando o trabalho está ‘Enviado para Aceite’. Caso haja algum erro, informe ao servidor e ao supervisor.
 
-1. Obter a lista de trabalhos com status ‘Enviado para Aceite’ do banco de dados usando uma consulta SQL.
-2. Para cada trabalho na lista:
-  1. Verificar se o campo Descrição está correto e coincide com a atividade.
-  2. Se houver algum erro, enviar uma notificação ao servidor e ao supervisor apontando o(s) erro(s) usando a função do arquivo Email.py com mensagem descErro.html.
-  3. Se tudo estiver correto, enviar o trabalho para o supervisor para análise com a mensagem descAceita.html.
+  #### Passos
 
-#### Observações
-As conexões com o banco de dados devem ser implementadas em um arquivo local chamado Conexao.py, que possui uma função para executar consultas SQL.
-As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado Email.py.
+  1. Obter a lista de trabalhos com status ‘Enviado para Aceite’ do banco de dados usando uma consulta SQL. Utilize a função `pontalina('SELECT DISTINCT [pactoTrabalhoId] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE [SituacaoPactoTrabalho] = 'Enviado para Aceite' and descricao like '%<demanda>%%</demanda>%')`.
+  2. Para cada pacto idTrabalho:
+    1. Obter todas as atividades desta pactoTrabalhoId usando a função `pontalina('SELECT [NomeServidor], [pactoTrabalhoId], [titulo], [descricao] FROM [ProgramaGestao].[VW_PlanoTrabalhoAUDIN] WHERE [pactoTrabalhoId] = <idTrabalho>')`.
+    2. Para cada atividade:
+      1. Verificar se o campo Descrição está correto.
+        1. Se estiver correto, ignorar e passar para a próxima atividade.
+        2. Se não estiver correto, adicione o erro à lista de erros.
+      2. Após todos terem sido lidos, envie um email ao servidor com a lista de erros.
+      3. Se não houver erros, verifique se [titulo] corresponde à descrição informada pelo servidor.
+      4. Se não coincidir, envie um email ao servidor e ao supervisor informando que o título não coincide com a descrição.
+      5. Se coincidir enviar email para supervisor.
+
+  #### Observações
+
+  - As conexões com o banco de dados devem ser implementadas em um arquivo local chamado `Conexao.py`, que possui uma função para executar consultas SQL.
+  - As funções para enviar as notificações por email devem ser implementadas em um arquivo externo chamado `Email.py`.
 
 ### Verificar existencia do produto no eAud
 - Atividade Avaliação ou Consultoria.

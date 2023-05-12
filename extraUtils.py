@@ -15,6 +15,11 @@ def personalizar_html(arquivo_html, valores):
         html = html.replace('{' + chave + '}', str(valor))
     return html
 
+def html_escape(text):
+    text = text.replace('<', '&lt;')
+    text = text.replace('>', '&gt;')
+    return text
+
 def corrigir_codificacao(texto):
     # Replace common encoding errors with the correct characters
     texto = texto.replace('Ã¡', 'á')
@@ -46,3 +51,8 @@ def stripFunc(striptext, tagname):
 def stripTrash(striptext):
     numbers = ''.join(filter(lambda i: i.isdigit(), striptext))
     return numbers
+
+def normalize(s):
+    s = s.lower()
+    s = re.sub(r'\b0+(\d)', r'\1', s)
+    return s
