@@ -1,66 +1,53 @@
-
+# Autor: Navin Ruas
 import win32com.client as win32
 from extraUtils import corrigir_codificacao
 
+# Função para enviar notificação por e-mail ao servidor
 def enviar_notificacao(servidor, html):
-
+    # Corrige a codificação do HTML, se necessário
     html_corrigido = corrigir_codificacao(html)
 
-    # Obter o endereço de email do servidor
     email_servidor = "jamil.monteiro@inep.gov.br"
-    #email_servidor = "navinchandry.ruas@inep.gov.br"
 
     print('Enviando notificação ao servidor... ' + servidor)
 
-    # Criar mensagem de email
-    subject = 'Notificação de Plano de Trabalho'
-
-    # Criar a integração Outlook
+    # Inicializa o objeto do Outlook
     outlook = win32.Dispatch('outlook.application')
-
-    # Criar um novo email
     email = outlook.CreateItem(0)
 
-    # Definir as propriedades do email
+    subject = 'Notificação de Plano de Trabalho'
+
     email.Subject = subject
-    email.BodyFormat = 2 # 2: olFormatHTML
+    email.BodyFormat = 2  # 2: olFormatHTML
     email.HTMLBody = html_corrigido
     email.To = email_servidor
 
-    # Enviar o email
     try:
         email.Send()
         print('Email enviado com sucesso!')
     except Exception as e:
-        print(f'Error: Failed to send email: {e}')
+        print(f'Erro: Falha ao enviar o email: {e}')
 
+# Função para enviar notificação por e-mail ao supervisor
 def enviar_notificacao_supervisor(servidor, html):
-
+    # Corrige a codificação do HTML, se necessário
     html_corrigido = corrigir_codificacao(html)
 
-    # Obter o endereço de email do supervisor do servidor
     email_supervisor = "jamil.monteiro@inep.gov.br"
-    #email_supervisor = "navinchandry.ruas@inep.gov.br"
 
-
-    # Criar mensagem de email
     subject = 'Sup Notificação de Plano de Trabalho'
 
-    # Criar a integração Outlook
+    # Inicializa o objeto do Outlook
     outlook = win32.Dispatch('outlook.application')
-
-    # Criar um novo email
     email = outlook.CreateItem(0)
 
-    # Definir as propriedades do email
     email.Subject = subject
-    email.BodyFormat = 2 # 2: olFormatHTML
+    email.BodyFormat = 2  # 2: olFormatHTML
     email.HTMLBody = html_corrigido
     email.To = email_supervisor
 
-    # Enviar o email
     try:
         email.Send()
         print('Email enviado com sucesso!')
     except Exception as e:
-        print(f'Error: Failed to send email: {e}')
+        print(f'Erro: Falha ao enviar o email: {e}')
