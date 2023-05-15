@@ -7,6 +7,8 @@ def update_ano_json():
     current_year = str(datetime.now().year)
     repo_path = None
 
+    print("Inicializando Atualização Ano.json...")
+
     # Locate the Gerador-Desc repository on the user's disk
     for root, dirs, files in os.walk(os.path.expanduser("~")):
         if '.git' in dirs and os.path.basename(root) == 'Gerador-Desc':
@@ -38,6 +40,8 @@ def update_ano_json():
 
 def update_depara_json():
     repo_path = None
+
+    print("Inicializando Atualização De-Para.json...")
 
     # Locate the Gerador-Desc repository on the user's disk
     for root, dirs, files in os.walk(os.path.expanduser("~")):
@@ -90,4 +94,26 @@ def update_depara_json():
 
     print("De-Para Do Gerador Foi Atualizado!")
 
-update_depara_json()
+def webUP():
+
+    repo_path = None
+
+    print("Inicializando Atualização De-Para.json...")
+
+    # Locate the Gerador-Desc repository on the user's disk
+    for root, dirs, files in os.walk(os.path.expanduser("~")):
+        if '.git' in dirs and os.path.basename(root) == 'Gerador-Desc':
+            repo_path = root
+            break
+
+    if not repo_path:
+        print("Gerador-Desc repository not found on user's disk.")
+        return
+
+    print("Inicializando Atualização Gerador Descrição Web...")
+    update_ano_json()
+    update_depara_json()
+    print("Atualização Gerador Descrição Web Concluída!")
+
+if __name__ == '__main__':
+    webUP()
