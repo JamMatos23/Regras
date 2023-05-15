@@ -143,9 +143,8 @@ Verificar se o id registrado existe dentro do eAud e se sim verificar se há a e
 ### Atualização do Dashboard Gerencial SharePoint - 'Em Execução' ou 'Autorizado' enviar dados para SharePoint.
 
 #### Objetivo
-Criar um filtro no Dashboard que permitar selecionar no campo SituacaoPactoTrabalho os dados onde são ou "Em Execução" ou "Autorizado" 
+Atulizar tabel Power BI no PGD do SharePoint com OS dados do SISGP. Transferir apenas trabalhos, acima de executados, por exemplo, 'Em Execução', 'Autorizado', 'Executado'...
 
 #### Ações a serem tomadas
-Utilizar do PowerBI para fazer um novo filtro no Dashboard Gerencial SharePoint onde se possar escolher os valores que desejar mostrar por meio do campo SituacaoPactoTrabalho
 
 #### Passos
