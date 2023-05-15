@@ -2,9 +2,9 @@ import os
 import re
 
 def gap(relative_path):
-    # Get the directory of the script
+    # Obter o diretório do script
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    # Join the script directory with the relative path
+    # Junte-se ao diretório do script com o caminho relativo
     absolute_path = os.path.join(script_dir, relative_path)
     return absolute_path
 
@@ -21,7 +21,7 @@ def html_escape(text):
     return text
 
 def corrigir_codificacao(texto):
-    # Replace common encoding errors with the correct characters
+    # Reajustar erros comuns de codificação com os caracteres corretos
     texto = texto.replace('Ã¡', 'á')
     texto = texto.replace('Ã ', 'à')
     texto = texto.replace('Ã¢', 'â')
@@ -36,7 +36,7 @@ def corrigir_codificacao(texto):
     texto = texto.replace('Ãº', 'ú')
     texto = texto.replace('Ã¼', 'ü')
     texto = texto.replace('Ã§', 'ç')
-    # Add more replacements as needed
+    # Adicionar mais reajustes se necessário
     return texto
 
 def stripFunc(striptext, tagname):

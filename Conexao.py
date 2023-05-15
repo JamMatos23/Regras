@@ -19,7 +19,7 @@ def auditoria(query):
     cur.close()
     conn.close()
     
-    # Return the results of the query as a list of tuples
+    # Retorna os resultados da query como uma lista de tuplas
     return rows
 
 def pontalina(query):
@@ -34,10 +34,10 @@ def pontalina(query):
     cur = conexao.cursor()
     cur.execute(query)
     
-    # Get the column names
+    # Pegar os nomes das colunas
     columns = [column[0] for column in cur.description]
     
-    # Fetch the rows as a list of dictionaries
+    # Combinar as linhas como uma lista de dicionarios
     rows = [dict(zip(columns, row)) for row in cur.fetchall()]
     
     cur.close()

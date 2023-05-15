@@ -19,13 +19,13 @@ def verificar_campo_descricao():
             atividade = stripFunc(tempDado['descricao'], 'atividade')
             produto = stripFunc(tempDado['descricao'], 'produto')
             atividadeSISGP = tempDado['titulo']
-
-            # Check if the order of demanda, atividade, and produto is valid
+            
+            # Verificar se a ordem de demanda, atividade e produto são validas
             if depara is not None:
                 for row in depara:
-                    # Use integer indices to access the elements of the row tuple
+                    # Usar indices inteiros para acessar os elementos da linha da tupla
                     if row[0] == demanda and row[2] == atividade and row[4] == produto:
-                        # The order is valid
+                        # A ordem está valida
                         print(f"Servidor {tempDado['NomeServidor']} possui demanda, atividade e produto na ordem correta")
                         compAtv = f"{row[6]}-{row[7]} - {row[8]}"
                         if compAtv == atividadeSISGP or normalize(compAtv) == normalize(atividadeSISGP):
